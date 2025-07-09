@@ -38,4 +38,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get get_started => 'Get started';
+
+  @override
+  String get sign_up => 'Sign Up';
+
+  @override
+  String get e_mail => 'e-mail';
+
+  @override
+  String get username => 'username';
+
+  @override
+  String get password => 'password';
+
+  @override
+  String get have_account => 'Already have an account? Log in';
+
+  @override
+  String get log_in => 'Log In';
+
+  @override
+  String get not_have_account => 'Do not have an account? Sign Up';
+
+  @override
+  String get forgot_password => 'Forgor the password? Change it';
 }

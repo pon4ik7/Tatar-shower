@@ -4,13 +4,13 @@ import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class LogInScreen extends StatefulWidget {
+  const LogInScreen({super.key});
   @override
-  State<SignUpScreen> createState() => _SignUpSCreen();
+  State<LogInScreen> createState() => _SignUpSCreen();
 }
 
-class _SignUpSCreen extends State<SignUpScreen> {
+class _SignUpSCreen extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
@@ -32,7 +32,7 @@ class _SignUpSCreen extends State<SignUpScreen> {
                   children: [
                     SizedBox(height: 50),
                     Text(
-                      loc.sign_up,
+                      loc.log_in,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: appFonts.header,
@@ -41,38 +41,6 @@ class _SignUpSCreen extends State<SignUpScreen> {
                       ),
                     ),
                     SizedBox(height: 50),
-                    SizedBox(
-                      height: 55,
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: appColors.white),
-                        decoration: InputDecoration(
-                          hintText: loc.e_mail,
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            color: appColors.midBlue,
-                          ),
-                          filled: true,
-                          fillColor: Colors.transparent,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 18,
-                            horizontal: 16,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: const BorderSide(color: Colors.white),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
                     SizedBox(
                       height: 55,
                       child: TextField(
@@ -149,10 +117,10 @@ class _SignUpSCreen extends State<SignUpScreen> {
                           ),
                         ),
                         onPressed: () {
-                          //Navigator.of(context).pushNamed('/mode');
+                          Navigator.of(context).pushNamed('/mode');
                         },
                         child: Text(
-                          loc.sign_up,
+                          loc.log_in,
                           style: TextStyle(
                             fontFamily: appFonts.header,
                             fontSize: 24,
@@ -163,13 +131,24 @@ class _SignUpSCreen extends State<SignUpScreen> {
                     SizedBox(height: 10),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/login');
+                        Navigator.of(context).pushNamed('/signup');
                       },
                       child: Text(
-                        loc.have_account,
+                        loc.not_have_account,
                         style: TextStyle(
                           fontFamily: appFonts.regular,
-                          fontSize: 13,
+                          fontSize: 11,
+                          color: appColors.midBlue,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        loc.forgot_password,
+                        style: TextStyle(
+                          fontFamily: appFonts.regular,
+                          fontSize: 11,
                           color: appColors.midBlue,
                         ),
                       ),

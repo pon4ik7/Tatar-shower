@@ -15,9 +15,25 @@
 
     "light": "Светлая",
 
-     "cold_shower_training": "COLD SHOWER TRAINING",
+    "cold_shower_training": "COLD SHOWER TRAINING",
      
-     "build_habit": "Выработайте привычку принимать холодный душ и улучшите свое самочувствие",
+    "build_habit": "Выработайте привычку принимать холодный душ и улучшите свое самочувствие",
 
-      "get_started": "Продолжить"
+    "get_started": "Продолжить",
+
+    "sign_up": "Регистрация",
+
+    "e_mail": "почта",
+
+    "username": "имя пользователя",
+
+    "password": "пароль",
+
+    "have_account": "Уже есть аккаунт? Войти",
+
+    "log_in": "Вход",
+
+    "not_have_account": "Нету еще аккаунта? Регистрация",
+
+    "forgot_password": "Забыли пароль? Сменить его"
 }

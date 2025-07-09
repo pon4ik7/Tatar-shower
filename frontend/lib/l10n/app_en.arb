@@ -19,5 +19,21 @@
 
     "build_habit": "Build the cold shower habit and improve your well-being",
 
-    "get_started": "Get started"
+    "get_started": "Get started",
+
+    "sign_up": "Sign Up",
+
+    "e_mail": "e-mail",
+
+    "username": "username",
+
+    "password": "password",
+
+    "have_account": "Already have an account? Log in",
+
+    "log_in": "Log In",
+
+    "not_have_account": "Do not have an account? Sign Up",
+
+    "forgot_password": "Forgor the password? Change it"
 }

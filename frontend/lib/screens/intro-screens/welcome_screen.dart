@@ -74,7 +74,7 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/mode');
+                        Navigator.of(context).pushNamed('/signup');
                       },
                       child: Text(
                         loc.get_started,

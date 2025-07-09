@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tatar_shower/screens/intro-screens/language_screen.dart';
 import 'package:tatar_shower/screens/intro-screens/mode_screen.dart';
 import 'package:tatar_shower/screens/intro-screens/welcome_screen.dart';
+import 'package:tatar_shower/screens/reg-auth-screens/sign_up_screen.dart';
+import 'package:tatar_shower/screens/reg-auth-screens/log_in_screen.dart';
 import "l10n/app_localizations.dart";
 
 void main() {
@@ -46,6 +48,8 @@ class _MyAppState extends State<MyApp> {
         '/language': (context) => LanguageScreen(onLocaleChanged: _setLocale),
         '/mode': (context) => ModeScreen(),
         '/welcome': (context) => WelcomeScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/login': (context) => LogInScreen(),
       },
     );
   }

@@ -157,6 +157,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get started'**
   String get get_started;
+
+  /// No description provided for @sign_up.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get sign_up;
+
+  /// No description provided for @e_mail.
+  ///
+  /// In en, this message translates to:
+  /// **'e-mail'**
+  String get e_mail;
+
+  /// No description provided for @username.
+  ///
+  /// In en, this message translates to:
+  /// **'username'**
+  String get username;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'password'**
+  String get password;
+
+  /// No description provided for @have_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Log in'**
+  String get have_account;
+
+  /// No description provided for @log_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get log_in;
+
+  /// No description provided for @not_have_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not have an account? Sign Up'**
+  String get not_have_account;
+
+  /// No description provided for @forgot_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgor the password? Change it'**
+  String get forgot_password;
 }
 
 class _AppLocalizationsDelegate
