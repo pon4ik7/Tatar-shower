@@ -45,7 +45,7 @@ class _SignUpSCreen extends State<LogInScreen> {
                       height: 55,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: appColors.white),
+                        style: TextStyle(color: appColors.midBlue),
                         decoration: InputDecoration(
                           hintText: loc.username,
                           hintStyle: TextStyle(
@@ -77,7 +77,7 @@ class _SignUpSCreen extends State<LogInScreen> {
                       height: 55,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: appColors.white),
+                        style: TextStyle(color: appColors.midBlue),
                         decoration: InputDecoration(
                           hintText: loc.password,
                           hintStyle: TextStyle(
