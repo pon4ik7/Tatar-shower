@@ -1,0 +1,23 @@
+{
+    "@@locale": "ru",
+
+    "choose_the_language": "Выберите язык",
+
+    "russian": "Русский",
+
+    "english": "Английский",
+
+    "apply": "Применить",
+
+    "choose_the_mode": "Выберите тему",
+
+    "dark": "Темная",
+
+    "light": "Светлая",
+
+     "cold_shower_training": "COLD SHOWER TRAINING",
+     
+     "build_habit": "Выработайте привычку принимать холодный душ и улучшите свое самочувствие",
+
+      "get_started": "Продолжить"
+}
