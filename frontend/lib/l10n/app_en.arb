@@ -87,5 +87,23 @@
 
     "done_prefs": "Done! Start your first cold adventure!",
 
-    "start": "Start"
+    "start": "Start",
+
+    "days": "Days",
+
+    "newShower": "New shower",
+
+    "date": "Date",
+
+    "duration": "Duration",
+
+    "coldDuration": "Cold shower",
+
+    "thisWeek": "This week",
+
+    "showers": "showers",
+
+    "longestStreak": "Longest Streak",
+
+    "recentShowers": "Resent showers"
 }

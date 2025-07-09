@@ -142,4 +142,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get start => 'Start';
+
+  @override
+  String get days => 'Days';
+
+  @override
+  String get newShower => 'New shower';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get coldDuration => 'Cold shower';
+
+  @override
+  String get thisWeek => 'This week';
+
+  @override
+  String get showers => 'showers';
+
+  @override
+  String get longestStreak => 'Longest Streak';
+
+  @override
+  String get recentShowers => 'Resent showers';
 }

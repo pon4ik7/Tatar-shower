@@ -361,6 +361,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start'**
   String get start;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get days;
+
+  /// No description provided for @newShower.
+  ///
+  /// In en, this message translates to:
+  /// **'New shower'**
+  String get newShower;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No description provided for @duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get duration;
+
+  /// No description provided for @coldDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Cold shower'**
+  String get coldDuration;
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get thisWeek;
+
+  /// No description provided for @showers.
+  ///
+  /// In en, this message translates to:
+  /// **'showers'**
+  String get showers;
+
+  /// No description provided for @longestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest Streak'**
+  String get longestStreak;
+
+  /// No description provided for @recentShowers.
+  ///
+  /// In en, this message translates to:
+  /// **'Resent showers'**
+  String get recentShowers;
 }
 
 class _AppLocalizationsDelegate

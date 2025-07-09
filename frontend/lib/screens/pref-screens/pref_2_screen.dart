@@ -144,7 +144,7 @@ class _SkipButton extends StatelessWidget {
           style: TextStyle(
             fontFamily: appFonts.regular,
             fontSize: 14,
-            color: appColors.midBlue.withOpacity(0.7),
+            color: Colors.transparent,
           ),
         ),
       ),
