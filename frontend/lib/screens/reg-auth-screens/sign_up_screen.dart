@@ -149,7 +149,7 @@ class _SignUpSCreen extends State<SignUpScreen> {
                           ),
                         ),
                         onPressed: () {
-                          //Navigator.of(context).pushNamed('/mode');
+                          Navigator.of(context).pushNamed('/pref1');
                         },
                         child: Text(
                           loc.sign_up,

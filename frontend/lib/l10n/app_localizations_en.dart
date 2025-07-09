@@ -62,4 +62,81 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgot_password => 'Forgor the password? Change it';
+
+  @override
+  String get why_take_shower => 'Why do you want to take cold showers?';
+
+  @override
+  String get improve_health => 'Improve health';
+
+  @override
+  String get increase_discipline => 'Increase discipline';
+
+  @override
+  String get waking_up_easier => 'Waking up easier';
+
+  @override
+  String get challenge_yourself => 'Challenge yourself';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get how_often_take_shower =>
+      'How often do you want to take cold showers?';
+
+  @override
+  String get every_day => 'Every day';
+
+  @override
+  String get times_per_week => '3 times per week';
+
+  @override
+  String get only_weekdays => 'Only on weekdays';
+
+  @override
+  String get when_remind => 'When should I remind you to exercise?';
+
+  @override
+  String get moring => 'In the morning (8:00)';
+
+  @override
+  String get evening => 'In the evening (19:00)';
+
+  @override
+  String get practice_before => 'Have you practiced cold showers before?';
+
+  @override
+  String get no_practice => 'No, it\'s the first time';
+
+  @override
+  String get tried => 'Tried it a couple of times';
+
+  @override
+  String get practice_regularly => 'Practice regularly';
+
+  @override
+  String get minimum_streak =>
+      'What is the minimum streak you want to achieve?';
+
+  @override
+  String get week => '7 days';
+
+  @override
+  String get two_weeks => '14 days';
+
+  @override
+  String get three_weeks => '21 days';
+
+  @override
+  String get your_streak => 'enter your streak';
+
+  @override
+  String get done_prefs => 'Done! Start your first cold adventure!';
 }

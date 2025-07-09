@@ -35,5 +35,55 @@
 
     "not_have_account": "Do not have an account? Sign Up",
 
-    "forgot_password": "Forgor the password? Change it"
+    "forgot_password": "Forgor the password? Change it",
+
+    "why_take_shower": "Why do you want to take cold showers?",
+
+    "improve_health": "Improve health",
+
+    "increase_discipline": "Increase discipline",
+
+    "waking_up_easier": "Waking up easier",
+
+    "challenge_yourself": "Challenge yourself",
+
+    "other": "Other",
+
+    "next": "Next",
+
+    "skip": "Skip", 
+
+    "how_often_take_shower": "How often do you want to take cold showers?",
+
+    "every_day": "Every day",
+
+    "times_per_week": "3 times per week",
+
+    "only_weekdays": "Only on weekdays",
+
+    "when_remind": "When should I remind you to exercise?",
+
+    "moring": "In the morning (8:00)",
+
+    "evening": "In the evening (19:00)",
+
+    "practice_before": "Have you practiced cold showers before?",
+
+    "no_practice": "No, it's the first time",
+
+    "tried": "Tried it a couple of times",
+
+    "practice_regularly": "Practice regularly",
+
+    "minimum_streak": "What is the minimum streak you want to achieve?",
+
+    "week": "7 days",
+
+    "two_weeks": "14 days",
+
+    "three_weeks": "21 days",
+
+    "your_streak": "enter your streak",
+
+    "done_prefs": "Done! Start your first cold adventure!"
 }

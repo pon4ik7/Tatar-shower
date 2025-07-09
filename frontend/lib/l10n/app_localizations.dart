@@ -205,6 +205,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forgor the password? Change it'**
   String get forgot_password;
+
+  /// No description provided for @why_take_shower.
+  ///
+  /// In en, this message translates to:
+  /// **'Why do you want to take cold showers?'**
+  String get why_take_shower;
+
+  /// No description provided for @improve_health.
+  ///
+  /// In en, this message translates to:
+  /// **'Improve health'**
+  String get improve_health;
+
+  /// No description provided for @increase_discipline.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase discipline'**
+  String get increase_discipline;
+
+  /// No description provided for @waking_up_easier.
+  ///
+  /// In en, this message translates to:
+  /// **'Waking up easier'**
+  String get waking_up_easier;
+
+  /// No description provided for @challenge_yourself.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge yourself'**
+  String get challenge_yourself;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @how_often_take_shower.
+  ///
+  /// In en, this message translates to:
+  /// **'How often do you want to take cold showers?'**
+  String get how_often_take_shower;
+
+  /// No description provided for @every_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get every_day;
+
+  /// No description provided for @times_per_week.
+  ///
+  /// In en, this message translates to:
+  /// **'3 times per week'**
+  String get times_per_week;
+
+  /// No description provided for @only_weekdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Only on weekdays'**
+  String get only_weekdays;
+
+  /// No description provided for @when_remind.
+  ///
+  /// In en, this message translates to:
+  /// **'When should I remind you to exercise?'**
+  String get when_remind;
+
+  /// No description provided for @moring.
+  ///
+  /// In en, this message translates to:
+  /// **'In the morning (8:00)'**
+  String get moring;
+
+  /// No description provided for @evening.
+  ///
+  /// In en, this message translates to:
+  /// **'In the evening (19:00)'**
+  String get evening;
+
+  /// No description provided for @practice_before.
+  ///
+  /// In en, this message translates to:
+  /// **'Have you practiced cold showers before?'**
+  String get practice_before;
+
+  /// No description provided for @no_practice.
+  ///
+  /// In en, this message translates to:
+  /// **'No, it\'s the first time'**
+  String get no_practice;
+
+  /// No description provided for @tried.
+  ///
+  /// In en, this message translates to:
+  /// **'Tried it a couple of times'**
+  String get tried;
+
+  /// No description provided for @practice_regularly.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice regularly'**
+  String get practice_regularly;
+
+  /// No description provided for @minimum_streak.
+  ///
+  /// In en, this message translates to:
+  /// **'What is the minimum streak you want to achieve?'**
+  String get minimum_streak;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get week;
+
+  /// No description provided for @two_weeks.
+  ///
+  /// In en, this message translates to:
+  /// **'14 days'**
+  String get two_weeks;
+
+  /// No description provided for @three_weeks.
+  ///
+  /// In en, this message translates to:
+  /// **'21 days'**
+  String get three_weeks;
+
+  /// No description provided for @your_streak.
+  ///
+  /// In en, this message translates to:
+  /// **'enter your streak'**
+  String get your_streak;
+
+  /// No description provided for @done_prefs.
+  ///
+  /// In en, this message translates to:
+  /// **'Done! Start your first cold adventure!'**
+  String get done_prefs;
 }
 
 class _AppLocalizationsDelegate

@@ -4,6 +4,12 @@ import 'package:tatar_shower/screens/intro-screens/mode_screen.dart';
 import 'package:tatar_shower/screens/intro-screens/welcome_screen.dart';
 import 'package:tatar_shower/screens/reg-auth-screens/sign_up_screen.dart';
 import 'package:tatar_shower/screens/reg-auth-screens/log_in_screen.dart';
+import 'package:tatar_shower/screens/pref-screens/pref_1_screen.dart';
+import 'package:tatar_shower/screens/pref-screens/pref_2_screen.dart';
+import 'package:tatar_shower/screens/pref-screens/pref_3_screen.dart';
+import 'package:tatar_shower/screens/pref-screens/pref_4_screen.dart';
+import 'package:tatar_shower/screens/pref-screens/pref_5_screen.dart';
+import 'package:tatar_shower/screens/pref-screens/pref_done_screen.dart';
 import "l10n/app_localizations.dart";
 
 void main() {
@@ -27,6 +33,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: ZoomPageTransitionsBuilder(),
+            TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+          },
+        ),
+      ),
       locale: _locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -50,6 +64,12 @@ class _MyAppState extends State<MyApp> {
         '/welcome': (context) => WelcomeScreen(),
         '/signup': (context) => SignUpScreen(),
         '/login': (context) => LogInScreen(),
+        '/pref1': (context) => PreferencesScreen1(),
+        '/pref2': (context) => PreferencesScreen2(),
+        '/pref3': (context) => PreferencesScreen3(),
+        '/pref4': (context) => PreferencesScreen4(),
+        '/pref5': (context) => PreferencesScreen5(),
+        '/prefDone': (context) => PreferencesDoneScreen(),
       },
     );
   }

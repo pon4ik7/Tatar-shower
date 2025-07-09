@@ -117,7 +117,7 @@ class _SignUpSCreen extends State<LogInScreen> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/mode');
+                          Navigator.of(context).pushNamed('/pref1');
                         },
                         child: Text(
                           loc.log_in,

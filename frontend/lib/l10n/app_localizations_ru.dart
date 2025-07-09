@@ -62,4 +62,82 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get forgot_password => 'Забыли пароль? Сменить его';
+
+  @override
+  String get why_take_shower => 'Почему вы хотите принимать холодный душ?';
+
+  @override
+  String get improve_health => 'Улучшить здоровье';
+
+  @override
+  String get increase_discipline => 'Улучшить дисциплину';
+
+  @override
+  String get waking_up_easier => 'Просыпаться легче';
+
+  @override
+  String get challenge_yourself => 'Испытать себя';
+
+  @override
+  String get other => 'Другое';
+
+  @override
+  String get next => 'Дальше';
+
+  @override
+  String get skip => 'Пропустить';
+
+  @override
+  String get how_often_take_shower =>
+      'Как часто вы хотите принимать холодный душ?';
+
+  @override
+  String get every_day => 'Каждый день';
+
+  @override
+  String get times_per_week => '3 раза в неделю';
+
+  @override
+  String get only_weekdays => 'Только по рабочим дням';
+
+  @override
+  String get when_remind => 'Когда мне стоит напоминать о принятии душа?';
+
+  @override
+  String get moring => 'Утром (8:00)';
+
+  @override
+  String get evening => 'Вечером (19:00)';
+
+  @override
+  String get practice_before =>
+      'Пробовали ли вы до этого принимать холодный душ?';
+
+  @override
+  String get no_practice => 'Нет, делаю это впервые';
+
+  @override
+  String get tried => 'Принимал пару раз';
+
+  @override
+  String get practice_regularly => 'Принимаю регулярно';
+
+  @override
+  String get minimum_streak =>
+      'Какого количества дней подряд вы бы хотели достичь, принимая холодный душ?';
+
+  @override
+  String get week => '7 дней';
+
+  @override
+  String get two_weeks => '14 дней';
+
+  @override
+  String get three_weeks => '21 день';
+
+  @override
+  String get your_streak => 'Введите свое число';
+
+  @override
+  String get done_prefs => 'Готово! Начните свое холодное приключение!';
 }

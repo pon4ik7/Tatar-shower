@@ -22,6 +22,12 @@ flutter:
   assets:
     - assets/light-images/background.png
     - assets/light-images/liquid.png
+    - assets/light-images/shower.png
+    - assets/light-images/clock.png
+    - assets/light-images/calendar.png
+    - assets/light-images/run.png
+    - assets/light-images/target.png
+    - assets/light-images/frozen.png
     - assets/dark-images/
   fonts:
     - family: RussoOne
