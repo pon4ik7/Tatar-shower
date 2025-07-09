@@ -4,6 +4,11 @@ WORKDIR /app
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 
+COPY backend/. ./
+
+RUN GO111MODULE=on go install github.com/pressly/goose/v3/cmd/goose@v3.11.0
+COPY backend/migrations /migrations
+
 ARG SERVICE_DIR
 COPY ${SERVICE_DIR} ${SERVICE_DIR}
 
@@ -18,6 +23,8 @@ ARG BINARY_NAME
 ARG PORT
 
 COPY --from=builder /${BINARY_NAME} /app/
+COPY --from=builder /go/bin/goose /app/goose
+COPY --from=builder /migrations /migrations
 COPY devops/entrypoint.sh /app/
 
 RUN chmod +x /app/entrypoint.sh && \
