@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tatar_shower/screens/intro-screens/language_screen.dart';
 import 'package:tatar_shower/screens/intro-screens/mode_screen.dart';
 import 'package:tatar_shower/screens/intro-screens/welcome_screen.dart';
@@ -12,7 +13,9 @@ import 'package:tatar_shower/screens/pref-screens/pref_5_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_done_screen.dart';
 import "l10n/app_localizations.dart";
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 

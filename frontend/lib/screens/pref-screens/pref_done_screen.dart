@@ -45,7 +45,8 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Center(
+                    child: Align(
+                      alignment: const Alignment(0, -0.5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         mainAxisSize: MainAxisSize.min,

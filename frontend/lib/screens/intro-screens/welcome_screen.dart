@@ -21,41 +21,44 @@ class WelcomeScreen extends StatelessWidget {
         child: SafeArea(
           child: Stack(
             children: [
-              SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 16,
-                ),
-                child: Padding(
+              ScrollConfiguration(
+                behavior: NoGlowScrollBehavior(),
+                child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 130,
+                    horizontal: 10,
+                    vertical: 16,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        loc.cold_shower_training,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: appFonts.header,
-                          fontSize: 40,
-                          color: appColors.midBlue,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 130,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          loc.cold_shower_training,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: appFonts.header,
+                            fontSize: 40,
+                            color: appColors.midBlue,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 80),
-                      Image(image: lightLiquid, height: 134),
-                      SizedBox(height: 80),
-                      Text(
-                        loc.build_habit,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: appFonts.regular,
-                          fontSize: 20,
-                          color: appColors.midBlue,
+                        SizedBox(height: 80),
+                        Image(image: lightLiquid, height: 134),
+                        SizedBox(height: 80),
+                        Text(
+                          loc.build_habit,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: appFonts.regular,
+                            fontSize: 20,
+                            color: appColors.midBlue,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -96,5 +99,16 @@ class WelcomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class NoGlowScrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child;
   }
 }
