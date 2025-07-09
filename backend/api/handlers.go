@@ -31,10 +31,10 @@ func (h *Handler) SetupRoutes() *mux.Router {
 	apiRouter := r.PathPrefix("/api").Subrouter()
 	apiRouter.HandleFunc("/register", h.RegisterUser).Methods("POST")
 	apiRouter.HandleFunc("/signin", h.SingInUser).Methods("POST")
-	apiRouter.HandleFunc("/schedules", h.GetAllSchedulesHandler).Methods("GET")
-	apiRouter.HandleFunc("/schedules", h.CreateOrUpdateScheduleHandler).Methods("POST", "PUT")
-	apiRouter.HandleFunc("/schedules", h.DeleteScheduleHandler).Methods("DELETE")
-	apiRouter.HandleFunc("/shower/completed", h.CompleteShowerHandler).Methods("POST")
+	apiRouter.HandleFunc("/user/schedules", h.GetAllSchedulesHandler).Methods("GET")
+	apiRouter.HandleFunc("/user/schedules", h.CreateOrUpdateScheduleHandler).Methods("POST", "PUT")
+	apiRouter.HandleFunc("/user/schedules", h.DeleteScheduleHandler).Methods("DELETE")
+	apiRouter.HandleFunc("/user/shower/completed", h.CompleteShowerHandler).Methods("POST")
 
 	return r
 }
@@ -213,9 +213,6 @@ func (h *Handler) GetAllSchedulesHandler(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Content-Type", "application/json")
 	log.Printf("GetAllSchedulesHandler success: Schedules returned for user %d", userID)
 	json.NewEncoder(w).Encode(user.Schedule)
-
-	log.Printf("GetAllSchedulesHandler error: User not found (404)")
-	http.Error(w, "User not found", http.StatusNotFound)
 }
 
 // CreateOrUpdateScheduleHandler creates or updates a schedule for the authenticated user.
@@ -437,9 +434,9 @@ func getUserIDFromRequest(r *http.Request) (int, error) {
 	if !ok {
 		return 0, fmt.Errorf("invalid token claims")
 	}
-	userID, ok := claims["user_id"].(int)
+	userIDFloat, ok := claims["user_id"].(float64)
 	if !ok {
 		return 0, fmt.Errorf("user_id not found in token claims")
 	}
-	return userID, nil
+	return int(userIDFloat), nil
 }
