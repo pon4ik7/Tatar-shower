@@ -29,7 +29,7 @@ func (h *Handler) SetupRoutes() *mux.Router {
 
 	apiRouter := r.PathPrefix("/api").Subrouter()
 	apiRouter.HandleFunc("/register", h.RegisterUser).Methods("POST")
-	apiRouter.HandleFunc("/sing-in", h.SingInUser).Methods("POST")
+	apiRouter.HandleFunc("/signin", h.SingInUser).Methods("POST")
 
 	return r
 }
