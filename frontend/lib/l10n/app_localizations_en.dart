@@ -139,4 +139,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get done_prefs => 'Done! Start your first cold adventure!';
+
+  @override
+  String get start => 'Start';
 }

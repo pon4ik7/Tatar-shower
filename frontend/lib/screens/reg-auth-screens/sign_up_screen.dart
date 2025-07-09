@@ -162,6 +162,7 @@ class _SignUpSCreen extends State<SignUpScreen> {
                     ),
                     SizedBox(height: 10),
                     TextButton(
+                      style: ButtonStyle(splashFactory: NoSplash.splashFactory),
                       onPressed: () {
                         Navigator.of(context).pushNamed('/login');
                       },

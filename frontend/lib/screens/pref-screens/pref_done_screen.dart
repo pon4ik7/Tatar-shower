@@ -23,62 +23,86 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
           image: DecorationImage(image: lightBackground, fit: BoxFit.cover),
         ),
         child: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              StepProgressBar(steps: 5, currentStep: 4),
-              SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 8,
-                ),
-                child: Text(
-                  loc.done_prefs,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: appFonts.header,
-                    fontSize: 24,
-                    color: appColors.midBlue,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Image(image: lightShower, width: 80, height: 80),
-              const SizedBox(height: 30),
-              Image(image: lightFrozen, width: 80, height: 80),
-              const SizedBox(height: 30),
-              Image(image: lightLiquid, width: 80, height: 80),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 8,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: appColors.deepBlue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+              Column(
+                children: [
+                  StepProgressBar(steps: 5, currentStep: 4),
+                  SizedBox(height: 40),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 8,
                     ),
-                    onPressed: () {
-                      //Navigator.of(context).pushNamed("/pref5");
-                    },
                     child: Text(
-                      loc.next,
+                      loc.done_prefs,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: appFonts.header,
-                        fontSize: 20,
-                        color: appColors.white,
+                        fontSize: 24,
+                        color: appColors.midBlue,
                       ),
                     ),
                   ),
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image(image: lightShower, width: 80, height: 80),
+                          const SizedBox(height: 70),
+                          Image(image: lightFrozen, width: 80, height: 80),
+                          const SizedBox(height: 70),
+                          Image(image: lightLiquid, width: 80, height: 80),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [_NextButton(loc: loc)],
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NextButton extends StatelessWidget {
+  const _NextButton({required this.loc});
+
+  final AppLocalizations loc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+      child: SizedBox(
+        width: double.infinity,
+        height: 52,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: appColors.deepBlue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            loc.start,
+            style: TextStyle(
+              fontFamily: appFonts.header,
+              fontSize: 20,
+              color: appColors.white,
+            ),
           ),
         ),
       ),

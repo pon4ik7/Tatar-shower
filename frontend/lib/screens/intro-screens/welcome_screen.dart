@@ -21,7 +21,11 @@ class WelcomeScreen extends StatelessWidget {
         child: SafeArea(
           child: Stack(
             children: [
-              Center(
+              SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 16,
+                ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,

@@ -130,6 +130,7 @@ class _SignUpSCreen extends State<LogInScreen> {
                     ),
                     SizedBox(height: 10),
                     TextButton(
+                      style: ButtonStyle(splashFactory: NoSplash.splashFactory),
                       onPressed: () {
                         Navigator.of(context).pushNamed('/signup');
                       },
@@ -143,6 +144,7 @@ class _SignUpSCreen extends State<LogInScreen> {
                       ),
                     ),
                     TextButton(
+                      style: ButtonStyle(splashFactory: NoSplash.splashFactory),
                       onPressed: () {},
                       child: Text(
                         loc.forgot_password,

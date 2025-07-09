@@ -140,4 +140,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get done_prefs => 'Готово! Начните свое холодное приключение!';
+
+  @override
+  String get start => 'Начать';
 }
