@@ -1,0 +1,75 @@
+services:
+  db:
+    image: postgres:13
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: tatar_shower
+      POSTGRES_PASSWORD: chinchanchonchi
+      POSTGRES_DB: shower_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  auth-service:
+    build:
+      context: ..
+      dockerfile: devops/Dockerfile
+      args:
+        SERVICE_DIR: backend/services/auth-service
+        BINARY_NAME: auth-service
+        PORT: "8001"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      BINARY_NAME: auth-service
+      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 8001
+    ports:
+      - "8001:8001"
+
+  shower-service:
+    build:
+      context: ..
+      dockerfile: devops/Dockerfile
+      args:
+        SERVICE_DIR: backend/services/shower-service
+        BINARY_NAME: shower-service
+        PORT: "8002"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      BINARY_NAME: shower-service
+      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db
+      PORT: 8002
+    ports:
+      - "8002:8002"
+
+  rec-service:
+    build:
+      context: ..
+      dockerfile: devops/Dockerfile
+      args:
+        SERVICE_DIR: backend/services/rec-service
+        BINARY_NAME: rec-service
+        PORT: "8003"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      BINARY_NAME: rec-service
+      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db
+      PORT: 8003
+    ports:
+      - "8003:8003"
+
+volumes:
+  db_data:
