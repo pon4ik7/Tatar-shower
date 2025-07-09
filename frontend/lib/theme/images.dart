@@ -8,4 +8,13 @@ final lightCalendar = AssetImage("assets/light-images/calendar.png");
 final lightRun = AssetImage("assets/light-images/run.png");
 final lightTarget = AssetImage("assets/light-images/target.png");
 final lightFrozen = AssetImage("assets/light-images/frozen.png");
+final lightBottomCalendar = AssetImage(
+  "assets/light-images/bottomIcons/bottomCalendar.png",
+);
+final lightBottomClock = AssetImage(
+  "assets/light-images/bottomIcons/bottomClock.png",
+);
+final lightBottomSettings = AssetImage(
+  "assets/light-images/bottomIcons/bottomSettings.png",
+);
 //final darkBackground = AssetImage("assets/dark-images/background.png");

@@ -28,7 +28,9 @@ flutter:
     - assets/light-images/run.png
     - assets/light-images/target.png
     - assets/light-images/frozen.png
-    - assets/dark-images/
+    - assets/light-images/bottomIcons/bottomCalendar.png
+    - assets/light-images/bottomIcons/bottomClock.png
+    - assets/light-images/bottomIcons/bottomSettings.png
   fonts:
     - family: RussoOne
       fonts:

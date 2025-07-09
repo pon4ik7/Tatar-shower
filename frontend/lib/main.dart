@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import "l10n/app_localizations.dart";
 import 'package:tatar_shower/screens/intro-screens/language_screen.dart';
 import 'package:tatar_shower/screens/intro-screens/mode_screen.dart';
 import 'package:tatar_shower/screens/intro-screens/welcome_screen.dart';
@@ -11,7 +12,13 @@ import 'package:tatar_shower/screens/pref-screens/pref_3_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_4_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_5_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_done_screen.dart';
-import "l10n/app_localizations.dart";
+import 'package:tatar_shower/screens/main-screens/main_screen.dart';
+import 'package:tatar_shower/screens/main-screens/timer-screens/set_timer_screen.dart';
+import 'package:tatar_shower/screens/main-screens/timer-screens/timer_screen.dart';
+import 'package:tatar_shower/screens/main-screens/timer-screens/log_shower_screen.dart';
+import 'package:tatar_shower/screens/main-screens/settings-screens/settings_screen.dart';
+import 'package:tatar_shower/screens/main-screens/settings-screens/settings_language_screen.dart';
+import 'package:tatar_shower/screens/main-screens/settings-screens/settings_mode_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +80,7 @@ class _MyAppState extends State<MyApp> {
         '/pref4': (context) => PreferencesScreen4(),
         '/pref5': (context) => PreferencesScreen5(),
         '/prefDone': (context) => PreferencesDoneScreen(),
+        '/mainScreen': (context) => MainScreen(),
       },
     );
   }

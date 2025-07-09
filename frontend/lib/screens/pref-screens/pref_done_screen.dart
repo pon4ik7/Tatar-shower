@@ -96,7 +96,9 @@ class _NextButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed("/mainScreen");
+          },
           child: Text(
             loc.start,
             style: TextStyle(
