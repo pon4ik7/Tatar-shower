@@ -12,6 +12,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  flutter_secure_storage: ^9.2.4
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:
