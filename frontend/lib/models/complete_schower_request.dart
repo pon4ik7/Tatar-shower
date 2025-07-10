@@ -1,3 +1,4 @@
+//TODO: Verify if the model valid
 class CompleteShowerRequest {
   String day;
   String time;

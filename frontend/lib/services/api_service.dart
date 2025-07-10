@@ -13,6 +13,7 @@ class ApiService {
   static const String _baseUrl = "http://localhost:8080/api";
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
+  //TODO: match request with backend
   Future<MessageResponse> registerUser(AuthRequest request) async {
     final url = Uri.parse("$_baseUrl/register");
     final headers = {"Content-Type": "application/json"};
@@ -34,6 +35,7 @@ class ApiService {
     }
   }
 
+  //TODO: match request with backend
   Future<MessageResponse> signInUser(AuthRequest request) async {
     final url = Uri.parse("$_baseUrl/signin");
     final headers = {"Content-Type": "application/json"};
@@ -55,6 +57,7 @@ class ApiService {
     }
   }
 
+  //TODO: match request with backend
   Future<Schedule> getAllSchedules() async {
     final url = Uri.parse("$_baseUrl/user/schedules");
     String? token = await _secureStorage.read(key: "jwtToken");
@@ -74,6 +77,7 @@ class ApiService {
     }
   }
 
+  //TODO: match request with backend
   Future<MessageResponse> updateSchedule(UpdateScheduleRequest request) async {
     final url = Uri.parse("$_baseUrl/user/schedules");
     String? token = await _secureStorage.read(key: "jwtToken");
@@ -94,6 +98,7 @@ class ApiService {
     }
   }
 
+  //TODO: match request with backend
   Future<MessageResponse> deleteSchedule(DeleteScheduleRequest request) async {
     final url = Uri.parse("$_baseUrl/user/schedules");
     String? token = await _secureStorage.read(key: "jwtToken");
@@ -118,6 +123,7 @@ class ApiService {
     }
   }
 
+  //TODO: match request with backend
   Future<MessageResponse> completeShower(CompleteShowerRequest request) async {
     final url = Uri.parse("$_baseUrl/user/shower/completed");
     String? token = await _secureStorage.read(key: "jwtToken");

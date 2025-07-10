@@ -1,3 +1,4 @@
+//TODO: Verify if the model valid
 class AuthRequest {
   String login;
   String password;
