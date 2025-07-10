@@ -17,4 +17,3 @@ final lightBottomClock = AssetImage(
 final lightBottomSettings = AssetImage(
   "assets/light-images/bottomIcons/bottomSettings.png",
 );
-//final darkBackground = AssetImage("assets/dark-images/background.png");
