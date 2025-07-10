@@ -51,7 +51,20 @@ func NewEmptySchedule() *Schedule {
 }
 
 type InputRegisterUserRequest struct {
-	Username string `json:"username"`
+	Login    string `json:"login"`
 	Password string `json:"password"`
-	Email    string `json:"email"`
+}
+
+type ScheduleCreateChancheRequest struct {
+	Day   string   `json:"day"`
+	Tasks []string `json"tasks"`
+}
+
+type ScheduleDeleteRequest struct {
+	Day string `json:"day"`
+}
+
+type ScheduleCompleteRequest struct {
+	Day  string `json:"day"`
+	Task string `json"tasks"`
 }

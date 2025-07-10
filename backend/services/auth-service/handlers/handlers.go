@@ -3,13 +3,15 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
-	"github.com/golang-jwt/jwt"
-	"github.com/lib/pq"
-	"github.com/rolanmulukin/tatar-shower-backend/models"
-	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/mux"
+	"github.com/lib/pq"
+	"github.com/rolanmulukin/tatar-shower-backend/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var jwtSecret []byte
@@ -28,6 +30,32 @@ type Handler struct {
 
 func NewHandler(db *sql.DB) *Handler {
 	return &Handler{DB: db}
+}
+
+func (h *Handler) SetupRoutes() *mux.Router {
+	r := mux.NewRouter()
+	r.Use(corsMiddleware)
+
+	apiRouter := r.PathPrefix("/api").Subrouter()
+	apiRouter.HandleFunc("/register", h.RegisterUser).Methods("POST")
+	apiRouter.HandleFunc("/signin", h.SignInUser).Methods("POST")
+
+	return r
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 // registerUserHandler handles user registration requests.
@@ -49,7 +77,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Basic validation
-	if input.Username == "" || input.Password == "" {
+	if input.Login == "" || input.Password == "" {
 		log.Printf("RegisterUser error: Username and password are required (400)")
 		http.Error(w, "Username and password are required", http.StatusBadRequest)
 		return
@@ -66,7 +94,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
         INSERT INTO users (username, password_hash)
         VALUES ($1, $2)
         RETURNING id
-    `, input.Username, string(hash)).Scan(&userID)
+    `, input.Login, string(hash)).Scan(&userID)
 
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
@@ -85,7 +113,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("RegisterUser success: User '%s' registered successfully (201)", input.Username)
+	log.Printf("RegisterUser success: User '%s' registered successfully (201)", input.Login)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Authorization", "Bearer "+jwtToken)
 	w.WriteHeader(http.StatusCreated)
@@ -95,7 +123,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // SingInUser handles user login requests.
-func (h *Handler) SingInUser(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) SignInUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		log.Printf("SingInUser error: Only post allowed (405)")
 		http.Error(w, "Only post allowed", http.StatusMethodNotAllowed)
@@ -107,7 +135,7 @@ func (h *Handler) SingInUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	if input.Username == "" || input.Password == "" {
+	if input.Login == "" || input.Password == "" {
 		log.Printf("SingInUser error: Username and password are required (400)")
 		http.Error(w, "Username and password are required", http.StatusBadRequest)
 		return
@@ -117,7 +145,7 @@ func (h *Handler) SingInUser(w http.ResponseWriter, r *http.Request) {
 	var storedHash string
 	err := h.DB.QueryRow(
 		`SELECT id, password_hash FROM users WHERE username = $1`,
-		input.Username,
+		input.Login,
 	).Scan(&userID, &storedHash)
 	if err == sql.ErrNoRows {
 		log.Printf("SingInUser error: User not found (401)")
@@ -144,7 +172,7 @@ func (h *Handler) SingInUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("SingInUser success: User '%s' signed in successfully (200)", input.Username)
+	log.Printf("SingInUser success: User '%s' signed in successfully (200)", input.Login)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Authorization", "Bearer "+jwtToken)
 	json.NewEncoder(w).Encode(map[string]string{

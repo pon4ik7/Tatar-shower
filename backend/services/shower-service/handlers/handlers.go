@@ -3,11 +3,13 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golang-jwt/jwt"
-	"github.com/rolanmulukin/tatar-shower-backend/models"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/mux"
+	"github.com/rolanmulukin/tatar-shower-backend/models"
 )
 
 var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
@@ -20,6 +22,34 @@ type Handler struct {
 
 func NewHandler(storage *models.Storage) *Handler {
 	return &Handler{Storage: storage}
+}
+
+func (h *Handler) SetupRoutes() *mux.Router {
+	r := mux.NewRouter()
+	r.Use(corsMiddleware)
+
+	apiRouter := r.PathPrefix("/api").Subrouter()
+	apiRouter.HandleFunc("/user/schedules", h.GetAllSchedulesHandler).Methods("GET")
+	apiRouter.HandleFunc("/user/schedules", h.CreateOrUpdateScheduleHandler).Methods("POST", "PUT")
+	apiRouter.HandleFunc("/user/schedules", h.DeleteScheduleHandler).Methods("DELETE")
+	apiRouter.HandleFunc("/user/shower/completed", h.CompleteShowerHandler).Methods("POST")
+
+	return r
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 // GetAllSchedulesHandler returns all schedules for the authenticated user.
@@ -39,7 +69,12 @@ func (h *Handler) GetAllSchedulesHandler(w http.ResponseWriter, r *http.Request)
 		log.Printf("Auth error: %v", err)
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
+
 	}
+	// TODO change this logic stroring the schedule into BD tables
+	// The main idea is to pin dayDone[taskID] = false if no shower and
+	// dayDone[taskID] = true if shower was
+	// Только не меняй структуру ответов
 	w.Header().Set("Content-Type", "application/json")
 	log.Printf("GetAllSchedulesHandler success: Schedules returned for user %d", userID)
 	json.NewEncoder(w).Encode(user.Schedule)
@@ -53,10 +88,8 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	var req struct {
-		Day   string   `json:"day"`
-		Tasks []string `json:"tasks"`
-	}
+	var req models.ScheduleCreateChancheRequest
+
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("CreateOrUpdateScheduleHandler error: Invalid request body (400): %v", err)
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -65,6 +98,11 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 
 	h.Storage.StorageMutex.Lock()
 	defer h.Storage.StorageMutex.Unlock()
+
+	// TODO change this logic stroring the schedule into BD tables
+	// The main idea is to pin dayDone[taskID] = false if no shower and
+	// dayDone[taskID] = true if shower was
+	// Только не меняй структуру ответов
 
 	user, exist := h.Storage.Users[userID]
 	if !exist {
@@ -112,9 +150,8 @@ func (h *Handler) DeleteScheduleHandler(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	var req struct {
-		Day string `json:"day"`
-	}
+	var req models.ScheduleDeleteRequest
+
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("DeleteScheduleHandler error: Invalid request body (400): %v", err)
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -123,6 +160,11 @@ func (h *Handler) DeleteScheduleHandler(w http.ResponseWriter, r *http.Request) 
 
 	h.Storage.StorageMutex.Lock()
 	defer h.Storage.StorageMutex.Unlock()
+
+	// TODO change this logic stroring the schedule into BD tables
+	// The main idea is to pin dayDone[taskID] = false if no shower and
+	// dayDone[taskID] = true if shower was
+	// Только не меняй структуру ответов
 
 	user, exist := h.Storage.Users[userID]
 	if !exist {
@@ -170,10 +212,7 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	var req struct {
-		Day  string `json:"day"`
-		Time string `json:"time"`
-	}
+	var req models.ScheduleCompleteRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("CompleteShowerHandler error: Invalid request body (400): %v", err)
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -190,46 +229,51 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	// TODO change this logic stroring the schedule into BD tables
+	// The main idea is to pin dayDone[taskID] = false if no shower and
+	// dayDone[taskID] = true if shower was
+	// Только не меняй структуру ответов
+
 	switch req.Day {
 	case "Monday":
 		for i, t := range user.Schedule.Monday {
-			if t == req.Time {
+			if t == req.Task {
 				user.Schedule.MondayDone[i] = true
 			}
 		}
 	case "Tuesday":
 		for i, t := range user.Schedule.Tuesday {
-			if t == req.Time {
+			if t == req.Task {
 				user.Schedule.TuesdayDone[i] = true
 			}
 		}
 	case "Wednesday":
 		for i, t := range user.Schedule.Wednesday {
-			if t == req.Time {
+			if t == req.Task {
 				user.Schedule.WednesdayDone[i] = true
 			}
 		}
 	case "Thursday":
 		for i, t := range user.Schedule.Thursday {
-			if t == req.Time {
+			if t == req.Task {
 				user.Schedule.ThursdayDone[i] = true
 			}
 		}
 	case "Friday":
 		for i, t := range user.Schedule.Friday {
-			if t == req.Time {
+			if t == req.Task {
 				user.Schedule.FridayDone[i] = true
 			}
 		}
 	case "Saturday":
 		for i, t := range user.Schedule.Saturday {
-			if t == req.Time {
+			if t == req.Task {
 				user.Schedule.SaturdayDone[i] = true
 			}
 		}
 	case "Sunday":
 		for i, t := range user.Schedule.Sunday {
-			if t == req.Time {
+			if t == req.Task {
 				user.Schedule.SundayDone[i] = true
 			}
 		}
@@ -238,7 +282,7 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Invalid day", http.StatusBadRequest)
 		return
 	}
-	log.Printf("CompleteShowerHandler success: Shower marked as completed for user %d, day %s, time %s", userID, req.Day, req.Time)
+	log.Printf("CompleteShowerHandler success: Shower marked as completed for user %d, day %s, time %s", userID, req.Day, req.Task)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Shower marked as completed"})
 }
