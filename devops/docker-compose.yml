@@ -27,7 +27,7 @@ services:
       - .env
     environment:
       BINARY_NAME: migrator
-      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db
+      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db?sslmode=disable
       MIGRATE: "true"
 
   auth-service:
@@ -45,7 +45,7 @@ services:
       - .env
     environment:
       BINARY_NAME: auth-service
-      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db
+      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db?sslmode=disable
       JWT_SECRET: ${JWT_SECRET}
       PORT: 8001
     ports:
@@ -66,7 +66,7 @@ services:
       - .env
     environment:
       BINARY_NAME: shower-service
-      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db
+      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db?sslmode=disable
       PORT: 8002
     ports:
       - "8002:8002"
@@ -86,7 +86,7 @@ services:
       - .env
     environment:
       BINARY_NAME: rec-service
-      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db
+      DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db?sslmode=disable
       PORT: 8003
     ports:
       - "8003:8003"

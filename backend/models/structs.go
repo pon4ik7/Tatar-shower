@@ -51,6 +51,7 @@ func NewEmptySchedule() *Schedule {
 }
 
 type InputRegisterUserRequest struct {
-	Login    string `json:"login"`
+	Username string `json:"username"`
 	Password string `json:"password"`
+	Email    string `json:"email"`
 }
