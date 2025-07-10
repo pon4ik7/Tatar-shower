@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -10,14 +11,12 @@ import (
 	"github.com/rolanmulukin/tatar-shower-backend/tokens"
 )
 
-// TODO: switch to DB-backed storage
-
 type Handler struct {
-	Storage *models.Storage
+	DB *sql.DB
 }
 
-func NewHandler(storage *models.Storage) *Handler {
-	return &Handler{Storage: storage}
+func NewHandler(db *sql.DB) *Handler {
+	return &Handler{DB: db}
 }
 
 func (h *Handler) SetupRoutes() *mux.Router {
@@ -57,23 +56,56 @@ func (h *Handler) GetAllSchedulesHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	h.Storage.StorageMutex.Lock()
-	defer h.Storage.StorageMutex.Unlock()
-
-	user, exist := h.Storage.Users[userID]
-	if !exist {
-		log.Printf("Auth error: %v", err)
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+	rows, err := h.DB.Query(`
+		SELECT day, time, done
+		FROM schedule_entries
+		WHERE user_id = $1
+		ORDER BY id
+	`, userID)
+	if err != nil {
+		log.Printf("DB error in GetAllSchedules: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
-
 	}
-	// TODO change this logic stroring the schedule into BD tables
-	// The main idea is to pin dayDone[taskID] = false if no shower and
-	// dayDone[taskID] = true if shower was
-	// Только не меняй структуру ответов
+	defer rows.Close()
+
+	schedule := models.Schedule{}
+
+	for rows.Next() {
+		var day, t string
+		var done bool
+		if err := rows.Scan(&day, &t, &done); err != nil {
+			log.Printf("Scan error in GetAllSchedules: %v", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+		switch day {
+		case "Monday":
+			schedule.Monday = append(schedule.Monday, t)
+			schedule.MondayDone = append(schedule.MondayDone, done)
+		case "Tuesday":
+			schedule.Tuesday = append(schedule.Tuesday, t)
+			schedule.TuesdayDone = append(schedule.TuesdayDone, done)
+		case "Wednesday":
+			schedule.Wednesday = append(schedule.Wednesday, t)
+			schedule.WednesdayDone = append(schedule.WednesdayDone, done)
+		case "Thursday":
+			schedule.Thursday = append(schedule.Thursday, t)
+			schedule.ThursdayDone = append(schedule.ThursdayDone, done)
+		case "Friday":
+			schedule.Friday = append(schedule.Friday, t)
+			schedule.FridayDone = append(schedule.FridayDone, done)
+		case "Saturday":
+			schedule.Saturday = append(schedule.Saturday, t)
+			schedule.SaturdayDone = append(schedule.SaturdayDone, done)
+		case "Sunday":
+			schedule.Sunday = append(schedule.Sunday, t)
+			schedule.SundayDone = append(schedule.SundayDone, done)
+		}
+	}
 	w.Header().Set("Content-Type", "application/json")
 	log.Printf("GetAllSchedulesHandler success: Schedules returned for user %d", userID)
-	json.NewEncoder(w).Encode(user.Schedule)
+	json.NewEncoder(w).Encode(schedule)
 }
 
 // CreateOrUpdateScheduleHandler creates or updates a schedule for the authenticated user.
@@ -92,47 +124,38 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	h.Storage.StorageMutex.Lock()
-	defer h.Storage.StorageMutex.Unlock()
-
-	// TODO change this logic stroring the schedule into BD tables
-	// The main idea is to pin dayDone[taskID] = false if no shower and
-	// dayDone[taskID] = true if shower was
-	// Только не меняй структуру ответов
-
-	user, exist := h.Storage.Users[userID]
-	if !exist {
-		log.Printf("CreateOrUpdateScheduleHandler error: User not found (404)")
-		http.Error(w, "User not found", http.StatusNotFound)
+	tx, err := h.DB.Begin()
+	if err != nil {
+		log.Printf("DB begin error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	switch req.Day {
-	case "Monday":
-		user.Schedule.Monday = req.Tasks
-		user.Schedule.MondayDone = make([]bool, len(req.Tasks))
-	case "Tuesday":
-		user.Schedule.Tuesday = req.Tasks
-		user.Schedule.TuesdayDone = make([]bool, len(req.Tasks))
-	case "Wednesday":
-		user.Schedule.Wednesday = req.Tasks
-		user.Schedule.WednesdayDone = make([]bool, len(req.Tasks))
-	case "Thursday":
-		user.Schedule.Thursday = req.Tasks
-		user.Schedule.ThursdayDone = make([]bool, len(req.Tasks))
-	case "Friday":
-		user.Schedule.Friday = req.Tasks
-		user.Schedule.FridayDone = make([]bool, len(req.Tasks))
-	case "Saturday":
-		user.Schedule.Saturday = req.Tasks
-		user.Schedule.SaturdayDone = make([]bool, len(req.Tasks))
-	case "Sunday":
-		user.Schedule.Sunday = req.Tasks
-		user.Schedule.SundayDone = make([]bool, len(req.Tasks))
-	default:
-		log.Printf("CreateOrUpdateScheduleHandler error: Invalid day (400)")
-		http.Error(w, "Invalid day", http.StatusBadRequest)
+	if _, err := tx.Exec(`
+		DELETE FROM schedule_entries
+		WHERE user_id=$1 AND day=$2
+	`, userID, req.Day); err != nil {
+		tx.Rollback()
+		log.Printf("DB delete error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
+	for _, t := range req.Tasks {
+		if _, err := tx.Exec(`
+			INSERT INTO schedule_entries (user_id, day, time, done)
+			VALUES ($1, $2, $3, false)
+		`, userID, req.Day, t); err != nil {
+			tx.Rollback()
+			log.Printf("DB insert error: %v", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		log.Printf("DB commit error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
 	log.Printf("CreateOrUpdateScheduleHandler success: Schedule updated for user %d, day %s", userID, req.Day)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Schedule updated"})
@@ -154,47 +177,15 @@ func (h *Handler) DeleteScheduleHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	h.Storage.StorageMutex.Lock()
-	defer h.Storage.StorageMutex.Unlock()
-
-	// TODO change this logic stroring the schedule into BD tables
-	// The main idea is to pin dayDone[taskID] = false if no shower and
-	// dayDone[taskID] = true if shower was
-	// Только не меняй структуру ответов
-
-	user, exist := h.Storage.Users[userID]
-	if !exist {
-		log.Printf("CreateOrUpdateScheduleHandler error: User not found (404)")
-		http.Error(w, "User not found", http.StatusNotFound)
+	if _, err := h.DB.Exec(`
+		DELETE FROM schedule_entries
+		WHERE user_id=$1 AND day=$2
+	`, userID, req.Day); err != nil {
+		log.Printf("DB delete error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	switch req.Day {
-	case "Monday":
-		user.Schedule.Monday = nil
-		user.Schedule.MondayDone = nil
-	case "Tuesday":
-		user.Schedule.Tuesday = nil
-		user.Schedule.TuesdayDone = nil
-	case "Wednesday":
-		user.Schedule.Wednesday = nil
-		user.Schedule.WednesdayDone = nil
-	case "Thursday":
-		user.Schedule.Thursday = nil
-		user.Schedule.ThursdayDone = nil
-	case "Friday":
-		user.Schedule.Friday = nil
-		user.Schedule.FridayDone = nil
-	case "Saturday":
-		user.Schedule.Saturday = nil
-		user.Schedule.SaturdayDone = nil
-	case "Sunday":
-		user.Schedule.Sunday = nil
-		user.Schedule.SundayDone = nil
-	default:
-		log.Printf("DeleteScheduleHandler error: Invalid day (400)")
-		http.Error(w, "Invalid day", http.StatusBadRequest)
-		return
-	}
+
 	log.Printf("DeleteScheduleHandler success: Schedule deleted for user %d, day %s", userID, req.Day)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Schedule deleted"})
@@ -215,69 +206,39 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	h.Storage.StorageMutex.Lock()
-	defer h.Storage.StorageMutex.Unlock()
-
-	user, exist := h.Storage.Users[userID]
-	if !exist {
-		log.Printf("CreateOrUpdateScheduleHandler error: User not found (404)")
-		http.Error(w, "User not found", http.StatusNotFound)
+	tx, err := h.DB.Begin()
+	if err != nil {
+		log.Printf("DB begin error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	if _, err := tx.Exec(`
+		UPDATE schedule_entries
+		SET done = true
+		WHERE user_id=$1 AND day=$2 AND time=$3
+	`, userID, req.Day, req.Task); err != nil {
+		tx.Rollback()
+		log.Printf("DB update error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
-	// TODO change this logic stroring the schedule into BD tables
-	// The main idea is to pin dayDone[taskID] = false if no shower and
-	// dayDone[taskID] = true if shower was
-	// Только не меняй структуру ответов
-
-	switch req.Day {
-	case "Monday":
-		for i, t := range user.Schedule.Monday {
-			if t == req.Task {
-				user.Schedule.MondayDone[i] = true
-			}
-		}
-	case "Tuesday":
-		for i, t := range user.Schedule.Tuesday {
-			if t == req.Task {
-				user.Schedule.TuesdayDone[i] = true
-			}
-		}
-	case "Wednesday":
-		for i, t := range user.Schedule.Wednesday {
-			if t == req.Task {
-				user.Schedule.WednesdayDone[i] = true
-			}
-		}
-	case "Thursday":
-		for i, t := range user.Schedule.Thursday {
-			if t == req.Task {
-				user.Schedule.ThursdayDone[i] = true
-			}
-		}
-	case "Friday":
-		for i, t := range user.Schedule.Friday {
-			if t == req.Task {
-				user.Schedule.FridayDone[i] = true
-			}
-		}
-	case "Saturday":
-		for i, t := range user.Schedule.Saturday {
-			if t == req.Task {
-				user.Schedule.SaturdayDone[i] = true
-			}
-		}
-	case "Sunday":
-		for i, t := range user.Schedule.Sunday {
-			if t == req.Task {
-				user.Schedule.SundayDone[i] = true
-			}
-		}
-	default:
-		log.Printf("CompleteShowerHandler error: Invalid day (400)")
-		http.Error(w, "Invalid day", http.StatusBadRequest)
+	// TODO create a logic to get total_duration and cold_duration
+	if _, err := tx.Exec(`
+		INSERT INTO sessions (user_id, date, total_duration, cold_duration)
+		VALUES ($1, NOW(), INTERVAL '0', INTERVAL '0')
+	`, userID); err != nil {
+		tx.Rollback()
+		log.Printf("DB insert session error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
+	if err := tx.Commit(); err != nil {
+		log.Printf("DB commit error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
 	log.Printf("CompleteShowerHandler success: Shower marked as completed for user %d, day %s, time %s", userID, req.Day, req.Task)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Shower marked as completed"})

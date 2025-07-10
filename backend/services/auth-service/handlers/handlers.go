@@ -10,12 +10,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/lib/pq"
 	"github.com/rolanmulukin/tatar-shower-backend/models"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/rolanmulukin/tatar-shower-backend/tokens"
+	"golang.org/x/crypto/bcrypt"
 )
-
-
-
 
 type Handler struct {
 	DB *sql.DB
@@ -82,9 +79,17 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tx, err := h.DB.Begin()
+	if err != nil {
+		log.Printf("RegisterUser: could not begin tx: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer tx.Rollback()
+
 	var userID int
 	err = h.DB.QueryRow(`
-        INSERT INTO users (username, password_hash)
+        INSERT INTO users (login, password_hash)
         VALUES ($1, $2)
         RETURNING id
     `, input.Login, string(hash)).Scan(&userID)
@@ -95,6 +100,18 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		http.Error(w, "DB error", http.StatusInternalServerError)
+		return
+	}
+
+	if err := h.initializeUserData(tx, userID); err != nil {
+		log.Printf("RegisterUser: init user data error: %v", err)
+		http.Error(w, "DB error", http.StatusInternalServerError)
+		return
+	}
+
+	if err := tx.Commit(); err != nil {
+		log.Printf("RegisterUser: commit error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 
@@ -137,7 +154,7 @@ func (h *Handler) SignInUser(w http.ResponseWriter, r *http.Request) {
 	var userID int
 	var storedHash string
 	err := h.DB.QueryRow(
-		`SELECT id, password_hash FROM users WHERE username = $1`,
+		`SELECT id, password_hash FROM users WHERE login = $1`,
 		input.Login,
 	).Scan(&userID, &storedHash)
 	if err == sql.ErrNoRows {
@@ -171,4 +188,28 @@ func (h *Handler) SignInUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "User signed in successfully",
 	})
+}
+
+// TODO: add language, theme, notifications, frequency_type, custom_days, reminder_time, experience_type, target_streak
+// Now this function is just a template for DB visualization
+func (h *Handler) initializeUserData(tx *sql.Tx, userID int) error {
+	if _, err := tx.Exec(`
+        INSERT INTO preferences (
+            user_id,
+            frequency_type,
+            experience_type,
+            target_streak
+        ) VALUES ($1, $2, DEFAULT, DEFAULT)
+    `, userID, "everyday"); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(`
+        INSERT INTO goals (
+            user_id
+        ) VALUES ($1)
+    `, userID); err != nil {
+		return err
+	}
+
+	return nil
 }

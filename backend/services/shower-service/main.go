@@ -1,17 +1,24 @@
 package main
 
 import (
-	"github.com/rolanmulukin/tatar-shower-backend/models"
+	"github.com/rolanmulukin/tatar-shower-backend/db"
 	"github.com/rolanmulukin/tatar-shower-backend/services/shower-service/handlers"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
-	// TODO: switch to DB-backed storage
-	storage := models.NewStrorage()
-	h := handlers.NewHandler(storage)
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		log.Fatal("DATABASE_URL is not set")
+	}
+	sqlDB, err := db.NewDB(dsn)
+	if err != nil {
+		log.Fatalf("failed to connect to DB: %v", err)
+	}
+	h := handlers.NewHandler(sqlDB)
 	r := h.SetupRoutes()
 
 	srv := &http.Server{
