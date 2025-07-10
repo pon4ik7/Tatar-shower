@@ -28,6 +28,8 @@
     "username": "имя пользователя",
 
     "password": "пароль",
+    
+    "confirm_password": "подтвертдите пароль",
 
     "have_account": "Уже есть аккаунт? Войти",
 
@@ -87,5 +89,11 @@
 
     "done_prefs": "Готово! Начните свое холодное приключение!",
 
-    "start": "Начать"
+    "start": "Начать",
+
+    "error_username_short": "От 5 до 50 символов",
+
+    "error_password_short": "Минимум 5 символов",
+
+    "error_passwords_must_match": "Пароли не совпадают"
 }

@@ -182,6 +182,12 @@ abstract class AppLocalizations {
   /// **'password'**
   String get password;
 
+  /// No description provided for @confirm_password.
+  ///
+  /// In en, this message translates to:
+  /// **'confirm password'**
+  String get confirm_password;
+
   /// No description provided for @have_account.
   ///
   /// In en, this message translates to:
@@ -415,6 +421,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resent showers'**
   String get recentShowers;
+
+  /// No description provided for @error_username_short.
+  ///
+  /// In en, this message translates to:
+  /// **'From 5 to 50 characters'**
+  String get error_username_short;
+
+  /// No description provided for @error_password_short.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 5 characters'**
+  String get error_password_short;
+
+  /// No description provided for @error_passwords_must_match.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get error_passwords_must_match;
 }
 
 class _AppLocalizationsDelegate

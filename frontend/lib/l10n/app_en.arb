@@ -29,6 +29,8 @@
 
     "password": "password",
 
+    "confirm_password": "confirm password",
+
     "have_account": "Already have an account? Log in",
 
     "log_in": "Log In",
@@ -105,5 +107,11 @@
 
     "longestStreak": "Longest Streak",
 
-    "recentShowers": "Resent showers"
+    "recentShowers": "Resent showers", 
+
+    "error_username_short": "From 5 to 50 characters",
+
+    "error_password_short": "At least 5 characters",
+
+    "error_passwords_must_match": "Passwords do not match"
 }

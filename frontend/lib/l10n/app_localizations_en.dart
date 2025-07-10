@@ -52,6 +52,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'password';
 
   @override
+  String get confirm_password => 'confirm password';
+
+  @override
   String get have_account => 'Already have an account? Log in';
 
   @override
@@ -169,4 +172,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recentShowers => 'Resent showers';
+
+  @override
+  String get error_username_short => 'From 5 to 50 characters';
+
+  @override
+  String get error_password_short => 'At least 5 characters';
+
+  @override
+  String get error_passwords_must_match => 'Passwords do not match';
 }
