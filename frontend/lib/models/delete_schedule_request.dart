@@ -1,4 +1,4 @@
-//TODO: Verify if the model valid
+// Valid request for delete day schedule
 class DeleteScheduleRequest {
   String day;
 

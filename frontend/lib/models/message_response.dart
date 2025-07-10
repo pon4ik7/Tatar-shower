@@ -1,4 +1,4 @@
-//TODO: Verify if the model valid
+// Valid model
 class MessageResponse {
   String message;
 

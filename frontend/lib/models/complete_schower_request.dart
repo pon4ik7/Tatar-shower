@@ -1,4 +1,4 @@
-//TODO: Verify if the model valid
+// Valid request for complete flag
 class CompleteShowerRequest {
   String day;
   String time;

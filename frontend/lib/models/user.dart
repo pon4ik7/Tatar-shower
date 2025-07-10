@@ -1,6 +1,6 @@
 import 'package:tatar_shower/models/schedule.dart';
 
-//TODO: Verify if the model valid
+// Valid model
 class User {
   int id;
   String login;

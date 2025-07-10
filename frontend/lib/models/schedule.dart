@@ -1,4 +1,4 @@
-//TODO: Verify if the model valid
+// Valid model
 class Schedule {
   List<String> monday;
   List<bool> mondayDone;

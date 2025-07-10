@@ -1,4 +1,4 @@
-//TODO: Verify if the model valid
+// Valid request for scuedule update
 class UpdateScheduleRequest {
   String day;
   List<String> tasks;
