@@ -17,24 +17,35 @@ class MainScreen extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(image: lightBackground, fit: BoxFit.cover),
         ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 24),
-              _Diagram(loc: loc),
-              const SizedBox(height: 40),
-              _NewShowerButtom(loc: loc),
-              const SizedBox(height: 24),
-              _TableHeader(loc: loc),
-              const SizedBox(height: 5),
-              _ShowerTable(loc: loc),
-              const SizedBox(height: 16),
-              _Statistics(loc: loc),
-            ],
-          ),
-        ),
+        child: _MainScreenBody(loc: loc),
       ),
       bottomNavigationBar: _BottomNavigationBar(),
+    );
+  }
+}
+
+class _MainScreenBody extends StatelessWidget {
+  const _MainScreenBody({required this.loc});
+
+  final AppLocalizations loc;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        children: [
+          const SizedBox(height: 24),
+          _Diagram(loc: loc),
+          const SizedBox(height: 40),
+          _NewShowerButtom(loc: loc),
+          const SizedBox(height: 24),
+          _TableHeader(loc: loc),
+          const SizedBox(height: 5),
+          _ShowerTable(loc: loc),
+          const SizedBox(height: 16),
+          _Statistics(loc: loc),
+        ],
+      ),
     );
   }
 }
