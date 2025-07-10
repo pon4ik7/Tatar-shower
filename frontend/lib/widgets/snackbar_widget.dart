@@ -20,7 +20,6 @@ class SnackBarFactory {
               style: TextStyle(
                 fontFamily: appFonts.regular,
                 color: appColors.midBlue,
-                fontWeight: FontWeight.w900,
                 fontSize: 17,
               ),
             ),
