@@ -57,7 +57,7 @@ type InputRegisterUserRequest struct {
 
 type ScheduleCreateChancheRequest struct {
 	Day   string   `json:"day"`
-	Tasks []string `json"tasks"`
+	Tasks []string `json:"tasks"`
 }
 
 type ScheduleDeleteRequest struct {
@@ -66,5 +66,5 @@ type ScheduleDeleteRequest struct {
 
 type ScheduleCompleteRequest struct {
 	Day  string `json:"day"`
-	Task string `json"tasks"`
+	Task string `json:"tasks"`
 }
