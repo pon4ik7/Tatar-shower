@@ -2,17 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/gorilla/mux"
 	"github.com/rolanmulukin/tatar-shower-backend/models"
+	"github.com/rolanmulukin/tatar-shower-backend/tokens"
 )
-
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 // TODO: switch to DB-backed storage
 
@@ -54,7 +50,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 
 // GetAllSchedulesHandler returns all schedules for the authenticated user.
 func (h *Handler) GetAllSchedulesHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := getUserIDFromRequest(r)
+	userID, err := tokens.GetUserIDFromRequest(r)
 	if err != nil {
 		log.Printf("Auth error: %v", err)
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -82,7 +78,7 @@ func (h *Handler) GetAllSchedulesHandler(w http.ResponseWriter, r *http.Request)
 
 // CreateOrUpdateScheduleHandler creates or updates a schedule for the authenticated user.
 func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := getUserIDFromRequest(r)
+	userID, err := tokens.GetUserIDFromRequest(r)
 	if err != nil {
 		log.Printf("Auth error: %v", err)
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -144,7 +140,7 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 
 // DeleteScheduleHandler deletes a schedule for a specific day for the authenticated user.
 func (h *Handler) DeleteScheduleHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := getUserIDFromRequest(r)
+	userID, err := tokens.GetUserIDFromRequest(r)
 	if err != nil {
 		log.Printf("Auth error: %v", err)
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -206,7 +202,7 @@ func (h *Handler) DeleteScheduleHandler(w http.ResponseWriter, r *http.Request) 
 
 // CompleteShowerHandler marks a shower as completed for tracking progress and streaks.
 func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := getUserIDFromRequest(r)
+	userID, err := tokens.GetUserIDFromRequest(r)
 	if err != nil {
 		log.Printf("Auth error: %v", err)
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -285,32 +281,4 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 	log.Printf("CompleteShowerHandler success: Shower marked as completed for user %d, day %s, time %s", userID, req.Day, req.Task)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Shower marked as completed"})
-}
-
-// Extract user ID from JWT token in Authorization header
-func getUserIDFromRequest(r *http.Request) (int, error) {
-	authHeader := r.Header.Get("Authorization")
-	if authHeader == "" {
-		return 0, fmt.Errorf("authorization header missing")
-	}
-	var tokenString string
-	fmt.Sscanf(authHeader, "Bearer %s", &tokenString)
-	if tokenString == "" {
-		return 0, fmt.Errorf("token missing in authorization header")
-	}
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
-	})
-	if err != nil || !token.Valid {
-		return 0, fmt.Errorf("invalid token: %v", err)
-	}
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return 0, fmt.Errorf("invalid token claims")
-	}
-	userIDFloat, ok := claims["user_id"].(float64)
-	if !ok {
-		return 0, fmt.Errorf("user_id not found in token claims")
-	}
-	return int(userIDFloat), nil
 }

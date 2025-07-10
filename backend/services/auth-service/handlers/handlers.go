@@ -5,24 +5,17 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/gorilla/mux"
 	"github.com/lib/pq"
 	"github.com/rolanmulukin/tatar-shower-backend/models"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/rolanmulukin/tatar-shower-backend/tokens"
 )
 
-var jwtSecret []byte
 
-func init() {
-	s := os.Getenv("JWT_SECRET")
-	if s == "" {
-		log.Fatal("JWT_SECRET is not set")
-	}
-	jwtSecret = []byte(s)
-}
+
 
 type Handler struct {
 	DB *sql.DB
@@ -107,7 +100,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	jwtToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
-	}).SignedString(jwtSecret)
+	}).SignedString(tokens.JwtSecret)
 	if err != nil {
 		http.Error(w, "Token error", http.StatusInternalServerError)
 		return
@@ -165,7 +158,7 @@ func (h *Handler) SignInUser(w http.ResponseWriter, r *http.Request) {
 
 	jwtToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
-	}).SignedString(jwtSecret)
+	}).SignedString(tokens.JwtSecret)
 	if err != nil {
 		log.Printf("SingInUser error: Token generation failed: %v", err)
 		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
