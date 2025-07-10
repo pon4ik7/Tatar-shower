@@ -105,5 +105,13 @@
 
     "longestStreak": "Longest Streak",
 
-    "recentShowers": "Resent showers"
+    "recentShowers": "Resent showers",
+
+    "change_the_language": "Change the language",
+
+    "change_the_mode": "Change the mode",
+
+    "notification_enabled": "Notification Enabled",
+
+    "notification_disabled": "Notification disabled"
 }

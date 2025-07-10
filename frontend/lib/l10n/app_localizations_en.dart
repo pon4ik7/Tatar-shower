@@ -169,4 +169,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recentShowers => 'Resent showers';
+
+  @override
+  String get change_the_language => 'Change the language';
+
+  @override
+  String get change_the_mode => 'Change the mode';
+
+  @override
+  String get notification_enabled => 'Notification Enabled';
+
+  @override
+  String get notification_disabled => 'Notification disabled';
 }

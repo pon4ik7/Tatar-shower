@@ -415,6 +415,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resent showers'**
   String get recentShowers;
+
+  /// No description provided for @change_the_language.
+  ///
+  /// In en, this message translates to:
+  /// **'Change the language'**
+  String get change_the_language;
+
+  /// No description provided for @change_the_mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Change the mode'**
+  String get change_the_mode;
+
+  /// No description provided for @notification_enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Enabled'**
+  String get notification_enabled;
+
+  /// No description provided for @notification_disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification disabled'**
+  String get notification_disabled;
 }
 
 class _AppLocalizationsDelegate

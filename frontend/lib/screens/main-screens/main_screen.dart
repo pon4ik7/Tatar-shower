@@ -19,7 +19,6 @@ class MainScreen extends StatelessWidget {
         ),
         child: _MainScreenBody(loc: loc),
       ),
-      bottomNavigationBar: _BottomNavigationBar(),
     );
   }
 }
@@ -110,7 +109,7 @@ class _NewShowerButtom extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pushNamed('/new_shower');
+            //Navigator.of(context).pushNamed('/new_shower');
           },
           child: Text(
             loc.newShower,
@@ -308,47 +307,6 @@ class _Statistics extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _BottomNavigationBar extends StatelessWidget {
-  const _BottomNavigationBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: appColors.black, width: 0.5)),
-      ),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          splashFactory: NoSplash.splashFactory,
-          highlightColor: Colors.transparent,
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          currentIndex: 0,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: appColors.black,
-          unselectedItemColor: appColors.black,
-          items: [
-            BottomNavigationBarItem(
-              icon: ImageIcon(lightBottomCalendar, size: 40),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(lightBottomClock, size: 40),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(lightBottomSettings, size: 40),
-              label: '',
-            ),
-          ],
-        ),
       ),
     );
   }

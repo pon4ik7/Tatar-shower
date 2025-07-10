@@ -145,29 +145,41 @@ class AppLocalizationsRu extends AppLocalizations {
   String get start => 'Начать';
 
   @override
-  String get days => 'Days';
+  String get days => 'Дней';
 
   @override
-  String get newShower => 'New shower';
+  String get newShower => 'Новое упражнение';
 
   @override
-  String get date => 'Date';
+  String get date => 'Дата';
 
   @override
-  String get duration => 'Duration';
+  String get duration => 'Длительность';
 
   @override
-  String get coldDuration => 'Cold shower';
+  String get coldDuration => 'Холодный душ';
 
   @override
-  String get thisWeek => 'This week';
+  String get thisWeek => 'Эта неделя';
 
   @override
-  String get showers => 'showers';
+  String get showers => 'Души';
 
   @override
-  String get longestStreak => 'Longest Streak';
+  String get longestStreak => 'Самая длиная серия';
 
   @override
-  String get recentShowers => 'Resent showers';
+  String get recentShowers => 'Последний душ';
+
+  @override
+  String get change_the_language => 'Сменить язык';
+
+  @override
+  String get change_the_mode => 'Сменить тему';
+
+  @override
+  String get notification_enabled => 'Уведомления включены';
+
+  @override
+  String get notification_disabled => 'Уведомления выключены';
 }
