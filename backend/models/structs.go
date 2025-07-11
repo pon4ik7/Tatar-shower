@@ -54,3 +54,17 @@ type InputRegisterUserRequest struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
+
+type ScheduleCreateChancheRequest struct {
+	Day   string   `json:"day"`
+	Tasks []string `json:"tasks"`
+}
+
+type ScheduleDeleteRequest struct {
+	Day string `json:"day"`
+}
+
+type ScheduleCompleteRequest struct {
+	Day  string `json:"day"`
+	Task string `json:"tasks"`
+}
