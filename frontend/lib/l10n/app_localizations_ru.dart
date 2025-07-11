@@ -52,7 +52,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get password => 'пароль';
 
   @override
-  String get confirm_password => 'подтвертдите пароль';
+  String get confirm_password => 'подтвердите пароль';
 
   @override
   String get have_account => 'Уже есть аккаунт? Войти';
@@ -175,7 +175,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recentShowers => 'Resent showers';
 
   @override
-  String get error_username_short => 'От 5 до 50 символов';
+  String get error_username_short => 'От 5 до 30 символов';
 
   @override
   String get error_password_short => 'Минимум 5 символов';

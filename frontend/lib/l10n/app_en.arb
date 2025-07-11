@@ -109,7 +109,7 @@
 
     "recentShowers": "Resent showers", 
 
-    "error_username_short": "From 5 to 50 characters",
+    "error_username_short": "From 5 to 30 characters",
 
     "error_password_short": "At least 5 characters",
 

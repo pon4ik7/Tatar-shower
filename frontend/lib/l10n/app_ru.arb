@@ -29,7 +29,7 @@
 
     "password": "пароль",
     
-    "confirm_password": "подтвертдите пароль",
+    "confirm_password": "подтвердите пароль",
 
     "have_account": "Уже есть аккаунт? Войти",
 
@@ -91,7 +91,7 @@
 
     "start": "Начать",
 
-    "error_username_short": "От 5 до 50 символов",
+    "error_username_short": "От 5 до 30 символов",
 
     "error_password_short": "Минимум 5 символов",
 

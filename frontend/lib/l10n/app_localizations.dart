@@ -425,7 +425,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_username_short.
   ///
   /// In en, this message translates to:
-  /// **'From 5 to 50 characters'**
+  /// **'From 5 to 30 characters'**
   String get error_username_short;
 
   /// No description provided for @error_password_short.

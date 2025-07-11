@@ -87,9 +87,9 @@ class _SignUpScreenBody extends StatelessWidget {
                   _SignUpText(loc: loc),
                   SizedBox(height: 50),
                   _UsernameTextField(loc: loc, controller: usernameController),
-                  SizedBox(height: 30),
+                  SizedBox(height: 15),
                   _PasswordTextField(loc: loc, controller: passwordController),
-                  SizedBox(height: 30),
+                  SizedBox(height: 15),
                   _ConfirmPasswordTextField(
                     loc: loc,
                     controller: confirmPasswordController,
@@ -137,12 +137,18 @@ class _UsernameTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 70,
       child: TextFormField(
+        maxLength: 30,
         controller: controller,
+        textAlignVertical: TextAlignVertical.center,
+        maxLines: 1,
         textAlign: TextAlign.center,
         style: TextStyle(color: appColors.midBlue),
         decoration: InputDecoration(
+          helperText: ' ',
+          errorMaxLines: 1,
+          isDense: true,
           hintText: loc.username,
           hintStyle: TextStyle(fontSize: 16, color: appColors.midBlue),
           filled: true,
@@ -156,6 +162,19 @@ class _UsernameTextField extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.white),
           ),
           focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          border: OutlineInputBorder(borderSide: BorderSide(width: 2)),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: Colors.white, width: 2),
           ),
@@ -180,12 +199,20 @@ class _PasswordTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 70,
       child: TextFormField(
+        maxLength: 30,
         controller: controller,
+        obscureText: true,
+        obscuringCharacter: '•',
+        textAlignVertical: TextAlignVertical.center,
+        maxLines: 1,
         textAlign: TextAlign.center,
         style: TextStyle(color: appColors.midBlue),
         decoration: InputDecoration(
+          helperText: ' ',
+          errorMaxLines: 1,
+          isDense: true,
           hintText: loc.password,
           hintStyle: TextStyle(fontSize: 16, color: appColors.midBlue),
           filled: true,
@@ -195,16 +222,29 @@ class _PasswordTextField extends StatelessWidget {
             horizontal: 16,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: Colors.white),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          border: OutlineInputBorder(borderSide: BorderSide(width: 2)),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: Colors.white, width: 2),
           ),
         ),
         validator: (v) {
-          if (v == null || v.length < 5) {
+          if (v == null || v.length < 5 || v.length > 30) {
             return loc.error_password_short;
           }
           return null;
@@ -228,12 +268,20 @@ class _ConfirmPasswordTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 70,
       child: TextFormField(
+        maxLength: 30,
         controller: controller,
+        obscureText: true,
+        obscuringCharacter: '•',
+        textAlignVertical: TextAlignVertical.center,
+        maxLines: 1,
         textAlign: TextAlign.center,
         style: TextStyle(color: appColors.midBlue),
         decoration: InputDecoration(
+          helperText: ' ',
+          errorMaxLines: 1,
+          isDense: true,
           hintText: loc.confirm_password,
           hintStyle: TextStyle(fontSize: 16, color: appColors.midBlue),
           filled: true,
@@ -243,11 +291,24 @@ class _ConfirmPasswordTextField extends StatelessWidget {
             horizontal: 16,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: Colors.white),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          border: OutlineInputBorder(borderSide: BorderSide(width: 2)),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(color: Colors.white, width: 2),
           ),
         ),

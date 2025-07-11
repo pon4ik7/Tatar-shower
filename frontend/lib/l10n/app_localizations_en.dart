@@ -174,7 +174,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recentShowers => 'Resent showers';
 
   @override
-  String get error_username_short => 'From 5 to 50 characters';
+  String get error_username_short => 'From 5 to 30 characters';
 
   @override
   String get error_password_short => 'At least 5 characters';
