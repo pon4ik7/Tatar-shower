@@ -95,7 +95,7 @@
 
     "error_password_short": "Минимум 5 символов",
 
-    "error_passwords_must_match": "Пароли не совпадают"
+    "error_passwords_must_match": "Пароли не совпадают",
 
     "start": "Начать",
 

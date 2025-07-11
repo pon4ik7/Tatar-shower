@@ -1,5 +1,6 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '12.0'
+platform :ios, '12.0'
+use_modular_headers!
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -28,16 +29,30 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  use_frameworks!
+  # Убираем use_frameworks!, чтобы собирать плагины статически
+  # use_frameworks! :linkage => :static
+
+  # Явно используем модульные заголовки для Firebase-подов
+  pod 'FirebaseCore',          :modular_headers => true
+  pod 'FirebaseMessaging',     :modular_headers => true
+  pod 'FirebaseInstallations', :modular_headers => true
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
   target 'RunnerTests' do
     inherit! :search_paths
   end
 end
 
+# Один единственный post_install, объединяющий flutter-настройки и разрешение не-модульных include
 post_install do |installer|
   installer.pods_project.targets.each do |target|
+    # Flutter-specific build settings
     flutter_additional_ios_build_settings(target)
+
+    # Allow non-modular includes in framework modules (just in case)
+    target.build_configurations.each do |config|
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+    end
   end
 end
