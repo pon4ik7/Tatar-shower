@@ -1,6 +1,9 @@
 package models
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
 // Storage struct is a thread-safe storage for users.
 // It uses a mutex to synchronize access to the users map.
@@ -67,4 +70,18 @@ type ScheduleDeleteRequest struct {
 type ScheduleCompleteRequest struct {
 	Day  string `json:"day"`
 	Task string `json:"tasks"`
+}
+
+type DeviceRegisterRequest struct{
+	Token string `json:"device_token"`
+}
+
+type ScheduledNotification struct {
+    ID          int       `json:"id" db:"id"`
+    EventID     int       `json:"event_id" db:"event_id"`
+    UserID      int       `json:"user_id" db:"user_id"`
+    Type        string    `json:"type" db:"type"` // "15_min_before" or "5_min_before"
+    ScheduledAt time.Time `json:"scheduled_at" db:"scheduled_at"`
+    Sent        bool      `json:"sent" db:"sent"`
+    CreatedAt   time.Time `json:"created_at" db:"created_at"`
 }

@@ -29,6 +29,7 @@ func (h *Handler) SetupRoutes() *mux.Router {
 	apiRouter := r.PathPrefix("/api").Subrouter()
 	apiRouter.HandleFunc("/register", h.RegisterUser).Methods("POST")
 	apiRouter.HandleFunc("/signin", h.SignInUser).Methods("POST")
+	apiRouter.HandleFunc("/user/push-token", h.RegisterPushToken).Methods("POST")
 
 	return r
 }
@@ -188,6 +189,42 @@ func (h *Handler) SignInUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "User signed in successfully",
 	})
+}
+
+func (h *Handler) RegisterPushToken(w http.ResponseWriter, r *http.Request) {
+	userID, err := tokens.GetUserIDFromRequest(r)
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	var req struct {
+		Token    string `json:"token"`
+		Platform string `json:"platform"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Insert or update push token
+	query := `
+        INSERT INTO push_tokens (user_id, token, platform, created_at, updated_at)
+        VALUES ($1, $2, $3, NOW(), NOW())
+        ON CONFLICT (user_id, platform) 
+        DO UPDATE SET token = $2, updated_at = NOW()
+    `
+
+	_, err = h.DB.Exec(query, userID, req.Token, req.Platform)
+	if err != nil {
+		log.Printf("DB error inserting push token: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "Push token registered"})
 }
 
 // TODO: add language, theme, notifications, frequency_type, custom_days, reminder_time, experience_type, target_streak
