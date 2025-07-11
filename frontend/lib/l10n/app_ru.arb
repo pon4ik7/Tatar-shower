@@ -29,6 +29,8 @@
 
     "password": "пароль",
 
+    "confirm_password": "подтвердите пароль",
+
     "have_account": "Уже есть аккаунт? Войти",
 
     "log_in": "Вход",
@@ -86,6 +88,14 @@
     "your_streak": "Введите свое число",
 
     "done_prefs": "Готово! Начните свое холодное приключение!",
+
+    "start": "Начать",
+
+    "error_username_short": "От 5 до 30 символов",
+
+    "error_password_short": "Минимум 5 символов",
+
+    "error_passwords_must_match": "Пароли не совпадают"
 
     "start": "Начать",
 

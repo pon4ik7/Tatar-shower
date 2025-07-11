@@ -182,6 +182,12 @@ abstract class AppLocalizations {
   /// **'password'**
   String get password;
 
+  /// No description provided for @confirm_password.
+  ///
+  /// In en, this message translates to:
+  /// **'confirm password'**
+  String get confirm_password;
+
   /// No description provided for @have_account.
   ///
   /// In en, this message translates to:

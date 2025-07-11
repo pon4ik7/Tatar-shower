@@ -52,6 +52,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get password => 'пароль';
 
   @override
+  String get confirm_password => 'подтвердите пароль';
+
+  @override
   String get have_account => 'Уже есть аккаунт? Войти';
 
   @override
@@ -145,41 +148,38 @@ class AppLocalizationsRu extends AppLocalizations {
   String get start => 'Начать';
 
   @override
-  String get days => 'Дней';
+  String get days => 'Days';
 
   @override
-  String get newShower => 'Новая тренировка';
+  String get newShower => 'New shower';
 
   @override
-  String get date => 'Дата';
+  String get date => 'Date';
 
   @override
-  String get duration => 'Длительность';
+  String get duration => 'Duration';
 
   @override
-  String get coldDuration => 'Холодный душ';
+  String get coldDuration => 'Cold shower';
 
   @override
-  String get thisWeek => 'Эта неделя';
+  String get thisWeek => 'This week';
 
   @override
-  String get showers => 'Души';
+  String get showers => 'showers';
 
   @override
-  String get longestStreak => 'Рекорд';
+  String get longestStreak => 'Longest Streak';
 
   @override
-  String get recentShowers => 'Последние тренировки';
+  String get recentShowers => 'Resent showers';
 
   @override
-  String get change_the_language => 'Сменить язык';
+  String get error_username_short => 'От 5 до 30 символов';
 
   @override
-  String get change_the_mode => 'Сменить тему';
+  String get error_password_short => 'Минимум 5 символов';
 
   @override
-  String get notification_enabled => 'Уведомления включены';
-
-  @override
-  String get notification_disabled => 'Уведомления выключены';
+  String get error_passwords_must_match => 'Пароли не совпадают';
 }
