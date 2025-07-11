@@ -87,5 +87,31 @@
 
     "done_prefs": "Готово! Начните свое холодное приключение!",
 
-    "start": "Начать"
+    "start": "Начать",
+
+    "days": "Дней",
+
+    "newShower": "Новая тренировка",
+
+    "date": "Дата",
+
+    "duration": "Длительность",
+
+    "coldDuration": "Холодный душ",
+
+    "thisWeek": "Эта неделя",
+
+    "showers": "Души",
+
+    "longestStreak": "Рекорд",
+
+    "recentShowers": "Последние тренировки",
+
+    "change_the_language": "Сменить язык",
+
+    "change_the_mode": "Сменить тему",
+
+    "notification_enabled": "Уведомления включены",
+
+    "notification_disabled": "Уведомления выключены"
 }

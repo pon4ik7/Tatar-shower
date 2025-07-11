@@ -174,7 +174,7 @@ class _SkipButton extends StatelessWidget {
     return TextButton(
       style: ButtonStyle(splashFactory: NoSplash.splashFactory),
       onPressed: () {
-        Navigator.of(context).pushNamed("/mainScreen");
+        Navigator.of(context).pushNamed("/tabs");
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),

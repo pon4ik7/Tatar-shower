@@ -97,7 +97,7 @@ class _NextButton extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pushNamed("/mainScreen");
+            Navigator.of(context).pushNamed("/tabs");
           },
           child: Text(
             loc.start,
