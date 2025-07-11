@@ -30,7 +30,7 @@ class _SettingsLanguage extends State<SettingsLanguage> {
     'English': const Locale('en'),
     'Русский': const Locale('ru'),
   };
-  String _selected = "English";
+  String _selected = "";
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;

@@ -148,7 +148,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get days => 'Дней';
 
   @override
-  String get newShower => 'Новое упражнение';
+  String get newShower => 'Новая тренировка';
 
   @override
   String get date => 'Дата';
@@ -166,10 +166,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showers => 'Души';
 
   @override
-  String get longestStreak => 'Самая длиная серия';
+  String get longestStreak => 'Рекорд';
 
   @override
-  String get recentShowers => 'Последний душ';
+  String get recentShowers => 'Последние тренировки';
 
   @override
   String get change_the_language => 'Сменить язык';
