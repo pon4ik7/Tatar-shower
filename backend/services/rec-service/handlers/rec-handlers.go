@@ -43,7 +43,6 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// TODO: add logic for streak goals creation
 func (h *Handler) GetStreak(w http.ResponseWriter, r *http.Request) {
 	userID, err := tokens.GetUserIDFromRequest(r)
 	if err != nil {
@@ -66,8 +65,6 @@ func (h *Handler) GetStreak(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-
-	// TODO: create logic это я для себя уже
 	resp := map[string]interface{}{
 		"current_streak": currentStreak,
 	}
@@ -93,8 +90,6 @@ func (h *Handler) GetTips(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer rows.Close()
-
-	// TODO: create logic это я для себя уже
 
 	var tips []string
 	for rows.Next() {

@@ -155,7 +155,7 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
-	
+
 		// Parse time string to time.Time
 		eventTime, err := time.Parse("15:04", t)
 		if err != nil {
@@ -166,7 +166,7 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 		}
 		// Calculate the next occurrence of this day and time
 		startTime := getNextOccurrence(req.Day, eventTime)
-	
+
 		// Create scheduled notifications
 		err = createScheduledNotifications(h.DB, scheduleEntryID, userID, startTime)
 		if err != nil {
@@ -176,7 +176,7 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 			return
 		}
 	}
-	
+
 	if err := tx.Commit(); err != nil {
 		log.Printf("DB commit error: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -245,8 +245,6 @@ func (h *Handler) DeleteScheduleHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	
-
 	if _, err := h.DB.Exec(`
 		DELETE FROM schedule_entries
 		WHERE user_id=$1 AND day=$2
@@ -262,132 +260,131 @@ func (h *Handler) DeleteScheduleHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 // CompleteShowerHandler marks a shower as completed for tracking progress and streaks.
-// CompleteShowerHandler marks a shower as completed for tracking progress and streaks.
 func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) {
-    userID, err := tokens.GetUserIDFromRequest(r)
-    if err != nil {
-        log.Printf("Auth error: %v", err)
-        http.Error(w, "Unauthorized", http.StatusUnauthorized)
-        return
-    }
-    var req models.ScheduleCompleteRequest
-    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-        log.Printf("CompleteShowerHandler error: Invalid request body (400): %v", err)
-        http.Error(w, "Invalid request body", http.StatusBadRequest)
-        return
-    }
+	userID, err := tokens.GetUserIDFromRequest(r)
+	if err != nil {
+		log.Printf("Auth error: %v", err)
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	var req models.ScheduleCompleteRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("CompleteShowerHandler error: Invalid request body (400): %v", err)
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
 
-    tx, err := h.DB.Begin()
-    if err != nil {
-        log.Printf("DB begin error: %v", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-        return
-    }
+	tx, err := h.DB.Begin()
+	if err != nil {
+		log.Printf("DB begin error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 
-    // Get schedule entry ID before updating
-    var scheduleEntryID int
-    err = tx.QueryRow(`
+	//TODO increase day streack and add last complete task
+
+	var scheduleEntryID int
+	err = tx.QueryRow(`
         SELECT id FROM schedule_entries 
         WHERE user_id=$1 AND day=$2 AND time=$3
     `, userID, req.Day, req.Task).Scan(&scheduleEntryID)
-    if err != nil {
-        tx.Rollback()
-        log.Printf("DB select error: %v", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-        return
-    }
+	if err != nil {
+		tx.Rollback()
+		log.Printf("DB select error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 
-    // Mark task as completed
-    if _, err := tx.Exec(`
+	// Mark task as completed
+	if _, err := tx.Exec(`
         UPDATE schedule_entries
         SET done = true
         WHERE user_id=$1 AND day=$2 AND time=$3
     `, userID, req.Day, req.Task); err != nil {
-        tx.Rollback()
-        log.Printf("DB update error: %v", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-        return
-    }
+		tx.Rollback()
+		log.Printf("DB update error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 
-    // Update notifications for this completed task
-    err = updateNotificationsForCompletedTask(h.DB, scheduleEntryID)
-    if err != nil {
-        tx.Rollback()
-        log.Printf("Failed to update notifications: %v", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-        return
-    }
+	// Update notifications for this completed task
+	err = updateNotificationsForCompletedTask(h.DB, scheduleEntryID)
+	if err != nil {
+		tx.Rollback()
+		log.Printf("Failed to update notifications: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 
-    // TODO create a logic to get total_duration and cold_duration
-    if _, err := tx.Exec(`
+	// TODO create a logic to get total_duration and cold_duration
+	if _, err := tx.Exec(`
         INSERT INTO sessions (user_id, date, total_duration, cold_duration)
         VALUES ($1, NOW(), INTERVAL '0', INTERVAL '0')
     `, userID); err != nil {
-        tx.Rollback()
-        log.Printf("DB insert session error: %v", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-        return
-    }
-    
-    if err := tx.Commit(); err != nil {
-        log.Printf("DB commit error: %v", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-        return
-    }
+		tx.Rollback()
+		log.Printf("DB insert session error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 
-    log.Printf("CompleteShowerHandler success: Shower marked as completed for user %d, day %s, time %s", userID, req.Day, req.Task)
-    w.WriteHeader(http.StatusOK)
-    json.NewEncoder(w).Encode(map[string]string{"message": "Shower marked as completed"})
+	if err := tx.Commit(); err != nil {
+		log.Printf("DB commit error: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("CompleteShowerHandler success: Shower marked as completed for user %d, day %s, time %s", userID, req.Day, req.Task)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Shower marked as completed"})
 }
 
 // UpdateNotificationsForCompletedTask updates notifications when a task is completed
 func updateNotificationsForCompletedTask(db *sql.DB, scheduleEntryID int) error {
-    // Get all notifications for this schedule entry
-    rows, err := db.Query(`
+	// Get all notifications for this schedule entry
+	rows, err := db.Query(`
         SELECT id, scheduled_at, sent 
         FROM scheduled_notifications 
         WHERE schedule_entry_id = $1
     `, scheduleEntryID)
-    if err != nil {
-        return err
-    }
-    defer rows.Close()
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
 
-    for rows.Next() {
-        var notificationID int
-        var scheduledAt time.Time
-        var sent bool
-        
-        if err := rows.Scan(&notificationID, &scheduledAt, &sent); err != nil {
-            return err
-        }
+	for rows.Next() {
+		var notificationID int
+		var scheduledAt time.Time
+		var sent bool
 
-        if !sent {
-            // If not sent, move to next week
-            newScheduledAt := scheduledAt.AddDate(0, 0, 7)
-            _, err := db.Exec(`
+		if err := rows.Scan(&notificationID, &scheduledAt, &sent); err != nil {
+			return err
+		}
+
+		if !sent {
+			// If not sent, move to next week
+			newScheduledAt := scheduledAt.AddDate(0, 0, 7)
+			_, err := db.Exec(`
                 UPDATE scheduled_notifications 
                 SET scheduled_at = $1 
                 WHERE id = $2
             `, newScheduledAt, notificationID)
-            if err != nil {
-                return err
-            }
-        } else {
-            // If already sent, mark as not sent for next week
-            _, err := db.Exec(`
+			if err != nil {
+				return err
+			}
+		} else {
+			// If already sent, mark as not sent for next week
+			_, err := db.Exec(`
                 UPDATE scheduled_notifications 
                 SET sent = FALSE 
                 WHERE id = $2
             `, notificationID)
-            if err != nil {
-                return err
-            }
-        }
-    }
-    return nil
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
-
 
 func createScheduledNotifications(db *sql.DB, scheduleEntryID, userID int, startTime time.Time) error {
 	now := time.Now()
@@ -422,37 +419,37 @@ func InsertScheduledNotification(db *sql.DB, scheduleEntryID int, userID int, no
 }
 
 func getNextOccurrence(weekdayStr string, eventTime time.Time) time.Time {
-    // Map day string to time.Weekday
-    weekdayStr = strings.ToLower(weekdayStr)
-    var weekday time.Weekday
-    switch weekdayStr {
-    case "monday":
-        weekday = time.Monday
-    case "tuesday":
-        weekday = time.Tuesday
-    case "wednesday":
-        weekday = time.Wednesday
-    case "thursday":
-        weekday = time.Thursday
-    case "friday":
-        weekday = time.Friday
-    case "saturday":
-        weekday = time.Saturday
-    case "sunday":
-        weekday = time.Sunday
-    }
+	// Map day string to time.Weekday
+	weekdayStr = strings.ToLower(weekdayStr)
+	var weekday time.Weekday
+	switch weekdayStr {
+	case "monday":
+		weekday = time.Monday
+	case "tuesday":
+		weekday = time.Tuesday
+	case "wednesday":
+		weekday = time.Wednesday
+	case "thursday":
+		weekday = time.Thursday
+	case "friday":
+		weekday = time.Friday
+	case "saturday":
+		weekday = time.Saturday
+	case "sunday":
+		weekday = time.Sunday
+	}
 
-    now := time.Now()
-    // Build today's date with eventTime's hour and minute
-    eventDateTime := time.Date(now.Year(), now.Month(), now.Day(), eventTime.Hour(), eventTime.Minute(), 0, 0, now.Location())
+	now := time.Now()
+	// Build today's date with eventTime's hour and minute
+	eventDateTime := time.Date(now.Year(), now.Month(), now.Day(), eventTime.Hour(), eventTime.Minute(), 0, 0, now.Location())
 
-    // Find how many days to add to get to the next weekday
-    daysUntil := (int(weekday) - int(now.Weekday()) + 7) % 7
-    if daysUntil == 0 && eventDateTime.Before(now) {
-        daysUntil = 7 // If today but time already passed, go to next week
-    }
-    if daysUntil != 0 {
-        eventDateTime = eventDateTime.AddDate(0, 0, daysUntil)
-    }
-    return eventDateTime
+	// Find how many days to add to get to the next weekday
+	daysUntil := (int(weekday) - int(now.Weekday()) + 7) % 7
+	if daysUntil == 0 && eventDateTime.Before(now) {
+		daysUntil = 7 // If today but time already passed, go to next week
+	}
+	if daysUntil != 0 {
+		eventDateTime = eventDateTime.AddDate(0, 0, daysUntil)
+	}
+	return eventDateTime
 }

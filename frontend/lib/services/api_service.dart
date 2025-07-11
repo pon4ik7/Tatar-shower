@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tatar_shower/models/auth_request.dart';
@@ -6,15 +7,70 @@ import 'package:tatar_shower/models/complete_schower_request.dart';
 import 'package:tatar_shower/models/delete_schedule_request.dart';
 import 'package:tatar_shower/models/message_response.dart';
 import 'package:tatar_shower/models/update_schedule_request.dart';
-import 'package:tatar_shower/models/push_token_request.dart'; // Add this import
-import 'package:firebase_messaging/firebase_messaging.dart'; // Add this import
-import 'dart:io'; // Add this import
+import 'package:tatar_shower/models/push_token_request.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:io';
+import 'package:tatar_shower/models/streak_response.dart';
+import 'package:tatar_shower/models/tips_response.dart';
+import 'dart:developer' as developer;
 
 import '../models/schedule.dart';
 
 class ApiService {
   static const String _baseUrl = "http://localhost:8080/api";
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
+  Future<String> getRandomTip() async {
+    try {
+      final tipsResponse = await getTips();
+      if (tipsResponse.tips.isEmpty) {
+        return "list empty";
+      }
+
+      // Get random tip from the list
+      final random = Random();
+      final randomIndex = random.nextInt(tipsResponse.tips.length);
+      return tipsResponse.tips[randomIndex];
+    } catch (e) {
+      return "load error";
+    }
+  }
+
+  Future<TipsResponse> getTips() async {
+    final url = Uri.parse("$_baseUrl/tips");
+    final headers = {"Content-Type": "application/json"};
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> respJson = jsonDecode(response.body);
+      return TipsResponse.fromJson(respJson);
+    } else {
+      throw Exception(
+        "Failed to load tips: ${response.statusCode} ${response.body}",
+      );
+    }
+  }
+
+  Future<StreakResponse> getStreak() async {
+    final url = Uri.parse("$_baseUrl/streak");
+    String? token = await _secureStorage.read(key: "jwtToken");
+    final headers = {
+      "Content-Type": "application/json",
+      if (token != null) "Authorization": "Bearer $token",
+    };
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> respJson = jsonDecode(response.body);
+      return StreakResponse.fromJson(respJson);
+    } else {
+      throw Exception(
+        "Failed to load streak: ${response.statusCode} ${response.body}",
+      );
+    }
+  }
 
   Future<MessageResponse> registerPushToken() async {
     try {
@@ -67,27 +123,43 @@ class ApiService {
           );
 
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        print('User granted permission for notifications');
+        developer.log(
+          'User granted permission for notifications',
+          name: 'PushNotifications',
+        );
 
         // Register push token with server
         await registerPushToken();
 
         // Listen for token refresh
         FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+          developer.log('FCM token refreshed', name: 'PushNotifications');
           // Update token on server when it changes
           registerPushToken();
         });
       } else {
-        print('User declined or has not accepted permission for notifications');
+        developer.log(
+          'User declined or has not accepted permission for notifications. Status: ${settings.authorizationStatus}',
+          name: 'PushNotifications',
+          level: 900, // Warning level
+        );
       }
     } catch (e) {
-      print('Error initializing push notifications: $e');
+      developer.log(
+        'Error initializing push notifications',
+        name: 'PushNotifications',
+        error: e,
+        level: 1000, // Error level
+      );
     }
   }
 
   static void setupForegroundMessageHandler() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Received foreground message: ${message.notification?.title}');
+      developer.log(
+        'Received foreground message: ${message.notification?.title}',
+        name: 'PushNotifications',
+      );
       // Handle foreground notification display here
       // You might want to show a local notification or update UI
     });
@@ -95,7 +167,10 @@ class ApiService {
 
   static void setupBackgroundMessageHandler() {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Message clicked: ${message.notification?.title}');
+      developer.log(
+        'Message clicked: ${message.notification?.title}',
+        name: 'PushNotifications',
+      );
       // Handle navigation when user taps notification
       // For example, navigate to schedule screen
     });
@@ -105,10 +180,13 @@ class ApiService {
     RemoteMessage? initialMessage = await FirebaseMessaging.instance
         .getInitialMessage();
     if (initialMessage != null) {
-      print(
+      developer.log(
         'App opened from notification: ${initialMessage.notification?.title}',
+        name: 'PushNotifications',
       );
-      // Handle navigation for initial message
+      // TODO Handle navigation for initial message
+    } else {
+      developer.log('No initial message found', name: 'PushNotifications');
     }
   }
 
