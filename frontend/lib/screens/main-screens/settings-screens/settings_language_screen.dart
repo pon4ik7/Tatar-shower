@@ -118,7 +118,7 @@ class _SettingsLanguage extends State<SettingsLanguage> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/tabs');
+                        Navigator.of(context).pop();
                       },
                       child: Text(
                         loc.apply,

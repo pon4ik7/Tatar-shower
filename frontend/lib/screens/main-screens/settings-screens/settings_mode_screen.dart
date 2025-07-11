@@ -113,7 +113,7 @@ class _SettingsMode extends State<SettingsMode> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/tabs');
+                        Navigator.of(context).pop();
                       },
                       child: Text(
                         loc.apply,

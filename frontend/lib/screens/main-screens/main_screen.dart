@@ -37,12 +37,37 @@ class _MainScreenBody extends StatelessWidget {
           _Diagram(loc: loc),
           const SizedBox(height: 40),
           _NewShowerButtom(loc: loc),
-          const SizedBox(height: 24),
-          _TableHeader(loc: loc),
-          const SizedBox(height: 5),
-          _ShowerTable(loc: loc),
-          const SizedBox(height: 16),
-          _Statistics(loc: loc),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 24, bottom: 16),
+              child: Column(
+                children: [
+                  _TableHeader(loc: loc),
+                  const SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Card(
+                        color: appColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: _ShowerTable(loc: loc),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _Statistics(loc: loc),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -156,80 +181,74 @@ class _ShowerTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: DataTable(
-          dataTextStyle: TextStyle(
-            fontFamily: appFonts.regular,
-            fontSize: 14,
-            color: appColors.black,
+    return DataTable(
+      dataTextStyle: TextStyle(
+        fontFamily: appFonts.regular,
+        fontSize: 14,
+        color: appColors.black,
+      ),
+      columns: [
+        DataColumn(
+          label: Text(
+            loc.date,
+            style: TextStyle(
+              fontFamily: appFonts.header,
+              fontSize: 14,
+              color: appColors.black,
+            ),
           ),
-          columns: [
-            DataColumn(
-              label: Text(
-                loc.date,
-                style: TextStyle(
-                  fontFamily: appFonts.header,
-                  fontSize: 14,
-                  color: appColors.black,
-                ),
-              ),
+        ),
+        DataColumn(
+          label: Text(
+            loc.duration,
+            style: TextStyle(
+              fontFamily: appFonts.header,
+              fontSize: 14,
+              color: appColors.black,
             ),
-            DataColumn(
-              label: Text(
-                loc.duration,
-                style: TextStyle(
-                  fontFamily: appFonts.header,
-                  fontSize: 14,
-                  color: appColors.black,
-                ),
-              ),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            loc.coldDuration,
+            style: TextStyle(
+              fontFamily: appFonts.header,
+              fontSize: 14,
+              color: appColors.black,
             ),
-            DataColumn(
-              label: Text(
-                loc.coldDuration,
-                style: TextStyle(
-                  fontFamily: appFonts.header,
-                  fontSize: 14,
-                  color: appColors.black,
-                ),
-              ),
-            ),
-          ],
-          rows: [
-            DataRow(
-              cells: [
-                DataCell(Text('Jul 7')),
-                DataCell(Text('9 min')),
-                DataCell(Text('4 min')),
-              ],
-            ),
-            DataRow(
-              cells: [
-                DataCell(Text('Jul 4')),
-                DataCell(Text('7 min')),
-                DataCell(Text('2 min')),
-              ],
-            ),
-            DataRow(
-              cells: [
-                DataCell(Text('Jul 1')),
-                DataCell(Text('7 min')),
-                DataCell(Text('2 min')),
-              ],
-            ),
-            DataRow(
-              cells: [
-                DataCell(Text('Jun 28')),
-                DataCell(Text('5 min')),
-                DataCell(Text('1 min')),
-              ],
-            ),
+          ),
+        ),
+      ],
+      rows: [
+        DataRow(
+          cells: [
+            DataCell(Text('Jul 7')),
+            DataCell(Text('9 min')),
+            DataCell(Text('4 min')),
           ],
         ),
-      ),
+        DataRow(
+          cells: [
+            DataCell(Text('Jul 4')),
+            DataCell(Text('7 min')),
+            DataCell(Text('2 min')),
+          ],
+        ),
+        DataRow(
+          cells: [
+            DataCell(Text('Jul 1')),
+            DataCell(Text('7 min')),
+            DataCell(Text('2 min')),
+          ],
+        ),
+        DataRow(
+          cells: [
+            DataCell(Text('Jun 28')),
+            DataCell(Text('5 min')),
+            DataCell(Text('1 min')),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -247,6 +266,7 @@ class _Statistics extends StatelessWidget {
         children: [
           Expanded(
             child: Card(
+              color: appColors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -278,6 +298,7 @@ class _Statistics extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Card(
+              color: appColors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
