@@ -19,12 +19,13 @@ import 'package:tatar_shower/screens/main-screens/settings-screens/settings_lang
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_mode_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tatar_shower/services/push_notification_service.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  //await Firebase.initializeApp();
-  //await PushNotificationService.initialize();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await PushNotificationService.initialize();
   //TODO "await apiService.initializePushNotifications();" add it inplase where user log in in the system
   runApp(const MyApp());
 }

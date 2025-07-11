@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "757230582151",
+    "project_id": "tatar-shower",
+    "storage_bucket": "tatar-shower.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757230582151:android:2db1979da795d72f98fb22",
+        "android_client_info": {
+          "package_name": "com.example.tatar_shower"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx2AmohmG9TXYB1uEjhvHzJIvM794daKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
