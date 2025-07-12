@@ -13,6 +13,7 @@ import 'dart:io';
 import 'package:tatar_shower/models/streak_response.dart';
 import 'package:tatar_shower/models/tips_response.dart';
 import 'dart:developer' as developer;
+import 'package:tatar_shower/models/register_request.dart';
 
 import '../models/schedule.dart';
 
@@ -204,6 +205,28 @@ class ApiService {
       }
       final Map<String, dynamic> respJson = jsonDecode(response.body);
       return MessageResponse.fromJson(respJson);
+    } else {
+      throw Exception(
+        "Failed to register: ${response.statusCode} ${response.body}",
+      );
+    }
+  }
+
+  Future<MessageResponse> registerUserWithPrefs(RegisterRequest request) async {
+    final url = Uri.parse("$_baseUrl/register");
+    final headers = {"Content-Type": "application/json"};
+    final body = jsonEncode(request.toJson());
+
+    final response = await http.post(url, headers: headers, body: body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final authHeader = response.headers['authorization'];
+      if (authHeader?.startsWith("Bearer ") == true) {
+        await _secureStorage.write(
+          key: "jwtToken",
+          value: authHeader!.substring(7),
+        );
+      }
+      return MessageResponse.fromJson(jsonDecode(response.body));
     } else {
       throw Exception(
         "Failed to register: ${response.statusCode} ${response.body}",

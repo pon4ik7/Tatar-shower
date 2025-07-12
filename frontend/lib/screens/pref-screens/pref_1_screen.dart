@@ -4,6 +4,10 @@ import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
+
+// TODO: handle the "other" option
 
 class PreferencesScreen1 extends StatefulWidget {
   const PreferencesScreen1({super.key});
@@ -62,7 +66,12 @@ class _PreferencesScreen1State extends State<PreferencesScreen1> {
                       itemBuilder: (_, i) {
                         final isSel = selectedIndex == i;
                         return InkWell(
-                          onTap: () => setState(() => selectedIndex = i),
+                          onTap: () => setState(() {
+                            selectedIndex = i;
+                            context.read<OnboardingData>().setReason(
+                              options[i],
+                            );
+                          }),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 13),
                             child: Row(

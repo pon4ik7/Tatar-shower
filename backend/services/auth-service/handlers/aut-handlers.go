@@ -104,7 +104,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.initializeUserData(tx, userID); err != nil {
+	if err := h.initializeUserData(tx, userID, &input); err != nil {
 		log.Printf("RegisterUser: init user data error: %v", err)
 		http.Error(w, "DB error", http.StatusInternalServerError)
 		return
@@ -114,6 +114,17 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("RegisterUser: commit error: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
+	}
+
+	var reason string
+	err = h.DB.QueryRow(
+		`SELECT reason FROM preferences WHERE user_id = $1`,
+		userID,
+	).Scan(&reason)
+	if err != nil {
+		log.Printf("Error selecting reason: %v", err)
+	} else {
+		log.Printf("User reason: %q", reason)
 	}
 
 	jwtToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -227,17 +238,24 @@ func (h *Handler) RegisterPushToken(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Push token registered"})
 }
 
-// TODO: add language, theme, notifications, frequency_type, custom_days, reminder_time, experience_type, target_streak
+// TODO: add language and remove notifications
 // Now this function is just a template for DB visualization
-func (h *Handler) initializeUserData(tx *sql.Tx, userID int) error {
-	if _, err := tx.Exec(`
+func (h *Handler) initializeUserData(tx *sql.Tx, userID int, input *models.InputRegisterUserRequest) error {
+	_, err := tx.Exec(`
         INSERT INTO preferences (
-            user_id,
-            frequency_type,
-            experience_type,
-            target_streak
-        ) VALUES ($1, $2, DEFAULT, DEFAULT)
-    `, userID, "everyday"); err != nil {
+            user_id, language, notifications, reason,
+            frequency_type, custom_days, experience_type, target_streak
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+    `, userID,
+		input.Language,
+		input.Notifications,
+		input.Reason,
+		input.FrequencyType,
+		pq.Array(input.CustomDays),
+		input.ExperienceType,
+		input.TargetStreak,
+	)
+	if err != nil {
 		return err
 	}
 	if _, err := tx.Exec(`

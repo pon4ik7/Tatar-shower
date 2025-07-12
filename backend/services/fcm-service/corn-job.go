@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"time" // Замени на свой путь
+	"time"
 
 	"github.com/robfig/cron/v3"
 )

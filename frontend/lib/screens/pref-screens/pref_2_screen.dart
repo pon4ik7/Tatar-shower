@@ -4,6 +4,8 @@ import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
 
 class PreferencesScreen2 extends StatefulWidget {
   const PreferencesScreen2({super.key});
@@ -61,7 +63,18 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                       itemBuilder: (_, i) {
                         final isSel = selectedIndex == i;
                         return InkWell(
-                          onTap: () => setState(() => selectedIndex = i),
+                          onTap: () {
+                            setState(() => selectedIndex = i);
+                            const codes = [
+                              'everyday',
+                              'times_per_week',
+                              'only_weekdays',
+                              'custom',
+                            ];
+                            context.read<OnboardingData>().setFrequencyType(
+                              codes[i],
+                            );
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 13),
                             child: Row(

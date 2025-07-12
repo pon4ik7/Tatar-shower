@@ -7,6 +7,7 @@ import (
 	"github.com/rolanmulukin/tatar-shower-backend/tokens"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Handler struct {
@@ -78,19 +79,27 @@ func (h *Handler) GetStreak(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// TODO: add tips saving to the table
 func (h *Handler) GetTips(w http.ResponseWriter, r *http.Request) {
+	lang := "en"
+	if userID, err := tokens.GetUserIDFromRequest(r); err == nil {
+		var uLang string
+		if err := h.DB.QueryRow(
+			`SELECT language FROM preferences WHERE user_id=$1`, userID,
+		).Scan(&uLang); err == nil && uLang != "" {
+			lang = uLang
+		}
+	} else if hdr := r.Header.Get("Accept-Language"); strings.HasPrefix(hdr, "ru") {
+		lang = "ru"
+	}
 	rows, err := h.DB.Query(
-		`SELECT message 
-         FROM tips
-         ORDER BY id`)
+		`SELECT message FROM tips WHERE category=$1 ORDER BY id`, lang,
+	)
 	if err != nil {
 		log.Printf("GetTips DB error: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 	defer rows.Close()
-
 	var tips []string
 	for rows.Next() {
 		var msg string
@@ -100,6 +109,7 @@ func (h *Handler) GetTips(w http.ResponseWriter, r *http.Request) {
 		}
 		tips = append(tips, msg)
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tips)
 }
