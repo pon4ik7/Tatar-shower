@@ -13,6 +13,7 @@ class PreferencesScreen2 extends StatefulWidget {
 
 class _PreferencesScreen2State extends State<PreferencesScreen2> {
   int? selectedIndex;
+  final List<bool> _daysSelected = List<bool>.filled(7, false);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,6 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                   const SizedBox(height: 30),
                   Image(image: lightClock, width: 80, height: 80),
                   const SizedBox(height: 30),
-                  const SizedBox(height: 24),
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -61,7 +61,12 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                       itemBuilder: (_, i) {
                         final isSel = selectedIndex == i;
                         return InkWell(
-                          onTap: () => setState(() => selectedIndex = i),
+                          onTap: () {
+                            if (i == 3 || i == 1) {
+                              _showDaysPicker(context, loc);
+                            }
+                            setState(() => selectedIndex = i);
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 13),
                             child: Row(
@@ -125,13 +130,89 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
       ),
     );
   }
+
+  void _showDaysPicker(BuildContext context, AppLocalizations loc) {
+    final weekDays = [
+      loc.monday,
+      loc.tuesday,
+      loc.wednesday,
+      loc.thursday,
+      loc.friday,
+      loc.saturday,
+      loc.sunday,
+    ];
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return Container(
+              width: 311,
+              height: 350,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: weekDays.length,
+                      itemBuilder: (_, idx) {
+                        return CheckboxListTile(
+                          title: Text(
+                            weekDays[idx],
+                            style: TextStyle(
+                              fontFamily: appFonts.regular,
+                              fontSize: 16,
+                              color: appColors.black,
+                            ),
+                          ),
+                          value: _daysSelected[idx],
+                          onChanged: (val) {
+                            setStateDialog(() {
+                              _daysSelected[idx] = val!;
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: appColors.midBlue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        //TODO Save selected days
+                      },
+                      child: Text(
+                        loc.save,
+                        style: TextStyle(
+                          fontFamily: appFonts.header,
+                          fontSize: 20,
+                          color: appColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 }
 
 class _SkipButton extends StatelessWidget {
   const _SkipButton({required this.loc});
-
   final AppLocalizations loc;
-
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -154,9 +235,7 @@ class _SkipButton extends StatelessWidget {
 
 class _NextButton extends StatelessWidget {
   const _NextButton({required this.loc});
-
   final AppLocalizations loc;
-
   @override
   Widget build(BuildContext context) {
     return Padding(

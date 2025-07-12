@@ -123,5 +123,27 @@
 
     "error_password_short": "At least 5 characters",
 
-    "error_passwords_must_match": "Passwords do not match"
+    "error_passwords_must_match": "Passwords do not match",
+
+    "save": "Save",
+
+    "cancel": "Cancel",
+
+    "enter_your_streak": "Enter your streak",
+
+    "error_enter_number": "Enter a number",
+
+    "monday": "Monday",
+
+    "tuesday": "Tuesday",
+
+    "wednesday": "Wednesday",
+
+    "thursday": "Thursday",
+
+    "friday": "Friday",
+
+    "saturday": "Saturday",
+
+    "sunday": "Sunday"
 }

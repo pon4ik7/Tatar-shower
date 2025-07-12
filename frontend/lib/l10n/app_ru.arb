@@ -123,5 +123,27 @@
 
     "notification_enabled": "Уведомления включены",
 
-    "notification_disabled": "Уведомления выключены"
+    "notification_disabled": "Уведомления выключены",
+
+    "save": "Сохранить",
+
+    "cancel": "Отменить",
+
+    "enter_your_streak": "Введите желаемую серию",
+
+    "error_enter_number": "Введите число",
+
+    "monday": "Понедельник",
+
+    "tuesday": "Вторник",
+
+    "wednesday": "Среда",
+
+    "thursday": "Четверг",
+
+    "friday": "Пятница",
+
+    "saturday": "Суббота",
+
+    "sunday": "Воскресенье"
 }
