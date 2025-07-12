@@ -54,6 +54,7 @@ class _MyAppState extends State<MyApp> {
             TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
           },
         ),
+        scaffoldBackgroundColor: Colors.transparent,
       ),
       locale: _locale,
       supportedLocales: AppLocalizations.supportedLocales,
