@@ -36,7 +36,8 @@ class FullTableScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Card(
-                  color: appColors.white,
+                  color: Colors.transparent,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
