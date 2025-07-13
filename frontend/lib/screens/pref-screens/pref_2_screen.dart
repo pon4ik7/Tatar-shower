@@ -21,7 +21,6 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
     final loc = AppLocalizations.of(context)!;
     final options = [
       loc.every_day,
-      loc.times_per_week,
       loc.only_weekdays,
       customDaysText ?? loc.other,
     ];
@@ -63,7 +62,7 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                         final isSel = selectedIndex == i;
                         return InkWell(
                           onTap: () {
-                            if (i == 3) {
+                            if (i == 2) {
                               _showDaysPicker(context, loc);
                             } else {
                               setState(() {
@@ -245,7 +244,7 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                               );
                             } else {
                               setState(() {
-                                selectedIndex = 3;
+                                selectedIndex = 2;
                                 customDaysText = selectedDays.join(', ');
                               });
                               Navigator.of(context).pop();
