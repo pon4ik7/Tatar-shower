@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/models/shower_model.dart';
 import 'package:tatar_shower/screens/main-screens/timer-screens/log_shower_screen.dart';
 import 'package:tatar_shower/theme/colors.dart';
@@ -92,11 +93,12 @@ class _TimerScreenState extends State<TimerScreen>
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final title = _remainingPeriods == 0
-        ? "Time is out"
+        ? loc.time_is_out
         : _isColdPhase
-        ? "Cold water"
-        : "Warm water";
+        ? loc.cold_water
+        : loc.warm_water;
 
     return Scaffold(
       extendBody: true,
@@ -121,7 +123,7 @@ class _TimerScreenState extends State<TimerScreen>
               if (_remainingPeriods > 0) ...[
                 const SizedBox(height: 4),
                 Text(
-                  "Rounds left: $_remainingPeriods",
+                  loc.rounds_left(_remainingPeriods),
                   style: TextStyle(
                     fontFamily: appFonts.regular,
                     fontSize: 16,
@@ -176,7 +178,7 @@ class _TimerScreenState extends State<TimerScreen>
                           ),
                         ),
                         child: Text(
-                          _isPaused ? 'Continue' : 'Pause',
+                          _isPaused ? loc.continue_ : loc.pause,
                           style: TextStyle(
                             fontFamily: appFonts.header,
                             fontSize: 20,
@@ -220,7 +222,7 @@ class _TimerScreenState extends State<TimerScreen>
                       ),
                     ),
                     child: Text(
-                      'Stop shower',
+                      loc.stop_shower,
                       style: TextStyle(
                         fontFamily: appFonts.header,
                         fontSize: 20,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/theme/fonts.dart';
@@ -68,6 +69,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       extendBody: true,
       body: Container(
@@ -92,7 +94,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         title: Text(
-                          'Info',
+                          loc.info,
                           style: TextStyle(
                             fontFamily: appFonts.header,
                             fontSize: 20,
@@ -100,7 +102,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                           ),
                         ),
                         content: Text(
-                          'Set the time for warm and cold water, choose how many periods you want, and click Start shower',
+                          loc.info_text,
                           style: TextStyle(
                             fontFamily: appFonts.regular,
                             fontSize: 16,
@@ -114,7 +116,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                             ),
                             onPressed: () => Navigator.of(context).pop(),
                             child: Text(
-                              'OK',
+                              loc.ok,
                               style: TextStyle(
                                 fontFamily: appFonts.header,
                                 color: appColors.midBlue,
@@ -145,7 +147,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                           ),
                           onPressed: () {},
                           child: Text(
-                            "Set previous settings",
+                            loc.set_previous_settings,
                             style: TextStyle(
                               fontFamily: appFonts.header,
                               fontSize: 20,
@@ -163,21 +165,24 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                         child: Column(
                           children: [
                             _buildTimeField(
-                              label: "Warm water time",
+                              loc: loc,
+                              label: loc.warm_water_time,
                               controller: _warmController,
-                              hint: 'mm:ss',
+                              hint: loc.mm_ss,
                             ),
                             const SizedBox(height: 16),
                             _buildTimeField(
-                              label: "Cold water time",
+                              loc: loc,
+                              label: loc.cold_water_time,
                               controller: _coldController,
-                              hint: 'mm:ss',
+                              hint: loc.mm_ss,
                             ),
                             const SizedBox(height: 16),
                             _buildNumberField(
-                              label: "Number of periods",
+                              loc: loc,
+                              label: loc.number_of_periods,
                               controller: _periodsController,
-                              hint: 'enter the number',
+                              hint: loc.enter_a_number,
                             ),
                           ],
                         ),
@@ -222,7 +227,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                       }
                     },
                     child: Text(
-                      "Start shower",
+                      loc.start_shower,
                       style: TextStyle(
                         fontFamily: appFonts.header,
                         fontSize: 20,
@@ -240,6 +245,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
   }
 
   Widget _buildTimeField({
+    required AppLocalizations loc,
     required String label,
     required TextEditingController controller,
     required String hint,
@@ -272,8 +278,10 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
           validator: (v) {
-            if (v == null || !RegExp(r'^[0-9]{2}:[0-5][0-9]$').hasMatch(v)) {
-              return 'Invalid format';
+            if (v == null ||
+                !RegExp(r'^[0-9]{2}:[0-5][0-9]$').hasMatch(v) ||
+                v == "00:00") {
+              return loc.invalid_format;
             }
             return null;
           },
@@ -283,6 +291,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
   }
 
   Widget _buildNumberField({
+    required AppLocalizations loc,
     required String label,
     required TextEditingController controller,
     required String hint,
@@ -316,7 +325,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
           ),
           validator: (v) {
             if (v == null || v.isEmpty || int.tryParse(v) == null) {
-              return 'Enter a number';
+              return loc.enter_a_number;
             }
             return null;
           },

@@ -193,4 +193,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_passwords_must_match => 'Passwords do not match';
+
+  @override
+  String get start_shower => 'Start shower';
+
+  @override
+  String get stop_shower => 'Stop shower';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get continue_ => 'Continue';
+
+  @override
+  String get set_previous_settings => 'Set previous settings';
+
+  @override
+  String get cold_water_time => 'Cold water time';
+
+  @override
+  String get warm_water_time => 'Warm water time';
+
+  @override
+  String get number_of_periods => 'Number of periods';
+
+  @override
+  String get invalid_format => 'Invalid format';
+
+  @override
+  String get enter_a_number => 'Enter a number';
+
+  @override
+  String get cold_water => 'Cold water';
+
+  @override
+  String get warm_water => 'Warm water';
+
+  @override
+  String get time_is_out => 'Time is out';
+
+  @override
+  String rounds_left(Object count) {
+    return 'Rounds left: $count';
+  }
+
+  @override
+  String get info => 'Info';
+
+  @override
+  String get info_text =>
+      'Set the time for warm and cold water, choose how many periods you want, and click Start shower.';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get log_shower => 'Log shower';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get mm_ss => 'mm:ss';
 }

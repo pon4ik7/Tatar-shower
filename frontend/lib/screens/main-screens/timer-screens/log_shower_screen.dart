@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/models/shower_model.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
+import 'package:intl/intl.dart';
 
 class ShowerResultScreen extends StatelessWidget {
   final ShowerLog log;
@@ -16,6 +18,7 @@ class ShowerResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final date = log.date;
     final totalFormatted = _formatDuration(log.totalDuration);
     final coldFormatted = _formatDuration(log.coldDuration);
@@ -34,7 +37,9 @@ class ShowerResultScreen extends StatelessWidget {
       'November',
       'December',
     ];
-    final dateLabel = "${monthNames[date.month - 1]} ${date.day}";
+    final dateLabel = DateFormat.MMMMd(
+      Localizations.localeOf(context).toString(),
+    ).format(date);
 
     return Scaffold(
       extendBody: true,
@@ -50,7 +55,7 @@ class ShowerResultScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 320,
+                  width: 400,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: appColors.white,
@@ -66,9 +71,9 @@ class ShowerResultScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildStatColumn("Date", dateLabel),
-                      _buildStatColumn("Duration", totalFormatted),
-                      _buildStatColumn("Cold Shower", coldFormatted),
+                      _buildStatColumn(loc.date, dateLabel),
+                      _buildStatColumn(loc.duration, totalFormatted),
+                      _buildStatColumn(loc.coldDuration, coldFormatted),
                     ],
                   ),
                 ),
@@ -77,7 +82,7 @@ class ShowerResultScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildButton(
-                      label: 'Log shower',
+                      label: loc.log_shower,
                       color: appColors.deepBlue,
                       onPressed: () {
                         // TODO: implement logging
@@ -85,7 +90,7 @@ class ShowerResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 16),
                     _buildButton(
-                      label: 'Cancel',
+                      label: loc.cancel,
                       color: const Color(0xFFB00020),
                       onPressed: () {
                         Navigator.of(context).pushNamed('/tabs');
