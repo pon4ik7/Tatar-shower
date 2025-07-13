@@ -238,17 +238,16 @@ func (h *Handler) RegisterPushToken(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Push token registered"})
 }
 
-// TODO: add language and remove notifications
+// TODO: add language
 // Now this function is just a template for DB visualization
 func (h *Handler) initializeUserData(tx *sql.Tx, userID int, input *models.InputRegisterUserRequest) error {
 	_, err := tx.Exec(`
         INSERT INTO preferences (
-            user_id, language, notifications, reason,
-            frequency_type, custom_days, experience_type, target_streak
+            user_id, language, reason, frequency_type, 
+        	custom_days, experience_type, target_streak
         ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
     `, userID,
 		input.Language,
-		input.Notifications,
 		input.Reason,
 		input.FrequencyType,
 		pq.Array(input.CustomDays),

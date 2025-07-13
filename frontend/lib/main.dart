@@ -13,6 +13,8 @@ import 'package:tatar_shower/screens/pref-screens/pref_3_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_4_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_5_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_done_screen.dart';
+import 'package:tatar_shower/screens/main-screens/timer-screens/timer_screen.dart';
+import 'package:tatar_shower/screens/main-screens/timer-screens/log_shower_screen.dart';
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_language_screen.dart';
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_mode_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,16 +67,16 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       localeResolutionCallback:
           (Locale? deviceLocale, Iterable<Locale> supported) {
-            if (deviceLocale != null) {
-              switch (deviceLocale.languageCode) {
-                case 'en':
-                  return const Locale('en');
-                case 'ru':
-                  return const Locale('ru');
-              }
-            }
-            return const Locale('en');
-          },
+        if (deviceLocale != null) {
+          switch (deviceLocale.languageCode) {
+            case 'en':
+              return const Locale('en');
+            case 'ru':
+              return const Locale('ru');
+          }
+        }
+        return const Locale('en');
+      },
       debugShowCheckedModeBanner: false,
       initialRoute: '/language',
       routes: {
@@ -90,10 +92,11 @@ class _MyAppState extends State<MyApp> {
         '/pref5': (context) => PreferencesScreen5(),
         '/prefDone': (context) => PreferencesDoneScreen(),
         '/tabs': (context) => Tabs(),
-        '/settingsLanguage': (context) => SettingsLanguage(
-          onLocaleChanged: _setLocale,
-          currentLocale: _locale == const Locale('en') ? 'eu' : 'ru',
-        ),
+        '/settingsLanguage': (context) =>
+            SettingsLanguage(
+              onLocaleChanged: _setLocale,
+              currentLocale: _locale == const Locale('en') ? 'eu' : 'ru',
+            ),
         '/settingsMode': (context) => SettingsMode(),
       },
     );

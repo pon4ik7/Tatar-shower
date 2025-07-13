@@ -11,7 +11,7 @@ class OnboardingData extends ChangeNotifier {
   String experienceType = 'first_time';
   int targetStreak = 7;
 
-  // методы для установки и нотификации
+  // methods for settings and notification
   void setLogin(String v) {
     login = v;
     notifyListeners();

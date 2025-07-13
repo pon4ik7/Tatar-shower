@@ -14,7 +14,6 @@ CREATE TABLE preferences
 (
     user_id         INT PRIMARY KEY REFERENCES users (id) ON DELETE CASCADE,
     language        VARCHAR(10) NOT NULL DEFAULT 'en',
-    notifications   BOOLEAN     NOT NULL DEFAULT true,
     reason          VARCHAR(255),
     frequency_type  VARCHAR(20) NOT NULL DEFAULT 'everyday',
     custom_days     SMALLINT[]    DEFAULT NULL,

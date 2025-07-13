@@ -57,7 +57,6 @@ type InputRegisterUserRequest struct {
 	Login          string  `json:"login"`
 	Password       string  `json:"password"`
 	Language       string  `json:"language"`
-	Notifications  bool    `json:"notifications"`
 	Reason         *string `json:"reason"`
 	FrequencyType  string  `json:"frequency_type"`
 	CustomDays     []int   `json:"custom_days"`
