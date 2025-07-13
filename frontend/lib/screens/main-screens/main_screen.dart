@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tatar_shower/screens/main-screens/full_table_screen.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
@@ -38,33 +39,40 @@ class _MainScreenBody extends StatelessWidget {
           const SizedBox(height: 40),
           _NewShowerButtom(loc: loc),
           Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 24, bottom: 16),
-              child: Column(
-                children: [
-                  _TableHeader(loc: loc),
-                  const SizedBox(height: 5),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Card(
-                        color: appColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const FullTableScreen()),
+                );
+              },
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 24, bottom: 16),
+                child: Column(
+                  children: [
+                    _TableHeader(loc: loc),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Card(
+                          color: appColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: _ShowerTable(loc: loc),
                         ),
-                        child: _ShowerTable(loc: loc),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _Statistics(loc: loc),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _Statistics(loc: loc),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
