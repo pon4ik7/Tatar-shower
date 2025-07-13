@@ -177,7 +177,7 @@ class _SetTimerScreenState extends State<SetTimerScreen> {
                             _buildNumberField(
                               label: "Number of periods",
                               controller: _periodsController,
-                              hint: '3',
+                              hint: 'enter the number',
                             ),
                           ],
                         ),
