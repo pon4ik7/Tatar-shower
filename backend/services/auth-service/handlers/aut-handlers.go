@@ -116,17 +116,6 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var reason string
-	err = h.DB.QueryRow(
-		`SELECT reason FROM preferences WHERE user_id = $1`,
-		userID,
-	).Scan(&reason)
-	if err != nil {
-		log.Printf("Error selecting reason: %v", err)
-	} else {
-		log.Printf("User reason: %q", reason)
-	}
-
 	jwtToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userID,
 	}).SignedString(tokens.JwtSecret)
