@@ -5,6 +5,8 @@ import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart';
 
+final Set<String> _selectedOptions = {};
+
 class PreferencesScreen5 extends StatefulWidget {
   const PreferencesScreen5({super.key});
   @override
@@ -28,7 +30,32 @@ class _PreferencesScreen5State extends State<PreferencesScreen5> {
         Navigator.of(context).pushNamed("/prefDone");
       }
     } else {
-      Navigator.of(context).pushNamed("/prefDone");
+      if (_selectedOptions.isNotEmpty) {
+        Navigator.of(context).pushNamed('/prefDone');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            padding: EdgeInsets.zero,
+            content: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(120),
+              alignment: Alignment.center,
+              child: Text(
+                loc.choose_option,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: appColors.deepBlue,
+                  fontFamily: appFonts.header,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -80,6 +107,7 @@ class _PreferencesScreen5State extends State<PreferencesScreen5> {
                             children: [
                               InkWell(
                                 onTap: () => setState(() {
+                                  _selectedOptions.add(options[i]);
                                   selectedIndex = i;
                                   if (i != 3) _otherController.clear();
                                 }),

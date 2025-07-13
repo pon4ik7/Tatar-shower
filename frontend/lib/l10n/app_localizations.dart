@@ -529,6 +529,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sunday'**
   String get sunday;
+
+  /// No description provided for @choose_option.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose option'**
+  String get choose_option;
 }
 
 class _AppLocalizationsDelegate

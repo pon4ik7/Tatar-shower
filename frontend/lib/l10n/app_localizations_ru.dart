@@ -227,4 +227,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sunday => 'Воскресенье';
+
+  @override
+  String get choose_option => 'Выберите опцию';
 }

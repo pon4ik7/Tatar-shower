@@ -14,12 +14,14 @@ class PreferencesScreen3 extends StatefulWidget {
 
 class _PreferencesScreen3State extends State<PreferencesScreen3> {
   int? selectedIndex;
-  TimeOfDay _pickedTime = TimeOfDay.now();
+  TimeOfDay? pickedTime;
+  String? customTimeText;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final options = [loc.moring, loc.evening, loc.other];
+    final options = [loc.moring, loc.evening, customTimeText ?? loc.other];
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -58,9 +60,13 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                         final isSel = selectedIndex == i;
                         return InkWell(
                           onTap: () {
-                            setState(() => selectedIndex = i);
                             if (i == 2) {
                               _showTimePickerDialog(context, loc);
+                            } else {
+                              setState(() {
+                                selectedIndex = i;
+                                customTimeText = null;
+                              });
                             }
                           },
                           child: Padding(
@@ -115,7 +121,7 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _NextButton(loc: loc),
+                    _NextButton(loc: loc, selectedIndex: selectedIndex),
                     _SkipButton(loc: loc),
                   ],
                 ),
@@ -128,7 +134,7 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
   }
 
   void _showTimePickerDialog(BuildContext context, AppLocalizations loc) {
-    TimeOfDay tempPicked = _pickedTime;
+    TimeOfDay tempPicked = pickedTime ?? TimeOfDay.now();
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -148,8 +154,8 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                         0,
                         0,
                         0,
-                        _pickedTime.hour,
-                        _pickedTime.minute,
+                        tempPicked.hour,
+                        tempPicked.minute,
                       ),
                       use24hFormat: false,
                       onDateTimeChanged: (dt) {
@@ -190,7 +196,11 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            setState(() => _pickedTime = tempPicked);
+                            setState(() {
+                              pickedTime = tempPicked;
+                              selectedIndex = 2;
+                              customTimeText = pickedTime!.format(context);
+                            });
                             Navigator.of(context).pop();
                           },
                           style: ElevatedButton.styleFrom(
@@ -245,8 +255,9 @@ class _SkipButton extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  const _NextButton({required this.loc});
+  const _NextButton({required this.loc, required this.selectedIndex});
   final AppLocalizations loc;
+  final int? selectedIndex;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -262,7 +273,32 @@ class _NextButton extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pushNamed('/pref4');
+            if (selectedIndex != null) {
+              Navigator.of(context).pushNamed('/pref4');
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  padding: EdgeInsets.zero,
+                  content: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(120),
+                    alignment: Alignment.center,
+                    child: Text(
+                      loc.choose_option,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: appColors.deepBlue,
+                        fontFamily: appFonts.header,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
           },
           child: Text(
             loc.next,

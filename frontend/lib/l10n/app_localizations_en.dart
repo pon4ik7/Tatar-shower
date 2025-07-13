@@ -226,4 +226,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sunday => 'Sunday';
+
+  @override
+  String get choose_option => 'Choose option';
 }
