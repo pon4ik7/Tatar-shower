@@ -199,6 +199,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get save => 'Сохранить';
 
   @override
+  String get cancel => 'Отменить';
+
+  @override
   String get enter_your_streak => 'Введите желаемую серию';
 
   @override
@@ -227,7 +230,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get choose_option => 'Выберите опцию';
-  
+
   @override
   String get start_shower => 'Начать душ';
 

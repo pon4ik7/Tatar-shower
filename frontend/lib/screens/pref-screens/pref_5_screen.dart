@@ -112,15 +112,15 @@ class _PreferencesScreen5State extends State<PreferencesScreen5> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                  _selectedOptions.add(options[i]);
-                                  selectedIndex = i;
-                                  if (i != 3) _otherController.clear();
-                                  }),
+                                    _selectedOptions.add(options[i]);
+                                    selectedIndex = i;
+                                    if (i != 3) _otherController.clear();
+                                  });
                                   const streaks = [7, 14, 21, 7];
-                            context.read<OnboardingData>().setTargetStreak(
-                              streaks[i],
-                            );
-                                }
+                                  context
+                                      .read<OnboardingData>()
+                                      .setTargetStreak(streaks[i]);
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 13,

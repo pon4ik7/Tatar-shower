@@ -121,6 +121,7 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                               style: TextStyle(
                                 fontFamily: appFonts.header,
                                 fontSize: 20,
+                                color: appColors.white,
                               ),
                             ),
                     ),

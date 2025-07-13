@@ -535,7 +535,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose option'**
   String get choose_option;
-  
+
   /// No description provided for @start_shower.
   ///
   /// In en, this message translates to:
