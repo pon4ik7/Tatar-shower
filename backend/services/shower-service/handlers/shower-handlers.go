@@ -110,7 +110,6 @@ func (h *Handler) GetAllSchedulesHandler(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(schedule)
 }
 
-// TODO create logic update events for future weeks
 // CreateOrUpdateScheduleHandler creates or updates a schedule for the authenticated user.
 func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.Request) {
 	userID, err := tokens.GetUserIDFromRequest(r)
@@ -281,8 +280,6 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	//TODO increase day streack and add last complete task
-
 	var scheduleEntryID int
 	err = tx.QueryRow(`
         SELECT id FROM schedule_entries 
@@ -312,6 +309,20 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		tx.Rollback()
 		log.Printf("Failed to update notifications: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = tx.Exec(`
+		INSERT INTO goals (user_id, current_streak, last_completed)
+		VALUES ($1, 1, CURRENT_DATE)
+		ON CONFLICT (user_id) DO UPDATE
+		  SET current_streak = goals.current_streak + 1,
+		      last_completed  = CURRENT_DATE
+	`, userID)
+	if err != nil {
+		tx.Rollback()
+		log.Printf("DB upsert goals error: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
