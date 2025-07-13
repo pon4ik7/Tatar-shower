@@ -13,8 +13,6 @@ import 'package:tatar_shower/screens/pref-screens/pref_3_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_4_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_5_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_done_screen.dart';
-import 'package:tatar_shower/screens/main-screens/timer-screens/timer_screen.dart';
-import 'package:tatar_shower/screens/main-screens/timer-screens/log_shower_screen.dart';
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_language_screen.dart';
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_mode_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
