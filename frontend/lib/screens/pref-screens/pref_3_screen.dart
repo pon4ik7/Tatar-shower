@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
@@ -13,11 +14,14 @@ class PreferencesScreen3 extends StatefulWidget {
 
 class _PreferencesScreen3State extends State<PreferencesScreen3> {
   int? selectedIndex;
+  TimeOfDay? pickedTime;
+  String? customTimeText;
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final options = [loc.moring, loc.evening, loc.other];
+    final options = [loc.moring, loc.evening, customTimeText ?? loc.other];
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -29,7 +33,7 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
               Column(
                 children: [
                   StepProgressBar(steps: 5, currentStep: 2),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -48,7 +52,6 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                   const SizedBox(height: 30),
                   Image(image: lightCalendar, width: 80, height: 80),
                   const SizedBox(height: 30),
-                  const SizedBox(height: 24),
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -56,7 +59,16 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                       itemBuilder: (_, i) {
                         final isSel = selectedIndex == i;
                         return InkWell(
-                          onTap: () => setState(() => selectedIndex = i),
+                          onTap: () {
+                            if (i == 2) {
+                              _showTimePickerDialog(context, loc);
+                            } else {
+                              setState(() {
+                                selectedIndex = i;
+                                customTimeText = null;
+                              });
+                            }
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 13),
                             child: Row(
@@ -109,7 +121,7 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _NextButton(loc: loc),
+                    _NextButton(loc: loc, selectedIndex: selectedIndex),
                     _SkipButton(loc: loc),
                   ],
                 ),
@@ -120,13 +132,132 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
       ),
     );
   }
+
+  void _showTimePickerDialog(BuildContext context, AppLocalizations loc) {
+    TimeOfDay tempPicked = pickedTime ?? TimeOfDay.now();
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: StatefulBuilder(
+          builder: (ctx, setStateDialog) {
+            return Container(
+              width: 311,
+              height: 350,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.time,
+                      initialDateTime: DateTime(
+                        0,
+                        0,
+                        0,
+                        tempPicked.hour,
+                        tempPicked.minute,
+                      ),
+                      use24hFormat: false,
+                      onDateTimeChanged: (dt) {
+                        setStateDialog(() {
+                          tempPicked = TimeOfDay(
+                            hour: dt.hour,
+                            minute: dt.minute,
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: appColors.midBlue),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            loc.cancel,
+                            style: TextStyle(
+                              fontFamily: appFonts.header,
+                              fontSize: 14,
+                              color: appColors.midBlue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              pickedTime = tempPicked;
+                              selectedIndex = 2;
+                              customTimeText = pickedTime!.format(context);
+                            });
+                            Navigator.of(context).pop();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: appColors.midBlue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            loc.save,
+                            style: TextStyle(
+                              fontFamily: appFonts.header,
+                              fontSize: 14,
+                              color: appColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _SkipButton extends StatelessWidget {
+  const _SkipButton({required this.loc});
+  final AppLocalizations loc;
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: ButtonStyle(splashFactory: NoSplash.splashFactory),
+      onPressed: () {},
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Text(
+          loc.skip,
+          style: TextStyle(
+            fontFamily: appFonts.regular,
+            fontSize: 14,
+            color: Colors.transparent,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _NextButton extends StatelessWidget {
-  const _NextButton({required this.loc});
-
+  const _NextButton({required this.loc, required this.selectedIndex});
   final AppLocalizations loc;
-
+  final int? selectedIndex;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -142,7 +273,32 @@ class _NextButton extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pushNamed('/pref4');
+            if (selectedIndex != null) {
+              Navigator.of(context).pushNamed('/pref4');
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  padding: EdgeInsets.zero,
+                  content: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(120),
+                    alignment: Alignment.center,
+                    child: Text(
+                      loc.choose_option,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: appColors.deepBlue,
+                        fontFamily: appFonts.header,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
           },
           child: Text(
             loc.next,
@@ -151,31 +307,6 @@ class _NextButton extends StatelessWidget {
               fontSize: 20,
               color: appColors.white,
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SkipButton extends StatelessWidget {
-  const _SkipButton({required this.loc});
-
-  final AppLocalizations loc;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(splashFactory: NoSplash.splashFactory),
-      onPressed: () {},
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Text(
-          loc.skip,
-          style: TextStyle(
-            fontFamily: appFonts.regular,
-            fontSize: 14,
-            color: Colors.transparent,
           ),
         ),
       ),

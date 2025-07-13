@@ -7,6 +7,8 @@ import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart'
 import 'package:provider/provider.dart';
 import 'package:tatar_shower/onboarding/onboarding_data.dart';
 
+final Set<String> _selectedOptions = {};
+
 class PreferencesScreen4 extends StatefulWidget {
   const PreferencesScreen4({super.key});
   @override
@@ -68,6 +70,7 @@ class _PreferencesScreen4State extends State<PreferencesScreen4> {
                             context.read<OnboardingData>().setExperienceType(
                               codes[i],
                             );
+                            _selectedOptions.add(options[i]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 13),
@@ -154,7 +157,32 @@ class _NextButton extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pushNamed("/pref5");
+            if (_selectedOptions.isNotEmpty) {
+              Navigator.of(context).pushNamed('/pref5');
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  padding: EdgeInsets.zero,
+                  content: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(120),
+                    alignment: Alignment.center,
+                    child: Text(
+                      loc.choose_option,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: appColors.deepBlue,
+                        fontFamily: appFonts.header,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
           },
           child: Text(
             loc.next,

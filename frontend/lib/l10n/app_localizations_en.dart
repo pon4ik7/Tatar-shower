@@ -195,6 +195,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_passwords_must_match => 'Passwords do not match';
 
   @override
+  String get save => 'Save';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get enter_your_streak => 'Enter your streak';
+
+  @override
+  String get error_enter_number => 'Enter a number';
+
+  @override
+  String get monday => 'Monday';
+
+  @override
+  String get tuesday => 'Tuesday';
+
+  @override
+  String get wednesday => 'Wednesday';
+
+  @override
+  String get thursday => 'Thursday';
+
+  @override
+  String get friday => 'Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
+  String get choose_option => 'Choose option';
+
+  @override
   String get start_shower => 'Start shower';
 
   @override
@@ -250,9 +286,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get log_shower => 'Log shower';
-
-  @override
-  String get cancel => 'Cancel';
 
   @override
   String get mm_ss => 'mm:ss';

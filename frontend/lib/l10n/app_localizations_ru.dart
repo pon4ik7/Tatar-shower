@@ -196,6 +196,39 @@ class AppLocalizationsRu extends AppLocalizations {
   String get error_passwords_must_match => 'Пароли не совпадают';
 
   @override
+  String get save => 'Сохранить';
+
+  @override
+  String get enter_your_streak => 'Введите желаемую серию';
+
+  @override
+  String get error_enter_number => 'Введите число';
+
+  @override
+  String get monday => 'Понедельник';
+
+  @override
+  String get tuesday => 'Вторник';
+
+  @override
+  String get wednesday => 'Среда';
+
+  @override
+  String get thursday => 'Четверг';
+
+  @override
+  String get friday => 'Пятница';
+
+  @override
+  String get saturday => 'Суббота';
+
+  @override
+  String get sunday => 'Воскресенье';
+
+  @override
+  String get choose_option => 'Выберите опцию';
+  
+  @override
   String get start_shower => 'Начать душ';
 
   @override
@@ -251,9 +284,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get log_shower => 'Записать';
-
-  @override
-  String get cancel => 'Отменить';
 
   @override
   String get mm_ss => 'мм:сс';
