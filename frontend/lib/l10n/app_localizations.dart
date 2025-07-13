@@ -535,6 +535,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose option'**
   String get choose_option;
+  
+  /// No description provided for @start_shower.
+  ///
+  /// In en, this message translates to:
+  /// **'Start shower'**
+  String get start_shower;
+
+  /// No description provided for @stop_shower.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop shower'**
+  String get stop_shower;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @continue_.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continue_;
+
+  /// No description provided for @set_previous_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Set previous settings'**
+  String get set_previous_settings;
+
+  /// No description provided for @cold_water_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Cold water time'**
+  String get cold_water_time;
+
+  /// No description provided for @warm_water_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm water time'**
+  String get warm_water_time;
+
+  /// No description provided for @number_of_periods.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of periods'**
+  String get number_of_periods;
+
+  /// No description provided for @invalid_format.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid format'**
+  String get invalid_format;
+
+  /// No description provided for @enter_a_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number'**
+  String get enter_a_number;
+
+  /// No description provided for @cold_water.
+  ///
+  /// In en, this message translates to:
+  /// **'Cold water'**
+  String get cold_water;
+
+  /// No description provided for @warm_water.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm water'**
+  String get warm_water;
+
+  /// No description provided for @time_is_out.
+  ///
+  /// In en, this message translates to:
+  /// **'Time is out'**
+  String get time_is_out;
+
+  /// No description provided for @rounds_left.
+  ///
+  /// In en, this message translates to:
+  /// **'Rounds left: {count}'**
+  String rounds_left(Object count);
+
+  /// No description provided for @info.
+  ///
+  /// In en, this message translates to:
+  /// **'Info'**
+  String get info;
+
+  /// No description provided for @info_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the time for warm and cold water, choose how many periods you want, and click Start shower.'**
+  String get info_text;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @log_shower.
+  ///
+  /// In en, this message translates to:
+  /// **'Log shower'**
+  String get log_shower;
+
+  /// No description provided for @mm_ss.
+  ///
+  /// In en, this message translates to:
+  /// **'mm:ss'**
+  String get mm_ss;
 }
 
 class _AppLocalizationsDelegate

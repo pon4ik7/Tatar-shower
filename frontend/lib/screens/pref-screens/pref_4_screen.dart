@@ -4,6 +4,8 @@ import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
 
 final Set<String> _selectedOptions = {};
 
@@ -60,6 +62,14 @@ class _PreferencesScreen4State extends State<PreferencesScreen4> {
                         return InkWell(
                           onTap: () {
                             setState(() => selectedIndex = i);
+                            const codes = [
+                              'first_time',
+                              'tried',
+                              'practice_regularly',
+                            ];
+                            context.read<OnboardingData>().setExperienceType(
+                              codes[i],
+                            );
                             _selectedOptions.add(options[i]);
                           },
                           child: Padding(

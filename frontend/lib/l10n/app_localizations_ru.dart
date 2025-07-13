@@ -199,9 +199,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get save => 'Сохранить';
 
   @override
-  String get cancel => 'Отменить';
-
-  @override
   String get enter_your_streak => 'Введите желаемую серию';
 
   @override
@@ -230,4 +227,64 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get choose_option => 'Выберите опцию';
+  
+  @override
+  String get start_shower => 'Начать душ';
+
+  @override
+  String get stop_shower => 'Закончить душ';
+
+  @override
+  String get pause => 'Пауза';
+
+  @override
+  String get continue_ => 'Продолжить';
+
+  @override
+  String get set_previous_settings => 'Прошлые настройки';
+
+  @override
+  String get cold_water_time => 'Время холодной воды';
+
+  @override
+  String get warm_water_time => 'Время теплой воды';
+
+  @override
+  String get number_of_periods => 'Количество подходов';
+
+  @override
+  String get invalid_format => 'Неверный формат';
+
+  @override
+  String get enter_a_number => 'Введите число';
+
+  @override
+  String get cold_water => 'Холодная вода';
+
+  @override
+  String get warm_water => 'Теплая вода';
+
+  @override
+  String get time_is_out => 'Время вышло';
+
+  @override
+  String rounds_left(Object count) {
+    return 'Подходов осталось: $count';
+  }
+
+  @override
+  String get info => 'Подсказка';
+
+  @override
+  String get info_text =>
+      'Установите время приема теплой и холодной воды, выберите желаемое количество периодов и нажмите «Начать душ».';
+
+  @override
+  String get ok => 'Принять';
+
+  @override
+  String get log_shower => 'Записать';
+
+  @override
+  String get mm_ss => 'мм:сс';
 }

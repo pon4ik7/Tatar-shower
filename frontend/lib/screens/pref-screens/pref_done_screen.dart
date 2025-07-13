@@ -4,6 +4,10 @@ import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
+import 'package:tatar_shower/models/register_request.dart';
+import 'package:tatar_shower/services/api_service.dart';
 
 class PreferencesDoneScreen extends StatefulWidget {
   const PreferencesDoneScreen({super.key});
@@ -13,6 +17,7 @@ class PreferencesDoneScreen extends StatefulWidget {
 
 class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
   int? selectedIndex;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +69,62 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [_NextButton(loc: loc)],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                              setState(() => _isLoading = true);
+                              final data = context.read<OnboardingData>();
+                              final req = RegisterRequest(
+                                login: data.login!,
+                                password: data.password!,
+                                language: data.language,
+                                notifications: data.notifications,
+                                reason: data.reason,
+                                frequencyType: data.frequencyType,
+                                customDays: data.customDays,
+                                experienceType: data.experienceType,
+                                targetStreak: data.targetStreak,
+                              );
+
+                              try {
+                                await ApiService().registerUserWithPrefs(req);
+                                Navigator.of(
+                                  context,
+                                ).pushReplacementNamed('/tabs');
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Ошибка: $e')),
+                                );
+                              } finally {
+                                setState(() => _isLoading = false);
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: appColors.deepBlue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator()
+                          : Text(
+                              loc.start,
+                              style: TextStyle(
+                                fontFamily: appFonts.header,
+                                fontSize: 20,
+                              ),
+                            ),
+                    ),
+                  ),
                 ),
               ),
             ],

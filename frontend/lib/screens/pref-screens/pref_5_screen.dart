@@ -4,6 +4,10 @@ import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
+
+// TODO: handle the "other" option
 
 final Set<String> _selectedOptions = {};
 
@@ -106,11 +110,17 @@ class _PreferencesScreen5State extends State<PreferencesScreen5> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               InkWell(
-                                onTap: () => setState(() {
+                                onTap: () {
+                                  setState(() {
                                   _selectedOptions.add(options[i]);
                                   selectedIndex = i;
                                   if (i != 3) _otherController.clear();
-                                }),
+                                  }),
+                                  const streaks = [7, 14, 21, 7];
+                            context.read<OnboardingData>().setTargetStreak(
+                              streaks[i],
+                            );
+                                }
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 13,

@@ -122,7 +122,7 @@
     "error_username_short": "From 5 to 30 characters",
 
     "error_password_short": "At least 5 characters",
-
+    
     "error_passwords_must_match": "Passwords do not match",
 
     "save": "Save",
@@ -148,4 +148,48 @@
     "sunday": "Sunday",
 
     "choose_option": "Choose option"
+    
+    "error_passwords_must_match": "Passwords do not match", 
+
+    "start_shower": "Start shower",
+
+    "stop_shower": "Stop shower",
+
+    "pause": "Pause",
+
+    "continue_": "Continue",
+
+    "set_previous_settings": "Set previous settings",
+
+    "cold_water_time": "Cold water time",
+
+    "warm_water_time": "Warm water time",
+
+    "number_of_periods": "Number of periods",
+
+    "invalid_format": "Invalid format",
+
+    "enter_a_number": "Enter a number",
+
+    "cold_water": "Cold water",
+
+    "warm_water": "Warm water",
+
+    "time_is_out": "Time is out",
+
+    "rounds_left": "Rounds left: {count}",
+
+    "info": "Info",
+
+    "info_text": "Set the time for warm and cold water, choose how many periods you want, and click Start shower.",
+
+    "ok": "OK",
+
+    "log_shower": "Log shower",
+
+    "date": "Date",
+
+    "duration": "Duration", 
+
+    "mm_ss": "mm:ss"
 }

@@ -13,13 +13,13 @@ import 'package:tatar_shower/screens/pref-screens/pref_3_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_4_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_5_screen.dart';
 import 'package:tatar_shower/screens/pref-screens/pref_done_screen.dart';
-import 'package:tatar_shower/screens/main-screens/timer-screens/timer_screen.dart';
-import 'package:tatar_shower/screens/main-screens/timer-screens/log_shower_screen.dart';
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_language_screen.dart';
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_mode_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tatar_shower/services/push_notification_service.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'onboarding/onboarding_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,12 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await PushNotificationService.initialize();
   //TODO "await apiService.initializePushNotifications();" add it inplase where user log in in the system
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => OnboardingData(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -54,22 +59,23 @@ class _MyAppState extends State<MyApp> {
             TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
           },
         ),
+        scaffoldBackgroundColor: Colors.transparent,
       ),
       locale: _locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       localeResolutionCallback:
           (Locale? deviceLocale, Iterable<Locale> supported) {
-            if (deviceLocale != null) {
-              switch (deviceLocale.languageCode) {
-                case 'en':
-                  return const Locale('en');
-                case 'ru':
-                  return const Locale('ru');
-              }
-            }
-            return const Locale('en');
-          },
+        if (deviceLocale != null) {
+          switch (deviceLocale.languageCode) {
+            case 'en':
+              return const Locale('en');
+            case 'ru':
+              return const Locale('ru');
+          }
+        }
+        return const Locale('en');
+      },
       debugShowCheckedModeBanner: false,
       initialRoute: '/language',
       routes: {
@@ -85,10 +91,11 @@ class _MyAppState extends State<MyApp> {
         '/pref5': (context) => PreferencesScreen5(),
         '/prefDone': (context) => PreferencesDoneScreen(),
         '/tabs': (context) => Tabs(),
-        '/settingsLanguage': (context) => SettingsLanguage(
-          onLocaleChanged: _setLocale,
-          currentLocale: _locale == const Locale('en') ? 'eu' : 'ru',
-        ),
+        '/settingsLanguage': (context) =>
+            SettingsLanguage(
+              onLocaleChanged: _setLocale,
+              currentLocale: _locale == const Locale('en') ? 'eu' : 'ru',
+            ),
         '/settingsMode': (context) => SettingsMode(),
       },
     );
