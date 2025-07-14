@@ -1,6 +1,6 @@
 name: tatar_shower
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -44,5 +44,4 @@ flutter:
     - family: Inter
       fonts:
         - asset: assets/fonts/inter.ttf
-  generate: true  
-
+  generate: true
