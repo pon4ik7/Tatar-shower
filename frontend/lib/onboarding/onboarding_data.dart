@@ -7,7 +7,7 @@ class OnboardingData extends ChangeNotifier {
   bool notifications = false;
   String? reason;
   String frequencyType = 'everyday';
-  List<int>? customDays;
+  List<String>? customDays;
   String experienceType = 'first_time';
   int targetStreak = 7;
 
@@ -42,7 +42,7 @@ class OnboardingData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCustomDays(List<int>? v) {
+  void setCustomDays(List<String>? v) {
     customDays = v;
     notifyListeners();
   }

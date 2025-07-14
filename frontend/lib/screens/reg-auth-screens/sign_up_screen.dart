@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
@@ -27,6 +29,10 @@ class _SignUpSCreen extends State<SignUpScreen> {
 
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
+      context.read<OnboardingData>().setLogin(_usernameController.text);
+      context.read<OnboardingData>().setPassword(
+        _confirmPasswordController.text,
+      );
       Navigator.of(context).pushNamed('/pref1');
     }
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
@@ -121,7 +123,11 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _NextButton(loc: loc, selectedIndex: selectedIndex),
+                    _NextButton(
+                      loc: loc,
+                      selectedIndex: selectedIndex,
+                      options: options,
+                    ),
                     _SkipButton(loc: loc),
                   ],
                 ),
@@ -255,7 +261,12 @@ class _SkipButton extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  const _NextButton({required this.loc, required this.selectedIndex});
+  const _NextButton({
+    required this.loc,
+    required this.selectedIndex,
+    required this.options,
+  });
+  final List<String> options;
   final AppLocalizations loc;
   final int? selectedIndex;
   @override
@@ -274,6 +285,9 @@ class _NextButton extends StatelessWidget {
           ),
           onPressed: () {
             if (selectedIndex != null) {
+              List<String> toData = [];
+              toData.add(options[selectedIndex!]);
+              context.read<OnboardingData>().setCustomDays(toData);
               Navigator.of(context).pushNamed('/pref4');
             } else {
               ScaffoldMessenger.of(context).showSnackBar(

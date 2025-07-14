@@ -128,7 +128,7 @@ class _LogInButton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed('/pref1');
+          Navigator.of(context).pushNamed('/tabs');
         },
         child: Text(
           loc.log_in,
