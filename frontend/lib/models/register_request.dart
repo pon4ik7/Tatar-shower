@@ -5,7 +5,7 @@ class RegisterRequest {
   final bool notifications;
   final String? reason;
   final String frequencyType;
-  final List<int>? customDays;
+  final List<String>? customDays;
   final String experienceType;
   final int targetStreak;
 

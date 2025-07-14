@@ -54,14 +54,19 @@ func NewEmptySchedule() *Schedule {
 }
 
 type InputRegisterUserRequest struct {
-	Login          string  `json:"login"`
-	Password       string  `json:"password"`
-	Language       string  `json:"language"`
-	Reason         *string `json:"reason"`
-	FrequencyType  string  `json:"frequency_type"`
-	CustomDays     []int   `json:"custom_days"`
-	ExperienceType string  `json:"experience_type"`
-	TargetStreak   int     `json:"target_streak"`
+	Login          string   `json:"login"`
+	Password       string   `json:"password"`
+	Language       string   `json:"language"`
+	Reason         *string  `json:"reason"`
+	FrequencyType  string   `json:"frequency_type"`
+	CustomDays     []string `json:"custom_days"`
+	ExperienceType string   `json:"experience_type"`
+	TargetStreak   int      `json:"target_streak"`
+}
+
+type InputRegisterUserRequestTemp struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
 }
 
 type ScheduleCreateChancheRequest struct {
