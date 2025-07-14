@@ -136,38 +136,38 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
   }
 }
 
-class _NextButton extends StatelessWidget {
-  const _NextButton({required this.loc});
+// class _NextButton extends StatelessWidget {
+//   const _NextButton({required this.loc});
 
-  final AppLocalizations loc;
+//   final AppLocalizations loc;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-      child: SizedBox(
-        width: double.infinity,
-        height: 52,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: appColors.deepBlue,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          onPressed: () {
-            Navigator.of(context).pushNamed("/tabs");
-          },
-          child: Text(
-            loc.start,
-            style: TextStyle(
-              fontFamily: appFonts.header,
-              fontSize: 20,
-              color: appColors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+//       child: SizedBox(
+//         width: double.infinity,
+//         height: 52,
+//         child: ElevatedButton(
+//           style: ElevatedButton.styleFrom(
+//             backgroundColor: appColors.deepBlue,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(12),
+//             ),
+//           ),
+//           onPressed: () {
+//             Navigator.of(context).pushNamed("/tabs");
+//           },
+//           child: Text(
+//             loc.start,
+//             style: TextStyle(
+//               fontFamily: appFonts.header,
+//               fontSize: 20,
+//               color: appColors.white,
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
