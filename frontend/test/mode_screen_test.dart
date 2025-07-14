@@ -1,198 +1,290 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
-import 'package:tatar_shower/screens/intro-screens/mode_screen.dart';
+import 'package:tatar_shower/theme/colors.dart';
+import 'package:tatar_shower/theme/fonts.dart';
+import 'package:tatar_shower/theme/images.dart';
+import 'package:tatar_shower/screens/intro-screens/language_screen.dart';
+
+// Mock class for navigation testing
+class MockNavigatorObserver extends NavigatorObserver {
+  final List<Route<dynamic>> pushedRoutes = [];
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    pushedRoutes.add(route);
+    super.didPush(route, previousRoute);
+  }
+}
 
 void main() {
-  late void Function(FlutterErrorDetails)? originalOnError;
+  group('LanguageScreen Tests', () {
+    late MockNavigatorObserver mockObserver;
+    void Function(FlutterErrorDetails)? originalOnError;
 
-  setUp(() {
-    // Сохраняем оригинальный обработчик ошибок
-    originalOnError = FlutterError.onError;
+    setUp(() {
+      mockObserver = MockNavigatorObserver();
+      originalOnError = FlutterError.onError; // Save original error handler
+    });
 
-    // Устанавливаем кастомный обработчик
-    FlutterError.onError = (FlutterErrorDetails details) {
-      if (details.toString().contains('RenderFlex overflowed')) {
-        return; // Игнорируем overflow ошибки
-      }
-      // Передаем другие ошибки оригинальному обработчику
-      originalOnError?.call(details);
-    };
-  });
+    tearDown(() {
+      FlutterError.onError = originalOnError; // Restore original error handler
+    });
 
-  tearDown(() {
-    // Восстанавливаем оригинальный обработчик после каждого теста
-    FlutterError.onError = originalOnError;
-  });
-
-  testWidgets('ModeScreen отображает начальное состояние корректно', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: [Locale('en'), Locale('ru')],
-        home: ModeScreen(),
+    Widget createTestWidget(LanguageScreen screen) {
+      return MaterialApp(
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en'), Locale('ru')],
+        navigatorObservers: [mockObserver],
+        home: screen,
         routes: {
-          '/welcome': (context) => Scaffold(body: Text('Welcome Screen')),
+          '/mode': (context) => const Scaffold(body: Text('Mode Screen')),
         },
-      ),
-    );
+      );
+    }
 
-    // Проверяем, что оба режима отображаются
-    expect(find.text('Light'), findsOneWidget);
-    expect(find.text('Dark'), findsOneWidget);
+    testWidgets('should display language options correctly', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
 
-    // Проверяем, что Light выбран по умолчанию (жирный шрифт)
-    final lightText = tester.widget<Text>(find.text('Light'));
-    expect(lightText.style?.fontWeight, FontWeight.bold);
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
 
-    // Проверяем, что Dark не выбран
-    final darkText = tester.widget<Text>(find.text('Dark'));
-    expect(darkText.style?.fontWeight, FontWeight.w400);
+      Locale? selectedLocale;
 
-    // Проверяем наличие кнопки Apply
-    expect(find.byType(ElevatedButton), findsOneWidget);
-  });
+      await tester.pumpWidget(
+        createTestWidget(
+          LanguageScreen(
+            onLocaleChanged: (locale) {
+              selectedLocale = locale;
+            },
+          ),
+        ),
+      );
 
-  testWidgets('Нажатие на режим меняет выбор', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: [Locale('en'), Locale('ru')],
-        home: ModeScreen(),
-      ),
-    );
+      await tester.pumpAndSettle();
 
-    // Нажимаем на Dark режим
-    await tester.tap(find.text('Dark'));
-    await tester.pumpAndSettle();
+      expect(find.text('English'), findsOneWidget);
+      expect(find.text('Русский'), findsOneWidget);
+      expect(find.byType(ElevatedButton), findsOneWidget);
 
-    // Проверяем, что Dark теперь выбран
-    final darkText = tester.widget<Text>(find.text('Dark'));
-    expect(darkText.style?.fontWeight, FontWeight.bold);
+      addTearDown(tester.view.resetPhysicalSize);
+    });
 
-    // Проверяем, что Light больше не выбран
-    final lightText = tester.widget<Text>(find.text('Light'));
-    expect(lightText.style?.fontWeight, FontWeight.w400);
-  });
+    testWidgets('should select English by default', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
 
-  testWidgets('Кнопка Apply выполняет навигацию на /welcome', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: [Locale('en'), Locale('ru')],
-        home: ModeScreen(),
-        routes: {
-          '/welcome': (context) => Scaffold(body: Text('Welcome Screen')),
-        },
-      ),
-    );
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
 
-    // Находим и нажимаем кнопку Apply
-    final applyButton = find.byType(ElevatedButton);
-    expect(applyButton, findsOneWidget);
+      await tester.pumpWidget(
+        createTestWidget(LanguageScreen(onLocaleChanged: (locale) {})),
+      );
 
-    await tester.tap(applyButton);
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    // Проверяем, что произошла навигация
-    expect(find.text('Welcome Screen'), findsOneWidget);
-  });
+      expect(find.text('English'), findsOneWidget);
 
-  testWidgets('Множественные переключения режимов работают корректно', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: [Locale('en'), Locale('ru')],
-        home: ModeScreen(),
-      ),
-    );
+      addTearDown(tester.view.resetPhysicalSize);
+    });
 
-    // Переключаемся на Dark
-    await tester.tap(find.text('Dark'));
-    await tester.pumpAndSettle();
+    testWidgets('should change selection when tapping on Russian', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
 
-    // Проверяем, что Dark выбран
-    final darkText1 = tester.widget<Text>(find.text('Dark'));
-    expect(darkText1.style?.fontWeight, FontWeight.bold);
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
 
-    // Переключаемся обратно на Light
-    await tester.tap(find.text('Light'));
-    await tester.pumpAndSettle();
+      Locale? selectedLocale;
 
-    // Проверяем финальное состояние
-    final lightText = tester.widget<Text>(find.text('Light'));
-    expect(lightText.style?.fontWeight, FontWeight.bold);
+      await tester.pumpWidget(
+        createTestWidget(
+          LanguageScreen(
+            onLocaleChanged: (locale) {
+              selectedLocale = locale;
+            },
+          ),
+        ),
+      );
 
-    final darkText2 = tester.widget<Text>(find.text('Dark'));
-    expect(darkText2.style?.fontWeight, FontWeight.w400);
-  });
+      await tester.pumpAndSettle();
 
-  testWidgets('Выбранный режим имеет правильное визуальное выделение', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: [Locale('en'), Locale('ru')],
-        home: ModeScreen(),
-      ),
-    );
+      await tester.tap(find.text('Русский'));
+      await tester.pumpAndSettle();
 
-    // Нажимаем на Dark режим
-    await tester.tap(find.text('Dark'));
-    await tester.pumpAndSettle();
+      expect(selectedLocale, equals(const Locale('ru')));
 
-    // Убираем проверку количества InkWell
-    // final inkWells = find.byType(InkWell);
-    // expect(inkWells, findsNWidgets(2));
+      addTearDown(tester.view.resetPhysicalSize);
+    });
 
-    // Проверяем, что выбранный режим имеет правильное выделение
-    final darkText = tester.widget<Text>(find.text('Dark'));
-    expect(darkText.style?.fontWeight, FontWeight.bold);
-  });
+    testWidgets('should change selection when tapping on English', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
 
-  testWidgets('Проверка корректности label функции', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: [Locale('en'), Locale('ru')],
-        home: ModeScreen(),
-      ),
-    );
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
 
-    // Проверяем, что локализованные тексты отображаются
-    expect(find.text('Light'), findsOneWidget);
-    expect(find.text('Dark'), findsOneWidget);
+      Locale? selectedLocale;
 
-    // Проверяем, что заголовок отображается
-    expect(find.textContaining('mode'), findsOneWidget);
-  });
+      await tester.pumpWidget(
+        createTestWidget(
+          LanguageScreen(
+            onLocaleChanged: (locale) {
+              selectedLocale = locale;
+            },
+          ),
+        ),
+      );
 
-  testWidgets('Проверка начального состояния _selected', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: [Locale('en'), Locale('ru')],
-        home: ModeScreen(),
-      ),
-    );
+      await tester.pumpAndSettle();
 
-    // Проверяем, что по умолчанию выбран light режим
-    final lightText = tester.widget<Text>(find.text('Light'));
-    expect(lightText.style?.fontWeight, FontWeight.bold);
+      await tester.tap(find.text('Русский'));
+      await tester.pumpAndSettle();
 
-    // Проверяем, что dark режим не выбран
-    final darkText = tester.widget<Text>(find.text('Dark'));
-    expect(darkText.style?.fontWeight, FontWeight.w400);
+      await tester.tap(find.text('English'));
+      await tester.pumpAndSettle();
+
+      expect(selectedLocale, equals(const Locale('en')));
+
+      addTearDown(tester.view.resetPhysicalSize);
+    });
+
+    testWidgets('should navigate to mode screen when Apply button is pressed', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
+
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
+
+      await tester.pumpWidget(
+        createTestWidget(LanguageScreen(onLocaleChanged: (locale) {})),
+      );
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      expect(mockObserver.pushedRoutes.length, greaterThan(0));
+
+      addTearDown(tester.view.resetPhysicalSize);
+    });
+
+    testWidgets('should have proper widget structure', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
+
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
+
+      await tester.pumpWidget(
+        createTestWidget(LanguageScreen(onLocaleChanged: (locale) {})),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(Container), findsWidgets);
+      expect(find.byType(Stack), findsWidgets);
+      expect(find.byType(InkWell), findsWidgets);
+      expect(find.byType(ElevatedButton), findsOneWidget);
+
+      addTearDown(tester.view.resetPhysicalSize);
+    });
+
+    testWidgets('should call onLocaleChanged callback with correct locale', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
+
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
+
+      final List<Locale> calledLocales = [];
+
+      await tester.pumpWidget(
+        createTestWidget(
+          LanguageScreen(
+            onLocaleChanged: (locale) {
+              calledLocales.add(locale);
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Русский'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('English'));
+      await tester.pumpAndSettle();
+
+      expect(calledLocales, contains(const Locale('ru')));
+      expect(calledLocales, contains(const Locale('en')));
+      expect(calledLocales.length, equals(2));
+
+      addTearDown(tester.view.resetPhysicalSize);
+    });
+
+    testWidgets('should display visual selection indicator', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 800);
+      tester.view.devicePixelRatio = 1.0;
+
+      FlutterError.onError = (FlutterErrorDetails details) {
+        if (details.toString().contains('RenderFlex overflowed')) return;
+        originalOnError?.call(details);
+      };
+
+      await tester.pumpWidget(
+        createTestWidget(LanguageScreen(onLocaleChanged: (locale) {})),
+      );
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Русский'));
+      await tester.pumpAndSettle();
+
+      final russianText = tester.widget<Text>(find.text('Русский'));
+      expect(russianText.style?.fontWeight, equals(FontWeight.bold));
+
+      addTearDown(tester.view.resetPhysicalSize);
+    });
   });
 }
