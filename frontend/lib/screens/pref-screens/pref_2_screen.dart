@@ -9,6 +9,7 @@ import 'package:tatar_shower/onboarding/onboarding_data.dart';
 
 class PreferencesScreen2 extends StatefulWidget {
   const PreferencesScreen2({super.key});
+
   @override
   _PreferencesScreen2State createState() => _PreferencesScreen2State();
 }
@@ -71,7 +72,6 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                                 selectedIndex = i;
                                 customDaysText = null;
                               });
-                              
                             }
                             const codes = [
                               'everyday',
@@ -81,6 +81,10 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                             context.read<OnboardingData>().setFrequencyType(
                               codes[i],
                             );
+                            if (codes[i] == 'custom') {
+                              context.read<OnboardingData>().setCustomDays(
+                                  selectedDays);
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 13),
@@ -98,15 +102,15 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                                   ),
                                   child: isSel
                                       ? Center(
-                                          child: Container(
-                                            width: 10,
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                              color: appColors.midBlue,
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                        )
+                                    child: Container(
+                                      width: 10,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: appColors.midBlue,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  )
                                       : null,
                                 ),
                                 const SizedBox(width: 10),
@@ -159,133 +163,137 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
 
     showDialog(
       context: context,
-      builder: (_) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: StatefulBuilder(
-          builder: (context, setStateDialog) {
-            return Container(
-              width: 311,
-              height: 350,
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: weekDays.length,
-                      itemBuilder: (_, idx) {
-                        return CheckboxListTile(
-                          title: Text(
-                            weekDays[idx],
-                            style: TextStyle(
-                              fontFamily: appFonts.regular,
-                              fontSize: 16,
-                              color: appColors.black,
-                            ),
-                          ),
-                          value: _daysSelected[idx],
-                          onChanged: (val) {
-                            setStateDialog(() {
-                              _daysSelected[idx] = val!;
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Row(
+      builder: (_) =>
+          Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15)),
+            child: StatefulBuilder(
+              builder: (context, setStateDialog) {
+                return Container(
+                  width: 311,
+                  height: 350,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
+                        child: ListView.builder(
+                          itemCount: weekDays.length,
+                          itemBuilder: (_, idx) {
+                            return CheckboxListTile(
+                              title: Text(
+                                weekDays[idx],
+                                style: TextStyle(
+                                  fontFamily: appFonts.regular,
+                                  fontSize: 16,
+                                  color: appColors.black,
+                                ),
+                              ),
+                              value: _daysSelected[idx],
+                              onChanged: (val) {
+                                setStateDialog(() {
+                                  _daysSelected[idx] = val!;
+                                });
+                              },
+                            );
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey.shade300,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: Text(
-                            loc.cancel,
-                            style: TextStyle(
-                              fontFamily: appFonts.header,
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: appColors.midBlue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey.shade300,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: Text(
+                                loc.cancel,
+                                style: TextStyle(
+                                  fontFamily: appFonts.header,
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
                           ),
-                          onPressed: () {
-                            final selectedDays = <String>[];
-                            for (int i = 0; i < _daysSelected.length; i++) {
-                              if (_daysSelected[i])
-                                selectedDays.add(weekDays[i]);
-                            }
-                            if (selectedDays.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  behavior: SnackBarBehavior.floating,
-                                  padding: EdgeInsets.zero,
-                                  content: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(120),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      loc.choose_option,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: appColors.deepBlue,
-                                        fontFamily: appFonts.header,
-                                        fontSize: 18,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: appColors.midBlue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () {
+                                final selectedDays = <String>[];
+                                for (int i = 0; i < _daysSelected.length; i++) {
+                                  if (_daysSelected[i])
+                                    selectedDays.add(weekDays[i]);
+                                }
+                                if (selectedDays.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      behavior: SnackBarBehavior.floating,
+                                      padding: EdgeInsets.zero,
+                                      content: Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(120),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          loc.choose_option,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: appColors.deepBlue,
+                                            fontFamily: appFonts.header,
+                                            fontSize: 18,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                  );
+                                } else {
+                                  setState(() {
+                                    selectedIndex = 2;
+                                    customDaysText = selectedDays.join(', ');
+                                  });
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                              child: Text(
+                                loc.save,
+                                style: TextStyle(
+                                  fontFamily: appFonts.header,
+                                  fontSize: 20,
+                                  color: appColors.white,
                                 ),
-                              );
-                            } else {
-                              setState(() {
-                                selectedIndex = 2;
-                                customDaysText = selectedDays.join(', ');
-                              });
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          child: Text(
-                            loc.save,
-                            style: TextStyle(
-                              fontFamily: appFonts.header,
-                              fontSize: 20,
-                              color: appColors.white,
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                );
+              },
+            ),
+          ),
     );
   }
 }
 
 class _SkipButton extends StatelessWidget {
   const _SkipButton({required this.loc});
+
   final AppLocalizations loc;
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -308,8 +316,10 @@ class _SkipButton extends StatelessWidget {
 
 class _NextButton extends StatelessWidget {
   const _NextButton({required this.loc, required this.selectedIndex});
+
   final AppLocalizations loc;
   final int? selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Padding(

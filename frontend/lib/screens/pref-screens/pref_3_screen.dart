@@ -16,6 +16,7 @@ class PreferencesScreen3 extends StatefulWidget {
 
 class _PreferencesScreen3State extends State<PreferencesScreen3> {
   int? selectedIndex;
+  int _dayIndex = 0;
   TimeOfDay? pickedTime;
   String? customTimeText;
 
@@ -68,6 +69,10 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                               setState(() {
                                 selectedIndex = i;
                                 customTimeText = null;
+                                final data = context.read<OnboardingData>();
+                                final day = data.customDays![_dayIndex];
+                                final chosenTime = (i == 0) ? "08:00" : "19:00";
+                                data.setTimeForDay(day, chosenTime);
                               });
                             }
                           },
@@ -206,6 +211,10 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                               pickedTime = tempPicked;
                               selectedIndex = 2;
                               customTimeText = pickedTime!.format(context);
+                              final data = context.read<OnboardingData>();
+                              final day = data.customDays![_dayIndex];
+                              final chosenTime = pickedTime!.format(context);
+                              data.setTimeForDay(day, chosenTime);
                             });
                             Navigator.of(context).pop();
                           },
@@ -283,6 +292,8 @@ class _NextButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
+
+          // TODO: implement navigation logic (it depends on the current day in the schedule)
           onPressed: () {
             if (selectedIndex != null) {
               List<String> toData = [];

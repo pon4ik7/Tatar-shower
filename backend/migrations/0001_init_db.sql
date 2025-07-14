@@ -70,7 +70,7 @@ CREATE TABLE scheduled_notifications
     schedule_entry_id INT REFERENCES schedule_entries (id) ON DELETE CASCADE,
     id                SERIAL PRIMARY KEY,
     user_id           INTEGER     NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    type              VARCHAR(20) NOT NULL CHECK (type IN ('10_min_before', '5_min_before')),
+    type              VARCHAR(20) NOT NULL CHECK (type IN ('15_min_before', '5_min_before')),
     scheduled_at      TIMESTAMP   NOT NULL,
     sent              BOOLEAN   DEFAULT FALSE,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP

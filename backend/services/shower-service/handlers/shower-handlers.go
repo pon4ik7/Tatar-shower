@@ -167,7 +167,7 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 		startTime := getNextOccurrence(req.Day, eventTime)
 
 		// Create scheduled notifications
-		err = createScheduledNotifications(h.DB, scheduleEntryID, userID, startTime)
+		err = createScheduledNotifications(tx, scheduleEntryID, userID, startTime)
 		if err != nil {
 			tx.Rollback()
 			log.Printf("Failed to create scheduled notifications: %v", err)
@@ -397,7 +397,7 @@ func updateNotificationsForCompletedTask(db *sql.DB, scheduleEntryID int) error 
 	return nil
 }
 
-func createScheduledNotifications(db *sql.DB, scheduleEntryID, userID int, startTime time.Time) error {
+func createScheduledNotifications(tx *sql.Tx, scheduleEntryID, userID int, startTime time.Time) error {
 	now := time.Now()
 	times := []struct {
 		Type   string
@@ -411,7 +411,12 @@ func createScheduledNotifications(db *sql.DB, scheduleEntryID, userID int, start
 		if !scheduled.After(now) {
 			scheduled = scheduled.AddDate(0, 0, 7) // Move to next week
 		}
-		err := InsertScheduledNotification(db, scheduleEntryID, userID, t.Type, scheduled)
+		query := `
+        INSERT INTO scheduled_notifications (schedule_entry_id, user_id, type, scheduled_at, sent, created_at)
+        VALUES ($1, $2, $3, $4, FALSE, $5)
+    `
+		createdAt := time.Now()
+		_, err := tx.Exec(query, scheduleEntryID, userID, t.Type, scheduled, createdAt)
 		if err != nil {
 			return err
 		}
