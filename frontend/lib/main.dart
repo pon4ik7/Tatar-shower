@@ -24,8 +24,8 @@ import 'onboarding/onboarding_data.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await PushNotificationService.initialize();
+  //   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //   await PushNotificationService.initialize();
   //TODO "await apiService.initializePushNotifications();" add it inplase where user log in in the system
   runApp(
     ChangeNotifierProvider(
@@ -66,16 +66,16 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       localeResolutionCallback:
           (Locale? deviceLocale, Iterable<Locale> supported) {
-        if (deviceLocale != null) {
-          switch (deviceLocale.languageCode) {
-            case 'en':
-              return const Locale('en');
-            case 'ru':
-              return const Locale('ru');
-          }
-        }
-        return const Locale('en');
-      },
+            if (deviceLocale != null) {
+              switch (deviceLocale.languageCode) {
+                case 'en':
+                  return const Locale('en');
+                case 'ru':
+                  return const Locale('ru');
+              }
+            }
+            return const Locale('en');
+          },
       debugShowCheckedModeBanner: false,
       initialRoute: '/language',
       routes: {
@@ -91,11 +91,10 @@ class _MyAppState extends State<MyApp> {
         '/pref5': (context) => PreferencesScreen5(),
         '/prefDone': (context) => PreferencesDoneScreen(),
         '/tabs': (context) => Tabs(),
-        '/settingsLanguage': (context) =>
-            SettingsLanguage(
-              onLocaleChanged: _setLocale,
-              currentLocale: _locale == const Locale('en') ? 'eu' : 'ru',
-            ),
+        '/settingsLanguage': (context) => SettingsLanguage(
+          onLocaleChanged: _setLocale,
+          currentLocale: _locale == const Locale('en') ? 'eu' : 'ru',
+        ),
         '/settingsMode': (context) => SettingsMode(),
       },
     );

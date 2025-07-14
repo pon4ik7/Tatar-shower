@@ -18,7 +18,9 @@ import 'package:tatar_shower/models/register_request.dart';
 import '../models/schedule.dart';
 
 class ApiService {
-  static const String _baseUrl = "http://localhost:8080/api";
+  static const String _baseUrl_1 = "http://localhost:8001/api";
+  static const String _baseUrl_2 = "http://localhost:8002/api";
+  static const String _baseUrl_3 = "http://localhost:8003/api";
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<String> getRandomTip() async {
@@ -38,7 +40,7 @@ class ApiService {
   }
 
   Future<TipsResponse> getTips() async {
-    final url = Uri.parse("$_baseUrl/tips");
+    final url = Uri.parse("$_baseUrl_3/tips");
     final headers = {"Content-Type": "application/json"};
 
     final response = await http.get(url, headers: headers);
@@ -54,7 +56,7 @@ class ApiService {
   }
 
   Future<StreakResponse> getStreak() async {
-    final url = Uri.parse("$_baseUrl/streak");
+    final url = Uri.parse("$_baseUrl_3/streak");
     String? token = await _secureStorage.read(key: "jwtToken");
     final headers = {
       "Content-Type": "application/json",
@@ -87,7 +89,7 @@ class ApiService {
       // Create request
       final request = PushTokenRequest(token: fcmToken, platform: platform);
       // Send to server
-      final url = Uri.parse("$_baseUrl/user/push-token");
+      final url = Uri.parse("$_baseUrl_1/user/push-token");
       String? token = await _secureStorage.read(key: "jwtToken");
       final headers = {
         "Content-Type": "application/json",
@@ -192,7 +194,7 @@ class ApiService {
   }
 
   Future<MessageResponse> registerUser(AuthRequest request) async {
-    final url = Uri.parse("$_baseUrl/register");
+    final url = Uri.parse("$_baseUrl_1/register");
     final headers = {"Content-Type": "application/json"};
     final body = jsonEncode(request.toJson());
     final response = await http.post(url, headers: headers, body: body);
@@ -213,7 +215,7 @@ class ApiService {
   }
 
   Future<MessageResponse> registerUserWithPrefs(RegisterRequest request) async {
-    final url = Uri.parse("$_baseUrl/register");
+    final url = Uri.parse("$_baseUrl_1/register");
     final headers = {"Content-Type": "application/json"};
     final body = jsonEncode(request.toJson());
 
@@ -235,7 +237,7 @@ class ApiService {
   }
 
   Future<MessageResponse> signInUser(AuthRequest request) async {
-    final url = Uri.parse("$_baseUrl/signin");
+    final url = Uri.parse("$_baseUrl_1/signin");
     final headers = {"Content-Type": "application/json"};
     final body = jsonEncode(request.toJson());
     final response = await http.post(url, headers: headers, body: body);
@@ -256,7 +258,7 @@ class ApiService {
   }
 
   Future<Schedule> getAllSchedules() async {
-    final url = Uri.parse("$_baseUrl/user/schedules");
+    final url = Uri.parse("$_baseUrl_2/user/schedules");
     String? token = await _secureStorage.read(key: "jwtToken");
     final headers = {
       "Content-Type": "application/json",
@@ -275,7 +277,7 @@ class ApiService {
   }
 
   Future<MessageResponse> updateSchedule(UpdateScheduleRequest request) async {
-    final url = Uri.parse("$_baseUrl/user/schedules");
+    final url = Uri.parse("$_baseUrl_2/user/schedules");
     String? token = await _secureStorage.read(key: "jwtToken");
     final headers = {
       "Content-Type": "application/json",
@@ -295,7 +297,7 @@ class ApiService {
   }
 
   Future<MessageResponse> deleteSchedule(DeleteScheduleRequest request) async {
-    final url = Uri.parse("$_baseUrl/user/schedules");
+    final url = Uri.parse("$_baseUrl_2/user/schedules");
     String? token = await _secureStorage.read(key: "jwtToken");
     final headers = {
       "Content-Type": "application/json",
@@ -319,7 +321,7 @@ class ApiService {
   }
 
   Future<MessageResponse> completeShower(CompleteShowerRequest request) async {
-    final url = Uri.parse("$_baseUrl/user/shower/completed");
+    final url = Uri.parse("$_baseUrl_2/user/shower/completed");
     String? token = await _secureStorage.read(key: "jwtToken");
     final headers = {
       "Content-Type": "application/json",
