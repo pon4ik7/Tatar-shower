@@ -25,11 +25,11 @@ void main() {
 
     setUp(() {
       mockObserver = MockNavigatorObserver();
-      originalOnError = FlutterError.onError; // Save original error handler
+      originalOnError = FlutterError.onError;
     });
 
     tearDown(() {
-      FlutterError.onError = originalOnError; // Restore original error handler
+      FlutterError.onError = originalOnError;
     });
 
     Widget createTestWidget(LanguageScreen screen) {
