@@ -62,4 +62,4 @@ class OnboardingData extends ChangeNotifier {
     scheduleTimes[day] = time;
     notifyListeners();
   }
-}}
+}
