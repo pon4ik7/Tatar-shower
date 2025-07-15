@@ -8,7 +8,7 @@ if [ "$MIGRATE" = "true" ]; then
   echo ">>> Migrations applied, entering standby until shutdown"
   cleanup() {
       echo ">>> Caught shutdown signal, running 'goose down'"
-      /app/goose -dir /migrations postgres "$DATABASE_URL" down
+      /app/goose -dir /migrations postgres "$DATABASE_URL" down-to 0
     }
     trap cleanup TERM INT
 

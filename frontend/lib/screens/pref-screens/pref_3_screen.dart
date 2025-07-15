@@ -16,6 +16,7 @@ class PreferencesScreen3 extends StatefulWidget {
 
 class _PreferencesScreen3State extends State<PreferencesScreen3> {
   int? selectedIndex;
+  int _dayIndex = 0;
   TimeOfDay? pickedTime;
   String? customTimeText;
 
@@ -62,13 +63,27 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                         final isSel = selectedIndex == i;
                         return InkWell(
                           onTap: () {
-                            if (i == 2) {
-                              _showTimePickerDialog(context, loc);
-                            } else {
+                            final data = context.read<OnboardingData>();
+                            if (i == 0) {
+                              const defaultTime = '08:00';
+                              for (final day in data.customDays!) {
+                                data.setTimeForDay(day, defaultTime);
+                              }
                               setState(() {
-                                selectedIndex = i;
-                                customTimeText = null;
+                                selectedIndex = 0;
+                                customTimeText = defaultTime;
                               });
+                            } else if (i == 1) {
+                              const defaultTime = '19:00';
+                              for (final day in data.customDays!) {
+                                data.setTimeForDay(day, defaultTime);
+                              }
+                              setState(() {
+                                selectedIndex = 1;
+                                customTimeText = defaultTime;
+                              });
+                            } else {
+                              _showTimePickerDialog(context, loc);
                             }
                           },
                           child: Padding(
@@ -202,10 +217,15 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            final formatted = tempPicked.format(context);
+                            final data = context.read<OnboardingData>();
+                            for (final day in data.customDays!) {
+                              data.setTimeForDay(day, formatted);
+                            }
                             setState(() {
                               pickedTime = tempPicked;
                               selectedIndex = 2;
-                              customTimeText = pickedTime!.format(context);
+                              customTimeText = formatted;
                             });
                             Navigator.of(context).pop();
                           },
@@ -285,9 +305,9 @@ class _NextButton extends StatelessWidget {
           ),
           onPressed: () {
             if (selectedIndex != null) {
-              List<String> toData = [];
-              toData.add(options[selectedIndex!]);
-              context.read<OnboardingData>().setCustomDays(toData);
+              // List<String> toData = [];
+              // toData.add(options[selectedIndex!]);
+              // context.read<OnboardingData>().setCustomDays(toData);
               Navigator.of(context).pushNamed('/pref4');
             } else {
               ScaffoldMessenger.of(context).showSnackBar(

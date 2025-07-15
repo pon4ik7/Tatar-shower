@@ -2,7 +2,6 @@ class RegisterRequest {
   final String login;
   final String password;
   final String language;
-  final bool notifications;
   final String? reason;
   final String frequencyType;
   final List<String>? customDays;
@@ -13,7 +12,6 @@ class RegisterRequest {
     required this.login,
     required this.password,
     required this.language,
-    required this.notifications,
     this.reason,
     required this.frequencyType,
     this.customDays,
@@ -25,7 +23,6 @@ class RegisterRequest {
     "login": login,
     "password": password,
     "language": language,
-    "notifications": notifications,
     "reason": reason,
     "frequency_type": frequencyType,
     "custom_days": customDays,

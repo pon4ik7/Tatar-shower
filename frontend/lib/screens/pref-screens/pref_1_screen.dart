@@ -7,8 +7,6 @@ import 'package:tatar_shower/screens/pref-screens/step_progress_bar_widget.dart'
 import 'package:provider/provider.dart';
 import 'package:tatar_shower/onboarding/onboarding_data.dart';
 
-// TODO: handle the "other" option
-
 final Set<String> _selectedOptions = {};
 
 class PreferencesScreen1 extends StatefulWidget {

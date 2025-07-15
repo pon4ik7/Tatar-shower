@@ -24,9 +24,8 @@ import 'onboarding/onboarding_data.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  //   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //   await PushNotificationService.initialize();
-  //TODO "await apiService.initializePushNotifications();" add it inplase where user log in in the system
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await PushNotificationService.initialize();
   runApp(
     ChangeNotifierProvider(
       create: (_) => OnboardingData(),

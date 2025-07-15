@@ -167,7 +167,7 @@ func (h *Handler) CreateOrUpdateScheduleHandler(w http.ResponseWriter, r *http.R
 		startTime := getNextOccurrence(req.Day, eventTime)
 
 		// Create scheduled notifications
-		err = createScheduledNotifications(h.DB, scheduleEntryID, userID, startTime)
+		err = createScheduledNotifications(tx, scheduleEntryID, userID, startTime)
 		if err != nil {
 			tx.Rollback()
 			log.Printf("Failed to create scheduled notifications: %v", err)
@@ -266,7 +266,7 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	var req models.ScheduleCompleteRequest
+	var req models.NewScheduleCompleteRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("CompleteShowerHandler error: Invalid request body (400): %v", err)
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -327,11 +327,10 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// TODO create a logic to get total_duration and cold_duration
 	if _, err := tx.Exec(`
         INSERT INTO sessions (user_id, date, total_duration, cold_duration)
-        VALUES ($1, NOW(), INTERVAL '0', INTERVAL '0')
-    `, userID); err != nil {
+        VALUES ($1, $2, $3, $4)
+    `, userID, req.Day, req.Time, req.ColdTime); err != nil {
 		tx.Rollback()
 		log.Printf("DB insert session error: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -397,7 +396,7 @@ func updateNotificationsForCompletedTask(db *sql.DB, scheduleEntryID int) error 
 	return nil
 }
 
-func createScheduledNotifications(db *sql.DB, scheduleEntryID, userID int, startTime time.Time) error {
+func createScheduledNotifications(tx *sql.Tx, scheduleEntryID, userID int, startTime time.Time) error {
 	now := time.Now()
 	times := []struct {
 		Type   string
@@ -411,7 +410,12 @@ func createScheduledNotifications(db *sql.DB, scheduleEntryID, userID int, start
 		if !scheduled.After(now) {
 			scheduled = scheduled.AddDate(0, 0, 7) // Move to next week
 		}
-		err := InsertScheduledNotification(db, scheduleEntryID, userID, t.Type, scheduled)
+		query := `
+        INSERT INTO scheduled_notifications (schedule_entry_id, user_id, type, scheduled_at, sent, created_at)
+        VALUES ($1, $2, $3, $4, FALSE, $5)
+    `
+		createdAt := time.Now()
+		_, err := tx.Exec(query, scheduleEntryID, userID, t.Type, scheduled, createdAt)
 		if err != nil {
 			return err
 		}

@@ -9,6 +9,7 @@ import 'package:tatar_shower/onboarding/onboarding_data.dart';
 
 class PreferencesScreen2 extends StatefulWidget {
   const PreferencesScreen2({super.key});
+
   @override
   _PreferencesScreen2State createState() => _PreferencesScreen2State();
 }
@@ -71,7 +72,25 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                                 selectedIndex = i;
                                 customDaysText = null;
                               });
-                              
+                            }
+                            if (i == 0) {
+                              context.read<OnboardingData>().setCustomDays([
+                                'Monday',
+                                'Tuesday',
+                                'Wednesday',
+                                'Thursday',
+                                'Friday',
+                                'Saturday',
+                                'Sunday',
+                              ]);
+                            } else if (i == 1) {
+                                context.read<OnboardingData>().setCustomDays([
+                                  'Monday',
+                                  'Tuesday',
+                                  'Wednesday',
+                                  'Thursday',
+                                  'Friday',
+                              ]);
                             }
                             const codes = [
                               'everyday',
@@ -258,6 +277,9 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                                 selectedIndex = 2;
                                 customDaysText = selectedDays.join(', ');
                               });
+                              context.read<OnboardingData>().setCustomDays(
+                                selectedDays,
+                              );
                               Navigator.of(context).pop();
                             }
                           },
@@ -285,7 +307,9 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
 
 class _SkipButton extends StatelessWidget {
   const _SkipButton({required this.loc});
+
   final AppLocalizations loc;
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -308,8 +332,10 @@ class _SkipButton extends StatelessWidget {
 
 class _NextButton extends StatelessWidget {
   const _NextButton({required this.loc, required this.selectedIndex});
+
   final AppLocalizations loc;
   final int? selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Padding(

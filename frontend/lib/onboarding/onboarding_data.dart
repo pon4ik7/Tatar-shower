@@ -7,9 +7,10 @@ class OnboardingData extends ChangeNotifier {
   bool notifications = false;
   String? reason;
   String frequencyType = 'everyday';
-  List<String>? customDays;
+  List<String>? customDays = [];
+  final Map<String, String> scheduleTimes = {};
   String experienceType = 'first_time';
-  int targetStreak = 7;
+  int targetStreak = 3;
 
   // methods for settings and notification
   void setLogin(String v) {
@@ -54,6 +55,11 @@ class OnboardingData extends ChangeNotifier {
 
   void setTargetStreak(int v) {
     targetStreak = v;
+    notifyListeners();
+  }
+
+  void setTimeForDay(String day, String time) {
+    scheduleTimes[day] = time;
     notifyListeners();
   }
 }

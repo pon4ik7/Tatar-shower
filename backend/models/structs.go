@@ -83,6 +83,13 @@ type ScheduleCompleteRequest struct {
 	Task string `json:"tasks"`
 }
 
+type NewScheduleCompleteRequest struct {
+	Day      string `json:"day"`
+	Task     string `json:"task"`
+	Time     string `json:"time"`
+	ColdTime string `json:"coldTime"`
+}
+
 type DeviceRegisterRequest struct {
 	Token string `json:"device_token"`
 }
