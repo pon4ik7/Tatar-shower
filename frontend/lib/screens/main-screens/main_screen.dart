@@ -2,35 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tatar_shower/models/shower_model.dart';
 import 'package:tatar_shower/screens/main-screens/full_table_screen.dart';
+import 'package:tatar_shower/services/api_service.dart';
+import 'package:tatar_shower/storage/prefer_streak_storage.dart';
 import 'package:tatar_shower/storage/shower_log_storage.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int? currentStreak;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStreak();
+  }
+
+  Future<void> _loadStreak() async {
+    try {
+      final streak = await ApiService().getStreak();
+      setState(() {
+        currentStreak = streak.currentStreak;
+      });
+    } catch (e) {
+      debugPrint("API error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-
+    if (currentStreak == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return Scaffold(
       extendBody: true,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(image: lightBackground, fit: BoxFit.cover),
         ),
-        child: _MainScreenBody(loc: loc),
+        child: _MainScreenBody(loc: loc, streak: currentStreak),
       ),
     );
   }
 }
 
 class _MainScreenBody extends StatelessWidget {
-  const _MainScreenBody({required this.loc});
+  const _MainScreenBody({required this.loc, required this.streak});
 
   final AppLocalizations loc;
+  final int? streak;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +67,7 @@ class _MainScreenBody extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 24),
-          _Diagram(loc: loc),
+          _Diagram(loc: loc, streak: streak),
           const SizedBox(height: 40),
           _NewShowerButtom(loc: loc),
           Expanded(
@@ -95,41 +124,54 @@ class _MainScreenBody extends StatelessWidget {
 }
 
 class _Diagram extends StatelessWidget {
-  const _Diagram({required this.loc});
+  const _Diagram({required this.loc, required this.streak});
 
   final AppLocalizations loc;
+  final int? streak;
+  Future<int?> getUserPreferStreak() async {
+    return await UserStreakPreference.loadStreak();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          const _DonutChart(progress: 0.7, size: 220, strokeWidth: 24),
-          Column(
-            mainAxisSize: MainAxisSize.min,
+    return FutureBuilder<int?>(
+      future: getUserPreferStreak(),
+      builder: (context, snapshot) {
+        return SizedBox(
+          height: 200,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              Text(
-                '7',
-                style: TextStyle(
-                  fontFamily: appFonts.header,
-                  fontSize: 40,
-                  color: appColors.black,
-                ),
+              _DonutChart(
+                progress: ((streak ?? 0) / (snapshot.data ?? 1).toDouble()),
+                size: 220,
+                strokeWidth: 24,
               ),
-              Text(
-                loc.days.toUpperCase(),
-                style: TextStyle(
-                  fontFamily: appFonts.header,
-                  fontSize: 40,
-                  color: appColors.black,
-                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "$streak",
+                    style: TextStyle(
+                      fontFamily: appFonts.header,
+                      fontSize: 40,
+                      color: appColors.black,
+                    ),
+                  ),
+                  Text(
+                    loc.days.toUpperCase(),
+                    style: TextStyle(
+                      fontFamily: appFonts.header,
+                      fontSize: 40,
+                      color: appColors.black,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

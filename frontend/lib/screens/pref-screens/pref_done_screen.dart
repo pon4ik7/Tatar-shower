@@ -114,11 +114,7 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                                       .initializePushNotifications();
                                 } catch (pushError) {
                                   // Log the error but don't show it to user
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Ошибка: $pushError'),
-                                    ),
-                                  );
+                                  print('Erorr: $pushError');
                                 }
                                 Navigator.of(
                                   context,
