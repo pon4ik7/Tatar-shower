@@ -367,9 +367,7 @@ class ApiService {
       final Map<String, dynamic> respJson = jsonDecode(response.body);
       return MessageResponse.fromJson(respJson);
     } else {
-      throw Exception(
-        "Failed to sign in: ${response.statusCode} ${response.body}",
-      );
+      throw Exception(response.body);
     }
   }
 

@@ -143,9 +143,27 @@ class _LogInButton extends StatelessWidget {
 
             Navigator.of(context).pushReplacementNamed('/tabs');
           } catch (e) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Error: $e')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                behavior: SnackBarBehavior.floating,
+                padding: EdgeInsets.zero,
+                content: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '$e',
+                    style: TextStyle(fontSize: 16, color: appColors.deepBlue),
+                  ),
+                ),
+              ),
+            );
           }
         },
         child: Text(
