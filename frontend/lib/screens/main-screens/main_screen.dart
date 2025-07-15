@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tatar_shower/models/shower_model.dart';
 import 'package:tatar_shower/screens/main-screens/full_table_screen.dart';
+import 'package:tatar_shower/storage/shower_log_storage.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
@@ -60,7 +63,16 @@ class _MainScreenBody extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: _ShowerTable(loc: loc),
+                          child: FutureBuilder<List<ShowerLog>>(
+                            future: ShowerLogStorage.loadLogs(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return CircularProgressIndicator();
+                              }
+                              final logs = snapshot.data!;
+                              return _ShowerTable(loc: loc, logs: logs);
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -183,12 +195,26 @@ class _TableHeader extends StatelessWidget {
 }
 
 class _ShowerTable extends StatelessWidget {
-  const _ShowerTable({required this.loc});
+  const _ShowerTable({required this.loc, required this.logs});
 
   final AppLocalizations loc;
+  final List<ShowerLog> logs;
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
+
+    final filledLogs = List<ShowerLog>.from(
+      logs.length >= 4 ? logs.sublist(logs.length - 4) : logs,
+    );
+
+    final missingCount = 4 - filledLogs.length;
+
+    final paddedLogs = [
+      ...filledLogs,
+      ...List.generate(missingCount, (_) => null),
+    ];
+
     return DataTable(
       dataTextStyle: TextStyle(
         fontFamily: appFonts.regular,
@@ -196,69 +222,50 @@ class _ShowerTable extends StatelessWidget {
         color: appColors.black,
       ),
       columns: [
-        DataColumn(
-          label: Text(
-            loc.date,
-            style: TextStyle(
-              fontFamily: appFonts.header,
-              fontSize: 14,
-              color: appColors.black,
-            ),
-          ),
-        ),
-        DataColumn(
-          label: Text(
-            loc.duration,
-            style: TextStyle(
-              fontFamily: appFonts.header,
-              fontSize: 14,
-              color: appColors.black,
-            ),
-          ),
-        ),
-        DataColumn(
-          label: Text(
-            loc.coldDuration,
-            style: TextStyle(
-              fontFamily: appFonts.header,
-              fontSize: 14,
-              color: appColors.black,
-            ),
-          ),
-        ),
+        DataColumn(label: Text(loc.date, style: headerStyle)),
+        DataColumn(label: Text(loc.duration, style: headerStyle)),
+        DataColumn(label: Text(loc.coldDuration, style: headerStyle)),
       ],
-      rows: [
-        DataRow(
+      rows: paddedLogs.map((log) {
+        if (log == null) {
+          return DataRow(
+            cells: [DataCell(Text('')), DataCell(Text('')), DataCell(Text(''))],
+          );
+        }
+
+        final date = DateFormat('d MMM', locale).format(log.date);
+        final dynamic totalMin;
+        final dynamic coldMin;
+        if (log.totalDuration.inSeconds.toString().length == 2) {
+          totalMin =
+              '${log.totalDuration.inMinutes}:${log.totalDuration.inSeconds}';
+        } else {
+          totalMin =
+              '${log.totalDuration.inMinutes}:0${log.totalDuration.inSeconds}';
+        }
+        if (log.coldDuration.inSeconds.toString().length == 2) {
+          coldMin =
+              '${log.coldDuration.inMinutes}:${log.coldDuration.inSeconds}';
+        } else {
+          coldMin =
+              '${log.coldDuration.inMinutes}:0${log.coldDuration.inSeconds}';
+        }
+        return DataRow(
           cells: [
-            DataCell(Text('Jul 7')),
-            DataCell(Text('9 min')),
-            DataCell(Text('4 min')),
+            DataCell(Text(date)),
+            DataCell(Text(totalMin)),
+            DataCell(Text(coldMin)),
           ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text('Jul 4')),
-            DataCell(Text('7 min')),
-            DataCell(Text('2 min')),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text('Jul 1')),
-            DataCell(Text('7 min')),
-            DataCell(Text('2 min')),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text('Jun 28')),
-            DataCell(Text('5 min')),
-            DataCell(Text('1 min')),
-          ],
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
+
+  TextStyle get headerStyle => TextStyle(
+    fontFamily: appFonts.header,
+    fontSize: 14,
+    color: appColors.black,
+  );
 }
 
 class _Statistics extends StatelessWidget {

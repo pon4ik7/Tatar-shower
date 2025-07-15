@@ -225,6 +225,11 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                             setState(() {
                               pickedTime = tempPicked;
                               selectedIndex = 2;
+                              customTimeText = pickedTime!.format(context);
+                              final data = context.read<OnboardingData>();
+                              final day = data.customDays![_dayIndex];
+                              final chosenTime = pickedTime!.format(context);
+                              data.setTimeForDay(day, chosenTime);
                               customTimeText = formatted;
                             });
                             Navigator.of(context).pop();
@@ -303,6 +308,8 @@ class _NextButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
+
+          // TODO: implement navigation logic (it depends on the current day in the schedule)
           onPressed: () {
             if (selectedIndex != null) {
               // List<String> toData = [];
