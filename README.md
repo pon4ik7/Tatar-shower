@@ -2,23 +2,15 @@
 
 A cross-platform application for building healthy cold shower habits. Includes a Go backend, Flutter frontend, and DevOps automation for modern development.
 
----
+## Team Roles & Responsibilities
+- Latipov Arsen - Frontent Developer
+- Minaeva Ksenia - QA Engeneer & Designer
+- Muliukin Rolan - Backend Developer & API Engeneer
+- Nagimova Adelia - DevOps Engeneer & DB Developer
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Architecture](#architecture)
-- [Backend (Go)](#backend-go)
-- [Frontend (Flutter)](#frontend-flutter)
-- [DevOps & CI/CD](#devops--cicd)
-- [API Documentation](#api-documentation)
-- [Git Workflow](#git-workflow)
-- [Environment Variables](#environment-variables)
-- [Running Tests](#running-tests)
-- [Contributing](#contributing)
-- [License](#license)
 
 ---
+
 
 ## Project Overview
 
@@ -29,6 +21,10 @@ Tatar Shower App helps users schedule cold showers, receive reminders, track pro
 - **DevOps:** Automated workflows, Docker, and infrastructure scripts
 
 ---
+
+## Setup instructions
+
+[Contributing](./docs/SETUP_INSTRUCTIONS.md)
 
 ## Architecture
 ```
@@ -51,24 +47,6 @@ tatar-shower/
 - Progress tracking and statistics
 - Tips and advice endpoints
 - RESTful API with JSON responses
-
-### Getting Started
-
-1. **Install dependencies:**
-    ```
-    cd backend
-    go mod tidy
-    ```
-
-2. **Run the server:**
-    ```
-    go run main.go
-    ```
-    The server will start on `http://localhost:8080`.
-
-3. **Environment Variables:**
-    - `JWT_SECRET` – Secret key for JWT signing
-    - `DATABASE_URL` – Path to SQLite DB (e.g., `./app.db`)
 
 ### Directory Structure
 
@@ -97,59 +75,17 @@ frontend/
 - Monitoring, logging, and backup scripts
 - Security scanning and dependency checks
 
-### Getting Started
-
-- **CI/CD:** All pushes/PRs trigger automated workflows (`.github/workflows/`)
-- **Docker:**  
-    ```
-    docker-compose up --build
-    ```
-- **Terraform:**  
-    See `devops/terraform/` for infrastructure setup instructions.
-
 ---
 
 ## API Documentation
 
-Full API collection is available in Postman:  
-[Postman Collection – Tatar Shower API](https://www.postman.com/pon4ik7/tatarshower/collection/kh8lsf5/tatar-shower-api?action=share&creator=45796036)
+[API description](./docs/API_DOCUMENTATION.md)
 
 ---
 
 ## Git Workflow
 
-### Branching Strategy
-
-- `main` — production-ready code
-- `dev` — integration branch
-- `feature/xyz` — feature branches
-- `bugfix/xyz` — bugfix branches
-- `hotfix/xyz` — urgent fixes
-
-### Typical Workflow
-
-1. **Create a branch:**
-    ```
-    git checkout dev
-    git pull
-    git checkout -b feature/your-feature
-    ```
-2. **Make changes and commit:**
-    ```
-    git add .
-    git commit -m "Describe your feature"
-    ```
-3. **Push and open a PR to `dev`**
-
-### Commit Message Guidelines
-
-- Use clear, descriptive messages.
-- Examples:
-    - `feat: add user registration endpoint`
-    - `fix: correct JWT expiration logic`
-    - `docs: update API documentation`
-
----
+[Documentation](./docs/GIT_WORKFLOW.md)
 
 ## Environment Variables
 
@@ -177,20 +113,5 @@ go test ./…
 cd frontend
 flutter test
 ```
-
----
-
-## Contributing
-
-- Fork the repository
-- Create a feature branch
-- Follow the Git Workflow above
-- Make sure all tests pass before submitting a PR
-
----
-
-## License
-
-MIT License
 
 ---
