@@ -86,14 +86,14 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                               setState(() => _isLoading = true);
                               final data = context.read<OnboardingData>();
                               final req = RegisterRequest(
-                                  login: data.login!,
-                                  password: data.password!,
-                                  language: data.language,
-                                  reason: data.reason,
-                                  frequencyType: data.frequencyType,
-                                  customDays: data.customDays,
-                                  experienceType: data.experienceType,
-                                  targetStreak: data.targetStreak,
+                                login: data.login!,
+                                password: data.password!,
+                                language: data.language,
+                                reason: data.reason,
+                                frequencyType: data.frequencyType,
+                                customDays: data.customDays,
+                                experienceType: data.experienceType,
+                                targetStreak: data.targetStreak,
                               );
                               try {
                                 await ApiService().registerUserWithPrefs(req);
@@ -108,6 +108,17 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                                       await ApiService().updateSchedule(upd);
                                     }
                                   }
+                                }
+                                try {
+                                  await ApiService()
+                                      .initializePushNotifications();
+                                } catch (pushError) {
+                                  // Log the error but don't show it to user
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Ошибка: $pushError'),
+                                    ),
+                                  );
                                 }
                                 Navigator.of(
                                   context,
