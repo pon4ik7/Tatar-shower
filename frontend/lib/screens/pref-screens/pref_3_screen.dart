@@ -63,13 +63,27 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                         final isSel = selectedIndex == i;
                         return InkWell(
                           onTap: () {
-                            if (i == 2) {
-                              _showTimePickerDialog(context, loc);
-                            } else {
+                            final data = context.read<OnboardingData>();
+                            if (i == 0) {
+                              const defaultTime = '08:00';
+                              for (final day in data.customDays!) {
+                                data.setTimeForDay(day, defaultTime);
+                              }
                               setState(() {
-                                selectedIndex = i;
-                                customTimeText = null;
+                                selectedIndex = 0;
+                                customTimeText = defaultTime;
                               });
+                            } else if (i == 1) {
+                              const defaultTime = '20:00';
+                              for (final day in data.customDays!) {
+                                data.setTimeForDay(day, defaultTime);
+                              }
+                              setState(() {
+                                selectedIndex = 1;
+                                customTimeText = defaultTime;
+                              });
+                            } else {
+                              _showTimePickerDialog(context, loc);
                             }
                           },
                           child: Padding(
@@ -203,14 +217,15 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            final formatted = tempPicked.format(context);
+                            final data = context.read<OnboardingData>();
+                            for (final day in data.customDays!) {
+                              data.setTimeForDay(day, formatted);
+                            }
                             setState(() {
                               pickedTime = tempPicked;
                               selectedIndex = 2;
-                              customTimeText = pickedTime!.format(context);
-                              final data = context.read<OnboardingData>();
-                              final day = data.customDays![_dayIndex];
-                              final chosenTime = pickedTime!.format(context);
-                              data.setTimeForDay(day, chosenTime);
+                              customTimeText = formatted;
                             });
                             Navigator.of(context).pop();
                           },
@@ -288,13 +303,11 @@ class _NextButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
-          // TODO: implement navigation logic (it depends on the current day in the schedule)
           onPressed: () {
             if (selectedIndex != null) {
-              List<String> toData = [];
-              toData.add(options[selectedIndex!]);
-              context.read<OnboardingData>().setCustomDays(toData);
+              // List<String> toData = [];
+              // toData.add(options[selectedIndex!]);
+              // context.read<OnboardingData>().setCustomDays(toData);
               Navigator.of(context).pushNamed('/pref4');
             } else {
               ScaffoldMessenger.of(context).showSnackBar(

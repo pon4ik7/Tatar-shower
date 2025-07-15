@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:tatar_shower/onboarding/onboarding_data.dart';
 import 'package:tatar_shower/models/register_request.dart';
 import 'package:tatar_shower/services/api_service.dart';
+import 'package:tatar_shower/models/auth_request.dart';
+import 'package:tatar_shower/models/update_schedule_request.dart';
 
 class PreferencesDoneScreen extends StatefulWidget {
   const PreferencesDoneScreen({super.key});
@@ -84,18 +86,29 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                               setState(() => _isLoading = true);
                               final data = context.read<OnboardingData>();
                               final req = RegisterRequest(
-                                login: data.login!,
-                                password: data.password!,
-                                language: data.language,
-                                reason: data.reason,
-                                frequencyType: data.frequencyType,
-                                customDays: data.customDays,
-                                experienceType: data.experienceType,
-                                targetStreak: data.targetStreak,
+                                  login: data.login!,
+                                  password: data.password!,
+                                  language: data.language,
+                                  reason: data.reason,
+                                  frequencyType: data.frequencyType,
+                                  customDays: data.customDays,
+                                  experienceType: data.experienceType,
+                                  targetStreak: data.targetStreak,
                               );
-
                               try {
                                 await ApiService().registerUserWithPrefs(req);
+                                if (data.customDays != null) {
+                                  for (final day in data.customDays!) {
+                                    final t = data.scheduleTimes[day];
+                                    if (t != null) {
+                                      final upd = UpdateScheduleRequest(
+                                        day: day,
+                                        tasks: [t],
+                                      );
+                                      await ApiService().updateSchedule(upd);
+                                    }
+                                  }
+                                }
                                 Navigator.of(
                                   context,
                                 ).pushReplacementNamed('/tabs');
