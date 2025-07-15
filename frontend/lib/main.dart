@@ -24,8 +24,8 @@ import 'onboarding/onboarding_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //final prefs = await SharedPreferences.getInstance();
-  //await prefs.clear();
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await PushNotificationService.initialize();
