@@ -26,10 +26,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //final prefs = await SharedPreferences.getInstance();
   //await prefs.clear();
-  //await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  //  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //   await PushNotificationService.initialize();
-  //TODO "await apiService.initializePushNotifications();" add it inplase where user log in in the system
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await PushNotificationService.initialize();
@@ -83,7 +79,7 @@ class _MyAppState extends State<MyApp> {
             return const Locale('en');
           },
       debugShowCheckedModeBanner: false,
-      initialRoute: '/tabs',
+      initialRoute: '/language',
       routes: {
         '/language': (context) => LanguageScreen(onLocaleChanged: _setLocale),
         '/mode': (context) => ModeScreen(),
