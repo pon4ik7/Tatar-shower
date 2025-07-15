@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tatar_shower/screens/main-screens/tabs.dart';
 import "l10n/app_localizations.dart";
 import 'package:tatar_shower/screens/intro-screens/language_screen.dart';
@@ -23,8 +24,10 @@ import 'onboarding/onboarding_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  //   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //final prefs = await SharedPreferences.getInstance();
+  //await prefs.clear();
+  //await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  //  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   //   await PushNotificationService.initialize();
   //TODO "await apiService.initializePushNotifications();" add it inplase where user log in in the system
   runApp(
@@ -77,7 +80,7 @@ class _MyAppState extends State<MyApp> {
             return const Locale('en');
           },
       debugShowCheckedModeBanner: false,
-      initialRoute: '/language',
+      initialRoute: '/tabs',
       routes: {
         '/language': (context) => LanguageScreen(onLocaleChanged: _setLocale),
         '/mode': (context) => ModeScreen(),

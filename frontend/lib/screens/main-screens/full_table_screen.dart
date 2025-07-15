@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tatar_shower/models/shower_model.dart';
+import 'package:tatar_shower/storage/shower_log_storage.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
@@ -43,7 +46,16 @@ class FullTableScreen extends StatelessWidget {
                   ),
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
-                    child: _ShowerTable(loc: loc),
+                    child: FutureBuilder<List<ShowerLog>>(
+                      future: ShowerLogStorage.loadLogs(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return CircularProgressIndicator();
+                        }
+                        final logs = snapshot.data!;
+                        return _ShowerTable(loc: loc, logs: logs);
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -56,9 +68,10 @@ class FullTableScreen extends StatelessWidget {
 }
 
 class _ShowerTable extends StatelessWidget {
-  const _ShowerTable({required this.loc});
+  const _ShowerTable({required this.loc, required this.logs});
 
   final AppLocalizations loc;
+  final List<ShowerLog> logs;
 
   @override
   Widget build(BuildContext context) {
@@ -73,36 +86,35 @@ class _ShowerTable extends StatelessWidget {
         DataColumn(label: Text(loc.duration, style: headerStyle)),
         DataColumn(label: Text(loc.coldDuration, style: headerStyle)),
       ],
-      rows: [
-        DataRow(
+      rows: logs.map((log) {
+        final date = DateFormat(
+          'd MMM',
+          Localizations.localeOf(context).languageCode,
+        ).format(log.date);
+        final dynamic totalMin;
+        final dynamic coldMin;
+        if (log.totalDuration.inSeconds.toString().length == 2) {
+          totalMin =
+              '${log.totalDuration.inMinutes}:${log.totalDuration.inSeconds}';
+        } else {
+          totalMin =
+              '${log.totalDuration.inMinutes}:0${log.totalDuration.inSeconds}';
+        }
+        if (log.coldDuration.inSeconds.toString().length == 2) {
+          coldMin =
+              '${log.coldDuration.inMinutes}:${log.coldDuration.inSeconds}';
+        } else {
+          coldMin =
+              '${log.coldDuration.inMinutes}:0${log.coldDuration.inSeconds}';
+        }
+        return DataRow(
           cells: [
-            DataCell(Text('Jul 7')),
-            DataCell(Text('9 min')),
-            DataCell(Text('4 min')),
+            DataCell(Text(date)),
+            DataCell(Text('$totalMin')),
+            DataCell(Text('$coldMin')),
           ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text('Jul 4')),
-            DataCell(Text('7 min')),
-            DataCell(Text('2 min')),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text('Jul 1')),
-            DataCell(Text('7 min')),
-            DataCell(Text('2 min')),
-          ],
-        ),
-        DataRow(
-          cells: [
-            DataCell(Text('Jun 28')),
-            DataCell(Text('5 min')),
-            DataCell(Text('1 min')),
-          ],
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 

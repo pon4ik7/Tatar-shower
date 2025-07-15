@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/models/shower_model.dart';
+import 'package:tatar_shower/storage/shower_log_storage.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
@@ -84,8 +85,9 @@ class ShowerResultScreen extends StatelessWidget {
                     _buildButton(
                       label: loc.log_shower,
                       color: appColors.deepBlue,
-                      onPressed: () {
-                        // TODO: implement logging
+                      onPressed: () async {
+                        await ShowerLogStorage.saveLog(log);
+                        Navigator.of(context).pushNamed('/tabs');
                       },
                     ),
                     const SizedBox(width: 16),
