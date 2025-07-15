@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tatar_shower/storage/prefer_streak_storage.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
@@ -110,16 +111,19 @@ class _PreferencesScreen5State extends State<PreferencesScreen5> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   setState(() {
                                     _selectedOptions.add(options[i]);
                                     selectedIndex = i;
                                     if (i != 3) _otherController.clear();
                                   });
-                                  const streaks = [7, 14, 21, 7];
+                                  const streaks = [7, 14, 21, 3];
                                   context
                                       .read<OnboardingData>()
                                       .setTargetStreak(streaks[i]);
+                                  await UserStreakPreference.saveStreak(
+                                    streaks[i],
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(

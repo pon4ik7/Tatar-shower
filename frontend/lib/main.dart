@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
             return const Locale('en');
           },
       debugShowCheckedModeBanner: false,
-      initialRoute: '/tabs',
+      initialRoute: '/language',
       routes: {
         '/language': (context) => LanguageScreen(onLocaleChanged: _setLocale),
         '/mode': (context) => ModeScreen(),

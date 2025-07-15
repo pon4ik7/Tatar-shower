@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
+import 'package:tatar_shower/models/auth_request.dart';
+import 'package:tatar_shower/services/api_service.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
+
+final TextEditingController _userNameController = TextEditingController();
+final TextEditingController _passwordsController = TextEditingController();
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -127,8 +132,21 @@ class _LogInButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: () {
-          Navigator.of(context).pushNamed('/tabs');
+        onPressed: () async {
+          try {
+            final response = await ApiService().signInUser(
+              AuthRequest(
+                login: _userNameController.text,
+                password: _passwordsController.text,
+              ),
+            );
+
+            Navigator.of(context).pushReplacementNamed('/tabs');
+          } catch (e) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: $e')));
+          }
         },
         child: Text(
           loc.log_in,
@@ -149,6 +167,7 @@ class _PasswordsField extends StatelessWidget {
     return SizedBox(
       height: 55,
       child: TextField(
+        controller: _passwordsController,
         textAlign: TextAlign.center,
         style: TextStyle(color: appColors.midBlue),
         decoration: InputDecoration(
@@ -184,6 +203,7 @@ class _UserNameField extends StatelessWidget {
     return SizedBox(
       height: 55,
       child: TextField(
+        controller: _userNameController,
         textAlign: TextAlign.center,
         style: TextStyle(color: appColors.midBlue),
         decoration: InputDecoration(
