@@ -10,7 +10,7 @@ class OnboardingData extends ChangeNotifier {
   List<String>? customDays = [];
   final Map<String, String> scheduleTimes = {};
   String experienceType = 'first_time';
-  int targetStreak = 7;
+  int targetStreak = 3;
 
   // methods for settings and notification
   void setLogin(String v) {

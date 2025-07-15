@@ -69,10 +69,6 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                               setState(() {
                                 selectedIndex = i;
                                 customTimeText = null;
-                                final data = context.read<OnboardingData>();
-                                final day = data.customDays![_dayIndex];
-                                final chosenTime = (i == 0) ? "08:00" : "19:00";
-                                data.setTimeForDay(day, chosenTime);
                               });
                             }
                           },

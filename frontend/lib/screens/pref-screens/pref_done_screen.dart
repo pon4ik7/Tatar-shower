@@ -87,7 +87,6 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                                 login: data.login!,
                                 password: data.password!,
                                 language: data.language,
-                                notifications: data.notifications,
                                 reason: data.reason,
                                 frequencyType: data.frequencyType,
                                 customDays: data.customDays,
