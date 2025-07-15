@@ -266,7 +266,7 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	var req models.ScheduleCompleteRequest
+	var req models.NewScheduleCompleteRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("CompleteShowerHandler error: Invalid request body (400): %v", err)
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -327,11 +327,10 @@ func (h *Handler) CompleteShowerHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	// TODO create a logic to get total_duration and cold_duration
 	if _, err := tx.Exec(`
         INSERT INTO sessions (user_id, date, total_duration, cold_duration)
-        VALUES ($1, NOW(), INTERVAL '0', INTERVAL '0')
-    `, userID); err != nil {
+        VALUES ($1, $2, $3, $4)
+    `, userID, req.Day, req.Time, req.ColdTime); err != nil {
 		tx.Rollback()
 		log.Printf("DB insert session error: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)

@@ -25,7 +25,7 @@ CREATE TABLE sessions
 (
     id      SERIAL PRIMARY KEY,
     user_id INT REFERENCES users (id) ON DELETE CASCADE,
-    date    TIMESTAMP NOT NULL,
+    date    VARCHAR(20) NOT NULL,
     total_duration INTERVAL NOT NULL,
     cold_duration INTERVAL NOT NULL,
     notes   TEXT
