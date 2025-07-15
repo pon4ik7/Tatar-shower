@@ -6,6 +6,7 @@ import 'package:tatar_shower/screens/main-screens/timer-screens/log_shower_scree
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class TimerScreen extends StatefulWidget {
   final Duration warmDuration;
@@ -33,6 +34,7 @@ class _TimerScreenState extends State<TimerScreen>
   late bool _isColdPhase;
   Timer? _timer;
   bool _isPaused = false;
+  late final AudioPlayer _audioPlayer;
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _TimerScreenState extends State<TimerScreen>
     _startTime = DateTime.now();
     _remainingPeriods = widget.periods;
     _isColdPhase = true;
+    _audioPlayer = AudioPlayer();
     _startPhase();
   }
 
@@ -49,7 +52,15 @@ class _TimerScreenState extends State<TimerScreen>
           ? widget.coldDuration
           : widget.warmDuration;
     });
+    _playPhaseSound();
     _startTimer();
+  }
+
+  void _playPhaseSound() {
+    final soundAsset = _isColdPhase
+        ? 'audio/cold-phase.mp3'
+        : 'audio/warm-phase.mp3';
+    _audioPlayer.play(AssetSource(soundAsset));
   }
 
   void _startTimer() {
@@ -71,6 +82,7 @@ class _TimerScreenState extends State<TimerScreen>
             _isColdPhase = !_isColdPhase;
             _startPhase();
           } else {
+            _audioPlayer.play(AssetSource('audio/end-phase.mp3'));
             setState(() {
               _currentDuration = Duration.zero;
             });
