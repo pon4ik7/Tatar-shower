@@ -2,6 +2,13 @@
 
 A cross-platform application for building healthy cold shower habits. Includes a Go backend, Flutter frontend, and DevOps automation for modern development.
 
+## Team Roles & Responsibilities
+- Latipov Arsen - Frontent Developer
+- Minaeva Ksenia - QA Engeneer & Designer
+- Muliukin Rolan - Backend Developer & API Engeneer
+- Nagimova Adelia - DevOps Engeneer & DB Developer
+
+
 ---
 
 ## Table of Contents
@@ -111,8 +118,7 @@ frontend/
 
 ## API Documentation
 
-Full API collection is available in Postman:  
-[Postman Collection – Tatar Shower API](https://www.postman.com/pon4ik7/tatarshower/collection/kh8lsf5/tatar-shower-api?action=share&creator=45796036)
+[API description](./docs/API_DOCUMENTATION.md)
 
 ---
 
