@@ -16,7 +16,7 @@ CREATE TABLE preferences
     language        VARCHAR(10) NOT NULL DEFAULT 'en',
     reason          VARCHAR(255),
     frequency_type  VARCHAR(20) NOT NULL DEFAULT 'everyday',
-    custom_days     SMALLINT[]    DEFAULT NULL,
+    custom_days     TEXT[]    DEFAULT NULL,
     experience_type VARCHAR(20) NOT NULL DEFAULT 'first_time',
     target_streak   INT         NOT NULL DEFAULT 7
 );

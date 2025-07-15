@@ -30,6 +30,9 @@ void main() async {
   //  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   //   await PushNotificationService.initialize();
   //TODO "await apiService.initializePushNotifications();" add it inplase where user log in in the system
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await PushNotificationService.initialize();
   runApp(
     ChangeNotifierProvider(
       create: (_) => OnboardingData(),

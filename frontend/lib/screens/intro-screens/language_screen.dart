@@ -3,6 +3,8 @@ import 'package:tatar_shower/l10n/app_localizations.dart';
 import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
+import 'package:provider/provider.dart';
+import 'package:tatar_shower/onboarding/onboarding_data.dart';
 
 class LanguageScreen extends StatefulWidget {
   final void Function(Locale) onLocaleChanged;
@@ -58,6 +60,9 @@ class _LanguageScreen extends State<LanguageScreen> {
                         onTap: () {
                           setState(() => _selected = e.key);
                           widget.onLocaleChanged(e.value);
+                          context.read<OnboardingData>().setLanguage(
+                            e.value.languageCode,
+                          );
                         },
                         child: Container(
                           height: 48,

@@ -73,6 +73,25 @@ class _PreferencesScreen2State extends State<PreferencesScreen2> {
                                 customDaysText = null;
                               });
                             }
+                            if (i == 0) {
+                              context.read<OnboardingData>().setCustomDays([
+                                'Monday',
+                                'Tuesday',
+                                'Wednesday',
+                                'Thursday',
+                                'Friday',
+                                'Saturday',
+                                'Sunday',
+                              ]);
+                            } else if (i == 1) {
+                                context.read<OnboardingData>().setCustomDays([
+                                  'Monday',
+                                  'Tuesday',
+                                  'Wednesday',
+                                  'Thursday',
+                                  'Friday',
+                              ]);
+                            }
                             const codes = [
                               'everyday',
                               'only_weekdays',

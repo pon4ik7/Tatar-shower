@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:tatar_shower/onboarding/onboarding_data.dart';
 import 'package:tatar_shower/models/register_request.dart';
 import 'package:tatar_shower/services/api_service.dart';
+import 'package:tatar_shower/models/auth_request.dart';
+import 'package:tatar_shower/models/update_schedule_request.dart';
 
 class PreferencesDoneScreen extends StatefulWidget {
   const PreferencesDoneScreen({super.key});
@@ -93,9 +95,31 @@ class _PreferencesDoneScreenState extends State<PreferencesDoneScreen> {
                                 experienceType: data.experienceType,
                                 targetStreak: data.targetStreak,
                               );
-
                               try {
                                 await ApiService().registerUserWithPrefs(req);
+                                if (data.customDays != null) {
+                                  for (final day in data.customDays!) {
+                                    final t = data.scheduleTimes[day];
+                                    if (t != null) {
+                                      final upd = UpdateScheduleRequest(
+                                        day: day,
+                                        tasks: [t],
+                                      );
+                                      await ApiService().updateSchedule(upd);
+                                    }
+                                  }
+                                }
+                                try {
+                                  await ApiService()
+                                      .initializePushNotifications();
+                                } catch (pushError) {
+                                  // Log the error but don't show it to user
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Ошибка: $pushError'),
+                                    ),
+                                  );
+                                }
                                 Navigator.of(
                                   context,
                                 ).pushReplacementNamed('/tabs');
