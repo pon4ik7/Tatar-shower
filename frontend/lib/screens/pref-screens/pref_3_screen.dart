@@ -74,7 +74,7 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                                 customTimeText = defaultTime;
                               });
                             } else if (i == 1) {
-                              const defaultTime = '20:00';
+                              const defaultTime = '19:00';
                               for (final day in data.customDays!) {
                                 data.setTimeForDay(day, defaultTime);
                               }
