@@ -10,4 +10,9 @@ require (
 	golang.org/x/crypto v0.39.0
 )
 
-require github.com/DATA-DOG/go-sqlmock v1.5.2 // indirect
+require cloud.google.com/go/compute/metadata v0.3.0 // indirect
+
+require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2 // indirect
+	golang.org/x/oauth2 v0.30.0
+)
