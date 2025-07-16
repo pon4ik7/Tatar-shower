@@ -1,4 +1,4 @@
-// Valid request for user autorisation
+// Valid request for user authorisation
 class AuthRequest {
   String login;
   String password;

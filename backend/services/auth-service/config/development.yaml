@@ -1,0 +1,6 @@
+server:
+  port: 8001
+database:
+  url: ${DATABASE_URL}
+jwt:
+  secret: ${JWT_SECRET}

@@ -295,7 +295,8 @@ func TestGetTips_Success(t *testing.T) {
 		AddRow("Tip 2").
 		AddRow("Tip 3")
 
-	mock.ExpectQuery("SELECT message FROM tips ORDER BY id").
+	mock.ExpectQuery("SELECT message FROM tips WHERE category=\\$1 ORDER BY id").
+		WithArgs("en").
 		WillReturnRows(rows)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/tips", nil)
@@ -334,7 +335,8 @@ func TestGetTips_EmptyResult(t *testing.T) {
 
 	rows := sqlmock.NewRows([]string{"message"})
 
-	mock.ExpectQuery("SELECT message FROM tips ORDER BY id").
+	mock.ExpectQuery("SELECT message FROM tips WHERE category=\\$1 ORDER BY id").
+		WithArgs("en").
 		WillReturnRows(rows)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/tips", nil)
@@ -362,7 +364,8 @@ func TestGetTips_DBError(t *testing.T) {
 
 	handler := NewHandler(db)
 
-	mock.ExpectQuery("SELECT message FROM tips ORDER BY id").
+	mock.ExpectQuery("SELECT message FROM tips WHERE category=\\$1 ORDER BY id").
+		WithArgs("en").
 		WillReturnError(errors.New("database error"))
 
 	req := httptest.NewRequest(http.MethodGet, "/api/tips", nil)
@@ -386,7 +389,8 @@ func TestGetTips_ScanError(t *testing.T) {
 		AddRow("Tip 2").
 		RowError(1, errors.New("scan error"))
 
-	mock.ExpectQuery("SELECT message FROM tips ORDER BY id").
+	mock.ExpectQuery("SELECT message FROM tips WHERE category=\\$1 ORDER BY id").
+		WithArgs("en").
 		WillReturnRows(rows)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/tips", nil)

@@ -1,0 +1,139 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feature/ci-cd
+    paths:
+      - backend/**
+      - frontend/**
+      - .github/workflows/ci.yml
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - backend/**
+      - frontend/**
+      - .github/workflows/ci.yml
+
+  workflow_dispatch:
+
+env:
+  GO_VERSION: '1.24'
+  FLUTTER_VERSION: '3.32.2'
+
+jobs:
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: backend/go.sum
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Lint Go (vet + fmt)
+        working-directory: backend
+        run: |
+          set -euo pipefail
+          go vet ./...
+          FMT_OUT="$($(go env GOROOT)/bin/gofmt -l -s .)"
+          if [ -n "$FMT_OUT" ]; then
+            echo "::error ::Go files need formatting (run 'gofmt -s -w .' locally)"
+            echo "$FMT_OUT"
+            exit 1
+          fi
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    env:
+      JWT_SECRET: "foobar"
+      DATABASE_URL: "postgres://user:pass@localhost:5432/devdb?sslmode=disable"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go & Test Backend
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24'
+          cache-dependency-path: backend/go.sum
+      - name: Run backend tests
+        run: |
+          cd backend
+          go test ./... -v
+
+      - name: Setup Flutter & Test Frontend
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+      - run: |
+          cd frontend
+          flutter test --coverage || true
+
+  build:
+    name: Build Artifacts
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - name: Download Go deps
+        working-directory: backend
+        run: go mod download
+      - name: Build all Go services
+        working-directory: backend
+        run: |
+          mkdir -p dist
+          go build -o dist/auth-service ./services/auth-service/main.go
+          go build -o dist/rec-service  ./services/rec-service/main.go
+          go build -o dist/shower-service ./services/shower-service/main.go
+
+      - name: Build Flutter Web
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+      - run: |
+          cd frontend
+          flutter build web --release
+
+      - name: Upload Frontend Web
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-web
+          path: frontend/build/web/
+
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download frontend web artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-web
+          path: site
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site
+          keep_files: false
