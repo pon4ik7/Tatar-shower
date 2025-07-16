@@ -96,7 +96,7 @@ jobs:
       - name: Build Flutter Web
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.8.1
+          flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: |
           cd frontend
           flutter build web --release
