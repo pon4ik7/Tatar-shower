@@ -6,7 +6,7 @@ A cross-platform application for building healthy cold shower habits. Includes a
 - **Latipov Arsen** - Frontent Developer
 - **Minaeva Kseniia** - QA Engineer & Designer
 - **Muliukin Rolan** - Backend Engineer & API Engineer
-- **Nagimova Adelia** - DevOps Engineer & DB Developer
+- **Nagimova Adeliya** - DevOps Engineer & DB Developer
 
 
 ---
@@ -53,6 +53,30 @@ tatar-shower/
 ### Directory Structure
 
 ```
+backend/
+├── db/
+│ └── db.go
+├── migrations/
+├── models/
+├── services/
+│ ├── auth-service/
+│ ├── shower-service/
+│ └── rec-service/
+├── tokens/
+└── go.mod
+```
+---
+## Frontend (Flutter)
+
+### Features
+- Secure login with JWT token storage
+- Weekly schedule editor with custom options
+- Interactive shower timer and activity logging
+- Dashboard displaying streaks, progress charts, and history table
+
+### Directory Structure
+
+```
 frontend/
 ├── lib/
 │   ├── l10n/
@@ -66,19 +90,17 @@ frontend/
 ├── android/
 ├── ios/
 └── …
-
-backend/
-├── db/
-│ └── db.go
-├── migrations/
-├── models/
-├── services/
-│ ├── auth-service/
-│ ├── shower-service/
-│ └── rec-service/
-├── tokens/
-└── go.mod
 ```
+---
+
+## DataBase
+
+### Features
+- PostgreSQL relational schema for users, preferences, schedules, and tips
+- Versioned migrations ensuring consistent database state
+- Container shutdown hooks trigger cleanup migrations automatically
+- Connection pooling and indexes for performance and scalability
+- Mockable DB layer with SQL mocking for reliable tests
 
 ---
 
@@ -105,6 +127,12 @@ backend/
 
 [System architecture](./docs/System_arch.jpeg)
 [Backend architecture](./docs/Backend_arch.jpeg)
+
+---
+
+## Screenshots of key features
+
+[Screenshots](./docs/screenshots-of-features/)
 
 ---
 
@@ -171,12 +199,12 @@ flutter test
 #### Project management (4 points)
 - [x] GitHub organization with well-maintained repository (1 point)
 - [x] Regular commits and meaningful pull requests from all team members (1 point)
-- [ ] Project board (GitHub Projects) with task tracking (1 point)
+- [x] Project board (GitHub Projects) with task tracking (1 point)
 - [x] Team member roles and responsibilities documentation (1 point)
 
 #### Documentation (4 points)
 - [x] Project overview and setup instructions (1 point)
-- [ ] Screenshots and GIFs of key features (1 point)
+- [x] Screenshots and GIFs of key features (1 point)
 - [x] API documentation (1 point)
 - [x] Architecture diagrams and explanations (1 point)
 
@@ -192,6 +220,6 @@ flutter test
 - [ ] Advanced animations and transitions (up to 3 points)
 - [x] Widget implementation for native mobile elements (up to 2 points)
 
-Total points implemented: 21/30 (excluding bonus points)
+Total points implemented: 27/30 (excluding bonus points)
 
 ---
