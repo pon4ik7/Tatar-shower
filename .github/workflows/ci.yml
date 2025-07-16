@@ -119,15 +119,19 @@ jobs:
           path: frontend/build/web/
 
   deploy-pages:
-    name: Deploy to GitHub Pages
-    if: github.ref == 'refs/heads/main'
+    name: Deploy to GitHub Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Download frontend web artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-web
+          path: site
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: frontend/build/web
+          publish_dir: site
           keep_files: false
