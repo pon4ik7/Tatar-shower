@@ -22,7 +22,7 @@ on:
 
 env:
   GO_VERSION: '1.24'
-  FLUTTER_VERSION: '3.8.1'
+  FLUTTER_VERSION: '3.32.2'
 
 jobs:
   lint:
@@ -96,7 +96,7 @@ jobs:
       - name: Build Flutter Web
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: 3.8.1
       - run: |
           cd frontend
           flutter build web --release
