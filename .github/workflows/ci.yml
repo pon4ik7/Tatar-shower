@@ -45,7 +45,11 @@ jobs:
         working-directory: backend
         run: |
           go vet ./...
-          go fmt -s ./...
+          gofmt -s -w .
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "Go code is not formatted. Run 'gofmt -s -w .' locally"
+            exit 1
+          fi
 
       - name: Lint Dart (analyze + format)
         working-directory: frontend
