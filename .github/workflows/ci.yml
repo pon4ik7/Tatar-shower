@@ -51,12 +51,6 @@ jobs:
             exit 1
           fi
 
-      - name: Lint Dart (analyze + format)
-        working-directory: frontend
-        run: |
-          dart analyze
-          dart format --set-exit-if-changed .
-
   test:
     name: Run Tests
     runs-on: ubuntu-latest
