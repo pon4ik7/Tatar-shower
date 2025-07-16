@@ -78,65 +78,30 @@ jobs:
           cd frontend
           flutter test --coverage || true
 
-  docker-build:
-    name: Build Docker images
+  build:
+    name: Build Artifacts
     runs-on: ubuntu-latest
-    container:
-      image: docker:24.0.5
-      options: --privileged
-    services:
-      docker:
-        image: docker:24.0.5-dind
-        privileged: true
     needs: test
     steps:
       - uses: actions/checkout@v4
 
-      - name: Load env from devops/.env
+      - name: Build all Go services
+        working-directory: backend
         run: |
-          set -a
-          source devops/.env
-          set +a
+          mkdir -p dist
+          go build -o dist/auth-service ./services/auth-service/main.go
+          go build -o dist/rec-service  ./services/rec-service/main.go
+          go build -o dist/shower-service ./services/shower-service/main.go
 
-      - name: Docker info
-        run: docker info
-
-      - name: Build auth-service image
-        run: docker build \
-          -f backend/services/auth-service/Dockerfile \
-          -t auth-service:latest \
-          backend/services/auth-service
-
-      - name: Build rec-service image
-        run: docker build \
-          -f backend/services/rec-service/Dockerfile \
-          -t rec-service:latest \
-          backend/services/rec-service
-
-      - name: Build shower-service image
-        run: docker build \
-          -f backend/services/shower-service/Dockerfile \
-          -t shower-service:latest \
-          backend/services/shower-service
-
-  build-frontend:
-    name: Build Flutter Web
-    runs-on: ubuntu-latest
-    needs: docker-build
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Flutter
+      - name: Build Flutter Web
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-
-      - name: Build web
-        run: |
+      - run: |
           cd frontend
           flutter build web --release
 
-      - name: Upload Web artifact
+      - name: Upload Frontend Web
         uses: actions/upload-artifact@v4
         with:
           name: frontend-web
@@ -145,7 +110,7 @@ jobs:
   deploy-pages:
     name: Deploy to GitHub Pages
     if: github.ref == 'refs/heads/main'
-    needs: build-frontend
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
