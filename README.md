@@ -142,7 +142,7 @@ frontend/
 
 ## Environment Variables
 
-Create a `.env` file in the devOps directory:
+Create a `.env` file in the devops directory:
 
 ```
 POSTGRES_USER=tatar_shower
