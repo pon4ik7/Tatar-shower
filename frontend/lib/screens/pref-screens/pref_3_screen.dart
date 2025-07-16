@@ -217,7 +217,8 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            final formatted = tempPicked.format(context);
+                            final formatted =
+                                '${tempPicked.hour.toString().padLeft(2, '0')}:${tempPicked.minute.toString().padLeft(2, '0')}';
                             final data = context.read<OnboardingData>();
                             for (final day in data.customDays!) {
                               data.setTimeForDay(day, formatted);
@@ -225,15 +226,11 @@ class _PreferencesScreen3State extends State<PreferencesScreen3> {
                             setState(() {
                               pickedTime = tempPicked;
                               selectedIndex = 2;
-                              customTimeText = pickedTime!.format(context);
-                              final data = context.read<OnboardingData>();
-                              final day = data.customDays![_dayIndex];
-                              final chosenTime = pickedTime!.format(context);
-                              data.setTimeForDay(day, chosenTime);
                               customTimeText = formatted;
                             });
                             Navigator.of(context).pop();
                           },
+
                           style: ElevatedButton.styleFrom(
                             backgroundColor: appColors.midBlue,
                             shape: RoundedRectangleBorder(

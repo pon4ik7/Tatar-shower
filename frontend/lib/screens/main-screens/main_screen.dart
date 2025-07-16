@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tatar_shower/models/shower_model.dart';
 import 'package:tatar_shower/screens/main-screens/full_table_screen.dart';
+import 'package:tatar_shower/screens/main-screens/tabs.dart';
 import 'package:tatar_shower/services/api_service.dart';
 import 'package:tatar_shower/storage/prefer_streak_storage.dart';
 import 'package:tatar_shower/storage/shower_log_storage.dart';
@@ -9,6 +10,9 @@ import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:tatar_shower/l10n/app_localizations.dart';
+
+var _showersThisWeek = 0;
+var currentStreak = 0;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -99,6 +103,7 @@ class _MainScreenBody extends StatelessWidget {
                                 return CircularProgressIndicator();
                               }
                               final logs = snapshot.data!;
+                              _showersThisWeek = logs.length;
                               return _ShowerTable(loc: loc, logs: logs);
                             },
                           ),
@@ -110,7 +115,11 @@ class _MainScreenBody extends StatelessWidget {
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _Statistics(loc: loc),
+                      child: _Statistics(
+                        loc: loc,
+                        showersThisWeek: _showersThisWeek,
+                        currentStreak: currentStreak,
+                      ),
                     ),
                   ],
                 ),
@@ -143,7 +152,7 @@ class _Diagram extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               _DonutChart(
-                progress: ((streak ?? 0) / (snapshot.data ?? 1).toDouble()),
+                progress: ((currentStreak) / (snapshot.data ?? 1).toDouble()),
                 size: 220,
                 strokeWidth: 24,
               ),
@@ -151,7 +160,7 @@ class _Diagram extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "$streak",
+                    "$currentStreak",
                     style: TextStyle(
                       fontFamily: appFonts.header,
                       fontSize: 40,
@@ -196,7 +205,7 @@ class _NewShowerButtom extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            //Navigator.of(context).pushNamed('/new_shower');
+            tabIndexNotifier.value = 1;
           },
           child: Text(
             loc.newShower,
@@ -311,9 +320,15 @@ class _ShowerTable extends StatelessWidget {
 }
 
 class _Statistics extends StatelessWidget {
-  const _Statistics({required this.loc});
+  const _Statistics({
+    required this.loc,
+    required this.showersThisWeek,
+    required this.currentStreak,
+  });
 
   final AppLocalizations loc;
+  final int showersThisWeek;
+  final int currentStreak;
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +355,7 @@ class _Statistics extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '3 ${loc.showers}',
+                      '$showersThisWeek ${loc.showers}',
                       style: TextStyle(
                         fontFamily: appFonts.regular,
                         fontSize: 14,
@@ -372,7 +387,7 @@ class _Statistics extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '10 ${loc.days}',
+                      '$currentStreak ${loc.days}',
                       style: TextStyle(
                         fontFamily: appFonts.regular,
                         fontSize: 14,
