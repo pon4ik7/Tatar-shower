@@ -6,6 +6,7 @@ import 'package:tatar_shower/theme/colors.dart';
 import 'package:tatar_shower/theme/fonts.dart';
 import 'package:tatar_shower/theme/images.dart';
 import 'package:intl/intl.dart';
+import 'package:tatar_shower/screens/main-screens/main_screen.dart';
 
 class ShowerResultScreen extends StatelessWidget {
   final ShowerLog log;
@@ -87,6 +88,9 @@ class ShowerResultScreen extends StatelessWidget {
                       color: appColors.deepBlue,
                       onPressed: () async {
                         await ShowerLogStorage.saveLog(log);
+                        if (currentStreak == 0) {
+                          currentStreak += 1;
+                        }
                         Navigator.of(context).pushNamed('/tabs');
                       },
                     ),

@@ -18,9 +18,9 @@ import 'package:tatar_shower/models/register_request.dart';
 import '../models/schedule.dart';
 
 class ApiService {
-  static const String _baseUrl_1 = "http://localhost:8001/api";
-  static const String _baseUrl_2 = "http://localhost:8002/api";
-  static const String _baseUrl_3 = "http://localhost:8003/api";
+  static const String _baseUrl_1 = "http://10.0.2.2:8001/api";
+  static const String _baseUrl_2 = "http://10.0.2.2:8002/api";
+  static const String _baseUrl_3 = "http://10.0.2.2:8003/api";
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<String> getRandomTip() async {

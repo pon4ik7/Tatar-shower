@@ -41,8 +41,15 @@ func main() {
 	h := handlers.NewHandler(sqlDB)
 	r := h.SetupRoutes()
 
-	fcmServerKey := os.Getenv("FCM_SERVER_KEY") // Get from environment
-	fcmService := fcmservice.NewFCMService(fcmServerKey)
+	credentialsFile := os.Getenv("FCM_CREDENTIALS_FILE") // Путь к JSON сервисного аккаунта
+	if credentialsFile == "" {
+		log.Fatal("FCM_CREDENTIALS_FILE is not set")
+	}
+	projectID := os.Getenv("FCM_PROJECT_ID")
+	if projectID == "" {
+		log.Fatal("FCM_PROJECT_ID is not set")
+	}
+	fcmService := fcmservice.NewFCMService(credentialsFile, projectID)
 
 	scheduler := fcmservice.NewNotificationScheduler(sqlDB, fcmService)
 	scheduler.Start()

@@ -48,8 +48,13 @@ services:
       DATABASE_URL: postgres://tatar_shower:chinchanchonchi@db:5432/shower_db?sslmode=disable&client_encoding=UTF8
       JWT_SECRET: ${JWT_SECRET}
       PORT: 8001
+      FCM_CREDENTIALS_FILE: /credentials/service-account.json
+      FCM_PROJECT_ID: tatar-shower
     ports:
       - "8001:8001"
+    volumes:
+      - ./tatar-shower-app-flutter-go-firebase-adminsdk-fbsvc-bbf3fba0a9.json:/credentials/service-account.json:ro
+
 
   shower-service:
     build:

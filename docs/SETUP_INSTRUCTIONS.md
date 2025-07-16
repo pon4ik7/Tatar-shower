@@ -14,8 +14,8 @@ Before starting, make sure you have the following installed:
 
 1. **Clone the repository:**
    ```
-   git clone https://github.com/your-org/tatar-shower-api.git
-   cd tatar-shower-api/backend
+   git clone https://github.com/your-org/tatar-shower-app-flutter-go.git
+   cd tatar-shower-app-flutter-go/backend
    ```
 
 2. **Install Go dependencies:**
@@ -24,37 +24,38 @@ Before starting, make sure you have the following installed:
    ```
 
 3. **Configure environment variables:**
-   Create a `.env` file in the backend directory:
+   Create a `.env` file in the devOps directory:
    ```
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_USER=your_db_user
-   DB_PASSWORD=your_db_password
-   DB_NAME=tatar_shower_db
+   POSTGRES_USER=tatar_shower
+   POSTGRES_PASSWORD=chinchanchonchi
+   POSTGRES_DB=shower_db
+   DATABASE_URL=postgres://tatar_shower:chinchanchonchi@db:5432/shower_db?sslmode=disable&client_encoding=UTF8
    JWT_SECRET=your_jwt_secret_key
-   PORT=8080
    ```
 
-4. **Set up the database:**
+4. **Run the backend services:**
    ```
-   # Create database
-   createdb tatar_shower_db
-   
-   # Run migrations
-   go run migrations/migrate.go
+   cd tatar-shower-app-flutter-go/devOps
+   docker-compose up --build
    ```
+   This will start:
+   - database (Postgres)
 
-5. **Start the backend server:**
-   ```
-   go run main.go
-   ```
-   The API will be available at `http://localhost:8080`
+   - migrator (applies DB migrations)
+
+   - auth‑service (port 8001)
+
+   - shower‑service (port 8002)
+
+   - rec‑service (port 8003)
+
+   APIs will be available under http://localhost:8001/api, http://localhost:8002/api, http://localhost:8003/api
 
 ### Frontend Setup (Flutter)
 
 1. **Navigate to the frontend directory:**
    ```
-   cd ../frontend
+   cd frontend
    ```
 
 2. **Install Flutter dependencies:**
@@ -62,17 +63,7 @@ Before starting, make sure you have the following installed:
    flutter pub get
    ```
 
-3. **Configure API endpoint:**
-   Edit `lib/config/api_config.dart`:
-   ```
-   class ApiConfig {
-     static const String baseUrl = 'http://localhost:8080/api';
-     // For Android emulator use: 'http://10.0.2.2:8080/api'
-     // For iOS simulator use: 'http://127.0.0.1:8080/api'
-   }
-   ```
-
-4. **Run the Flutter app:**
+3. **Run the Flutter app:**
    ```
    # For development
    flutter run
@@ -96,18 +87,13 @@ Before starting, make sure you have the following installed:
    go version
    ```
 
-3. **Database connection test:**
-   ```
-   cd backend
-   go run cmd/test-db/main.go
-   ```
-
 ### Build for Production
 
 #### Backend (Go)
 ```
-cd backend
-go build -o tatar-shower-api main.go
+cd backend/services/auth-service
+go build -o auth-service
+# similarly for shower-service, rec-service
 ```
 
 #### Frontend (Flutter)
@@ -149,8 +135,9 @@ flutter build web --release
 
 #### Backend Tests
 ```
-cd backend
-go test ./...
+go test ./backend/services/auth-service/handlers
+go test ./backend/services/shower-service/handlers
+go test ./backend/services/rec-service/handlers
 ```
 
 #### Frontend Tests
