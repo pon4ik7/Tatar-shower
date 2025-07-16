@@ -78,30 +78,36 @@ jobs:
           cd frontend
           flutter test --coverage || true
 
-  build:
-    name: Build Artifacts
+  build-and-up:
+    name: Build & start services via Docker Compose
     runs-on: ubuntu-latest
     needs: test
     steps:
       - uses: actions/checkout@v4
-
-      - name: Build all Go services
-        working-directory: backend
+      - uses: docker/setup-buildx-action@v2
+      - name: Build & start all services
         run: |
-          mkdir -p dist
-          go build -o dist/auth-service ./backend/services/auth-service/main.go
-          go build -o dist/rec-service  ./backend/services/rec-service/main.go
-          go build -o dist/shower-service ./backend/services/shower-service/main.go
+          docker-compose --env-file devops/.env \
+            -f devops/docker-compose.yml up -d --build
 
-      - name: Build Flutter Web
+  build-frontend:
+    name: Build Flutter Web
+    runs-on: ubuntu-latest
+    needs: build-and-up
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-      - run: |
+
+      - name: Build web
+        run: |
           cd frontend
           flutter build web --release
 
-      - name: Upload Frontend Web
+      - name: Upload Frontend Artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-web
@@ -110,7 +116,7 @@ jobs:
   deploy-pages:
     name: Deploy to GitHub Pages
     if: github.ref == 'refs/heads/main'
-    needs: build
+    needs: build-frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
