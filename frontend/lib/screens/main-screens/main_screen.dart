@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tatar_shower/models/shower_model.dart';
 import 'package:tatar_shower/screens/main-screens/full_table_screen.dart';
+import 'package:tatar_shower/screens/main-screens/tabs.dart';
 import 'package:tatar_shower/services/api_service.dart';
 import 'package:tatar_shower/storage/prefer_streak_storage.dart';
 import 'package:tatar_shower/storage/shower_log_storage.dart';
@@ -204,7 +205,7 @@ class _NewShowerButtom extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            //Navigator.of(context).pushNamed('/new_shower');
+            tabIndexNotifier.value = 1;
           },
           child: Text(
             loc.newShower,

@@ -5,6 +5,8 @@ import 'package:tatar_shower/screens/main-screens/main_screen.dart';
 import 'package:tatar_shower/screens/main-screens/settings-screens/settings_screen.dart';
 import 'package:tatar_shower/screens/main-screens/timer-screens/set_timer_screen.dart';
 
+final ValueNotifier<int> tabIndexNotifier = ValueNotifier<int>(0);
+
 class Tabs extends StatefulWidget {
   const Tabs();
 
@@ -28,43 +30,50 @@ class _MainWithTabs extends State<Tabs> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: _screens[_currentIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: appColors.black, width: 0.5)),
-        ),
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            splashFactory: NoSplash.splashFactory,
-            highlightColor: Colors.transparent,
+    return ValueListenableBuilder<int>(
+      valueListenable: tabIndexNotifier,
+      builder: (context, currentIndex, _) {
+        return Scaffold(
+          extendBody: true,
+          body: _screens[currentIndex],
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: appColors.black, width: 0.5),
+              ),
+            ),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                splashFactory: NoSplash.splashFactory,
+                highlightColor: Colors.transparent,
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                currentIndex: currentIndex,
+                onTap: (index) => tabIndexNotifier.value = index,
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: appColors.black,
+                unselectedItemColor: appColors.black,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: ImageIcon(lightBottomCalendar, size: 40),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: ImageIcon(lightBottomClock, size: 40),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: ImageIcon(lightBottomSettings, size: 40),
+                    label: '',
+                  ),
+                ],
+              ),
+            ),
           ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            currentIndex: _currentIndex,
-            onTap: _onTap,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: appColors.black,
-            unselectedItemColor: appColors.black,
-            items: [
-              BottomNavigationBarItem(
-                icon: ImageIcon(lightBottomCalendar, size: 40),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(lightBottomClock, size: 40),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(lightBottomSettings, size: 40),
-                label: '',
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
