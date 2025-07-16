@@ -63,17 +63,7 @@ Before starting, make sure you have the following installed:
    flutter pub get
    ```
 
-3. **Configure API endpoint:**
-   Edit `lib/config/api_config.dart`:
-   ```
-   class ApiConfig {
-     static const String baseUrl = 'http://localhost:8080/api';
-     // For Android emulator use: 'http://10.0.2.2:8080/api'
-     // For iOS simulator use: 'http://127.0.0.1:8080/api'
-   }
-   ```
-
-4. **Run the Flutter app:**
+3. **Run the Flutter app:**
    ```
    # For development
    flutter run
