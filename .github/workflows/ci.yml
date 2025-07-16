@@ -55,6 +55,11 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     needs: lint
+    env:
+      JWT_SECRET: "foobar"
+      DATABASE_URL: "postgres://user:pass@localhost:5432/devdb?sslmode=disable"
+#      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - uses: actions/checkout@v4
 
