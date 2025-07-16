@@ -85,13 +85,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Backend (Linux)
-        uses: actions/setup-go@v4
-        with:
-          go-version: ${{ env.GO_VERSION }}
-      - run: |
-          cd backend
-          CGO_ENABLED=0 GOOS=linux go build -o dist/server cmd/server/main.go
+      - name: Build all Go services
+        run: |
+          mkdir -p dist
+          go build -o dist/auth-service ./backend/services/auth-service
+          go build -o dist/rec-service  ./backend/services/rec-service
+          go build -o dist/shower-service ./backend/services/shower-service
 
       - name: Build Flutter Web
         uses: subosito/flutter-action@v2
