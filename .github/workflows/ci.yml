@@ -88,9 +88,9 @@ jobs:
       - name: Build all Go services
         run: |
           mkdir -p dist
-          go build -o dist/auth-service ./backend/services/auth-service
-          go build -o dist/rec-service  ./backend/services/rec-service
-          go build -o dist/shower-service ./backend/services/shower-service
+          go build -o dist/auth-service ./backend/services/auth-service/main.go
+          go build -o dist/rec-service  ./backend/services/rec-service/main.go
+          go build -o dist/shower-service ./backend/services/shower-service/main.go
 
       - name: Build Flutter Web
         uses: subosito/flutter-action@v2
