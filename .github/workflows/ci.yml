@@ -66,11 +66,12 @@ jobs:
       - name: Setup Go & Test Backend
         uses: actions/setup-go@v4
         with:
-          go-version: ${{ env.GO_VERSION }}
-      - name: Load environment variables
+          go-version: '1.24'
+#      - name: Load environment variables
+#        run: |
+#            grep -v '^#' devops/.env >> $GITHUB_ENV
+      - name: Run backend tests
         run: |
-            grep -v '^#' devops/.env >> $GITHUB_ENV
-      - run: |
           cd backend
           go test ./... -v
 
