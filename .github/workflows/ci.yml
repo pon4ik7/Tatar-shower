@@ -45,10 +45,12 @@ jobs:
       - name: Lint Go (vet + fmt)
         working-directory: backend
         run: |
+          set -euo pipefail
           go vet ./...
-          gofmt -s -w .
-          if [ -n "$(gofmt -l .)" ]; then
-            echo "Go code is not formatted. Run 'gofmt -s -w .' locally"
+          FMT_OUT="$($(go env GOROOT)/bin/gofmt -l -s .)"
+          if [ -n "$FMT_OUT" ]; then
+            echo "::error ::Go files need formatting (run 'gofmt -s -w .' locally)"
+            echo "$FMT_OUT"
             exit 1
           fi
 
